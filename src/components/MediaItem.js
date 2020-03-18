@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Box, Button, Typography } from "@material-ui/core";
+import { Grid, Hidden, Button, Typography } from "@material-ui/core";
 
 export default function MediaItem(props) {
   //   const {title, series, img, duration, desc} = props;
@@ -18,29 +18,32 @@ export default function MediaItem(props) {
   return (
     <Grid container spacing={1} style={{ marginTop: '1vw', marginBottom: '1vw' }}>
 
-      <Grid item xs={12}>
-        <Box display={{ md: "none" }}>
+      <Hidden mdUp>
+        <Grid item xs={12}>
           <Typography variant="h5">{title}</Typography>
-        </Box>
-      </Grid>
-      
+        </Grid>
+      </Hidden>
+
       <Grid item xs={3} sm={2}>
         <img src={img} alt="IMG" width="100%" />
       </Grid>
 
       <Grid item xs={9} sm={8}>
-        <Box display={{ xs: "none", md: "block" }}>
+        <Hidden smDown>
           <Typography variant="h5">{title}</Typography>
-        </Box>
+        </Hidden>
         <Typography variant="subtitle1" color="textSecondary">
           {series}
         </Typography>
         <Typography variant="subtitle2" color="secondary">
           {duration}
         </Typography>
-        <Box display={{ xs: "none", sm: "block" }}>
+        <Hidden mdUp only="xs">
+          <Typography noWrap display="block" variant="caption">{desc}</Typography>
+        </Hidden>
+        <Hidden smDown>
           <Typography variant="caption">{desc}</Typography>
-        </Box>
+        </Hidden>
       </Grid>
 
       <Grid item xs={12} sm={2}>
