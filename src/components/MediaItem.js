@@ -1,8 +1,11 @@
 import React from "react";
 import { Grid, Hidden, Button, Typography } from "@material-ui/core";
+import { useTheme  } from '@material-ui/core/styles';
 
 export default function MediaItem(props) {
   //   const {title, series, img, duration, desc} = props;
+  const theme = useTheme();
+  const primaryTextColor = theme.palette.primary.main;
 
   // placeholders
   let title = "Podcast Title: A Subtitle for the Podcast";
@@ -16,7 +19,7 @@ export default function MediaItem(props) {
               commodo, rutrum tortor vitae, rhoncus nulla.`;
 
   return (
-    <Grid container spacing={1} style={{ marginTop: '1vw', marginBottom: '1vw' }}>
+    <Grid container spacing={1} style={{ marginTop: '1vw', marginBottom: '1vw', padding: '1vw', borderStyle: 'solid', borderColor: primaryTextColor }}>
 
       <Hidden mdUp>
         <Grid item xs={12}>
@@ -32,10 +35,10 @@ export default function MediaItem(props) {
         <Hidden smDown>
           <Typography variant="h5">{title}</Typography>
         </Hidden>
-        <Typography variant="subtitle1" color="textSecondary">
+        <Typography variant="subtitle1">
           {series}
         </Typography>
-        <Typography variant="subtitle2" color="secondary">
+        <Typography variant="subtitle2">
           {duration}
         </Typography>
         <Hidden mdUp only="xs">
