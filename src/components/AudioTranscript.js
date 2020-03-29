@@ -20,10 +20,10 @@ function AudioPlayer(props) {
 	return (
 		<audio
 			controls
-			style={{ position: 'fixed', bottom: 0, width: "100%" }}
+			style={{ position: 'fixed', bottom: 0, width: '100%' }}
 			ref={audioRef}
 		>
-			<source src={audioSrc} type="audio/mpeg" />
+			<source src={audioSrc} type='audio/mpeg' />
 		</audio>
 	);
 }

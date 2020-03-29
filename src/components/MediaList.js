@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 import MediaItem from './MediaItem';
-import { Container, Box, Divider } from '@material-ui/core'
+import { Container } from '@material-ui/core';
 
 export default function MediaList(props) {
   const { data } = props;
@@ -9,11 +9,8 @@ export default function MediaList(props) {
     <Container>
       {/* Placeholder map function */}
       {data.map(id => (
-        <Box>
-          <MediaItem key={id} /> <Divider />
-        </Box>
-      ))
-      }
+        <MediaItem key={id} />
+      ))}
     </Container>
   );
 }
