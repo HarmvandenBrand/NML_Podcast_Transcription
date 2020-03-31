@@ -5,11 +5,11 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import MediaList from './components/MediaList';
 import AudioTranscript from './components/AudioTranscript';
 import Header from './components/Header';
-import theme from './Theme';
+import theme from './theme';
 
 function App() {
   return (
-    <ThemeProvider theme={theme()}>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <>
         <Header/>
