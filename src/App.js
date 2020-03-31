@@ -1,18 +1,22 @@
 import React from 'react';
-import { Typography, ThemeProvider } from '@material-ui/core';
+import { Router} from '@reach/router';
+import { ThemeProvider } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import MediaList from './components/MediaList';
+import AudioTranscript from './components/AudioTranscript';
+import Header from './components/Header';
 import theme from './Theme';
-// import AudioTranscript from './components/AudioTranscript';
 
 function App() {
   return (
     <ThemeProvider theme={theme()}>
       <CssBaseline />
       <>
-        <Typography variant='h2' align='center'>ScribeCast</Typography>
-        <MediaList data={[1, 2, 3, 4, 5]} />
-        {/* <AudioTranscript /> */}
+        <Header/>
+        <Router>
+          <MediaList path="/" />
+          <AudioTranscript path="player/:podcastId" />
+        </Router>
       </>
     </ThemeProvider>
   );

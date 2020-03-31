@@ -1,12 +1,13 @@
 import React from 'react';
 import { Container, Typography } from '@material-ui/core';
-import { audio, transcript } from '../examplePodcast'; // example
+import { metadata, audio, transcript } from '../examplePodcast'; // example
 
 function TranscriptView(props) {
-	const { transcript } = props;
+	const { transcript, title } = props;
 
 	return (
-		<Container maxWidth={'md'} style={{ marginBottom: '8vh' }}>
+		<Container maxWidth={'md'} style={{ marginTop: '4vh', marginBottom: '8vh' }}>
+			<Typography variant='h6'>{title}</Typography>
 			<Typography component={'div'}>
 				{transcript}
 			</Typography>
@@ -55,14 +56,13 @@ function AudioTranscript(props) {
 		audioRef.current.currentTime = Math.fround(idx * 20);
 	};
 
-	// placeholder example without timestamps
-	let audioSrc = audio;
+	// example with dummy timestamps
 	let transcriptParagraphs = mapParagraphTag(transcript, handleClick);
 
 	return (
 		<>
-			<TranscriptView transcript={transcriptParagraphs} />
-			<AudioPlayer audioSrc={audioSrc} audioRef={audioRef} />
+			<TranscriptView transcript={transcriptParagraphs} title={metadata.title}/>
+			<AudioPlayer audioSrc={audio} audioRef={audioRef} />
 		</>
 	);
 }
