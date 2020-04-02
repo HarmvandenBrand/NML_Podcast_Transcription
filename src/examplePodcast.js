@@ -9,12 +9,12 @@ let description = `Manoush Zomorodi explores the surprising environmental impact
 Music professor Kyle Devine considers the environmental costs of streaming music. Geophysicist and pop scientist Miles Traer takes his best shot at calculating the carbon footprint of the IRL podcast. Climate journalist Tatiana Schlossberg explores the environmental influence we don’t know we have and what the web’s got to do with it. Greenpeace’s Gary Cook explains which tech companies are committed to renewable energy — and which are not. Kris De Decker tries powering his website with a homebrew solar power system. And, Ecosia’s Chief Tree Planting Officer Pieter Van Midwoud discusses how his company uses online search to plant trees.`
 
 const metadata = {
-    id: '123456789',
-    title: 'The Internet\'s Carbon Footprint',
-    series: 'IRL - Online Life is Real Life',
-    duration: '28:12',
-    img: 'https://irlpodcast.org/images/episodes/S05E03/artwork.png',
-    desc: description
+  id: '123456789',
+  title: 'The Internet\'s Carbon Footprint',
+  series: 'IRL - Online Life is Real Life',
+  duration: '28:12',
+  img: 'https://irlpodcast.org/images/episodes/S05E03/artwork.png',
+  desc: description
 };
 
 const audio = `https://cdn.simplecast.com/audio/9b52b8/9b52b824-909f-4be5-aaf0-10f9e93c7818/99a79fe9-7a1c-41cf-85a9-c5f2c7216d23/irl_s5e03_what_is_the_carbon_footprint_of_irl_final_june_27_tc.mp3`;

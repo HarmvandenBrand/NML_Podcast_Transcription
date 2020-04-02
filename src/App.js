@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router} from '@reach/router';
+import { Router } from '@reach/router';
 import { ThemeProvider } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import MediaList from './components/MediaList';
@@ -11,13 +11,11 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <>
-        <Header/>
-        <Router>
-          <MediaList path="/" />
-          <AudioTranscript path="player/:podcastId" />
-        </Router>
-      </>
+      <Header />
+      <Router>
+        <MediaList path='/' />
+        <AudioTranscript path='player/:podcastId' />
+      </Router>
     </ThemeProvider>
   );
 }
