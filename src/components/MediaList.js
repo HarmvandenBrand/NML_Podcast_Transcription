@@ -1,19 +1,25 @@
-import React from "react";
+import React from 'react';
 import MediaItem from './MediaItem';
-import { Container, Box, Divider } from '@material-ui/core'
+import { Container } from '@material-ui/core';
+import { metadata } from '../examplePodcast'; // example
 
 export default function MediaList(props) {
-  const { data } = props;
+  // example to fill the screen
+  const data = [1, 2, 3, 4, 5];
 
   return (
     <Container>
-      {/* Placeholder map function */}
-      {data.map(id => (
-        <Box>
-          <MediaItem key={id} /> <Divider />
-        </Box>
-      ))
-      }
+      {data.map(idx => (
+        <MediaItem
+          key={idx}
+          id={metadata.id}
+          title={metadata.title}
+          series={metadata.series}
+          duration={metadata.duration}
+          img={metadata.img}
+          desc={metadata.desc}
+        />
+      ))}
     </Container>
   );
 }
