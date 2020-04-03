@@ -9,9 +9,9 @@ let surfaceColor = '#EF8321'; // intended for menus etc.
 const theme = createMuiTheme({
   palette: {
     type: 'dark',
-    background: {
-      default: primaryBackground
-    },
+    // background: {
+    //   default: primaryBackground
+    // },
     primary: {
       main: primaryTextColor
     },

@@ -47,7 +47,7 @@ export default function MediaItem(props) {
       <Grid item xs={12} sm={2}>
         <Button
           component={Link}
-          to={`player/${id}`}
+          to={'/player'}
           fullWidth
           variant='contained'
           color='primary'

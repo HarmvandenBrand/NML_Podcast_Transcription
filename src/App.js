@@ -5,6 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import MediaList from './components/MediaList';
 import AudioTranscript from './components/AudioTranscript';
 import Header from './components/Header';
+import Navigation from './components/Navigation';
 import theme from './theme';
 
 function App() {
@@ -12,10 +13,11 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Header />
-      <Router>
+      <Router style={{ marginBottom: '56px', paddingTop: '2vh', paddingBottom: '2vh' }}>
         <MediaList path='/' />
-        <AudioTranscript path='player/:podcastId' />
+        <AudioTranscript path='player' />
       </Router>
+      <Navigation />
     </ThemeProvider>
   );
 }

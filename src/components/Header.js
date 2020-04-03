@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from '@reach/router';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   AppBar,
@@ -39,16 +38,15 @@ export default function Header(props) {
 
   return (
     <HideOnScroll>
-      <AppBar position="sticky">
+      <AppBar position="sticky" elevation={2}>
         <Toolbar>
           <Typography
             className={classes.appName}
-            component={Link}
-            to="/"
             variant='h5'
           >
-            ScribeCast
-      		</Typography>
+            Placeholder 
+          </Typography>
+          {props.children}
         </Toolbar>
       </AppBar>
     </HideOnScroll>
