@@ -1,12 +1,13 @@
 import React from 'react';
 import { Container, Typography } from '@material-ui/core';
+import Header from './Header';
 import { metadata, audio, transcript } from '../examplePodcast'; // example
 
 function TranscriptView(props) {
   const { transcript, title } = props;
 
   return (
-    <Container maxWidth={'md'} style={{ marginTop: '4vh', marginBottom: '8vh' }}>
+    <Container maxWidth={'md'} style={{ paddingTop: '32px', paddingBottom: '64px' }}>
       <Typography variant='h6'>{title}</Typography>
       <Typography component={'div'}>
         {transcript}
@@ -61,6 +62,7 @@ function AudioTranscript(props) {
 
   return (
     <>
+      <Header />
       <TranscriptView transcript={transcriptParagraphs} title={metadata.title} />
       <AudioPlayer audioSrc={audio} audioRef={audioRef} />
     </>

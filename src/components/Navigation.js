@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { BottomNavigation, BottomNavigationAction, Paper } from '@material-ui/core';
-import { HomeOutlined, HearingOutlined, StarBorderRounded } from '@material-ui/icons';
+import { HomeRounded, HearingRounded, StarRounded } from '@material-ui/icons';
 import { Link, Location } from '@reach/router';
 
 const useStyles = makeStyles(theme => ({
@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
 export default function Navigation(props) {
   const classes = useStyles();
   const paths = {
-    home: '/',
+    home: '/home',
     player: '/player',
     favorites: '/favorites'
   };
@@ -37,6 +37,7 @@ export default function Navigation(props) {
           className={classes.root}
           component={Paper}
           elevation={4}
+          square
           value={parseRootPath(location.pathname)}
           showLabels
         >
@@ -45,21 +46,21 @@ export default function Navigation(props) {
             to={paths.home}
             value={paths.home}
             label='Home'
-            icon={<HomeOutlined />}
+            icon={<HomeRounded />}
           />
           <BottomNavigationAction
             component={Link}
             to={paths.player}
             value={paths.player}
             label='Listen Now'
-            icon={<HearingOutlined />}
+            icon={<HearingRounded />}
           />
           <BottomNavigationAction
             component={Link}
             to={paths.favorites}
             value={paths.favorites}
             label='Favorites'
-            icon={<StarBorderRounded />}
+            icon={<StarRounded />}
           />
         </BottomNavigation>
 
