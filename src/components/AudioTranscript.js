@@ -1,7 +1,28 @@
 import React from 'react';
-import { Container, Typography } from '@material-ui/core';
+import { Grid, Container, Typography, Paper } from '@material-ui/core';
 import Header from './Header';
+import { makeStyles } from '@material-ui/core/styles';
 import { metadata, audio, transcript } from '../examplePodcast'; // example
+
+const useStyles = makeStyles(theme => ({
+  audioplayer: {
+    //marginTop: '1vw',
+    position: 'fixed', 
+    position: 'sticky', 
+    bottom: '56px',
+    width: '100%',
+    //height: '150px',
+    padding: '1vw',
+    borderStyle: 'solid',
+    borderColor: theme.palette.primary.main,
+    background: theme.palette.background.default,
+  },
+  image: {
+    width: 128,
+    height: 128,
+  },
+
+}));
 
 function TranscriptView(props) {
   const { transcript, title } = props;
@@ -17,16 +38,39 @@ function TranscriptView(props) {
 }
 
 function AudioPlayer(props) {
-  const { audioSrc, audioRef } = props;
+  const { audioSrc, audioRef, title, duration, img } = props;
+  const classes = useStyles();
 
   return (
-    <audio
-      controls
-      style={{ position: 'fixed', bottom: '56px', width: '100%' }}
-      ref={audioRef}
-    >
-      <source src={audioSrc} type='audio/mpeg' />
-    </audio>
+    <div class={ classes.audioplayer }>
+      <Grid container xs={12} spacing={2}>
+        <Grid item xs={2}>
+          <img class={classes.image} src={img} alt='Podcast logo' />
+        </Grid>
+        <Grid item xs={10} container> 
+          <Grid item container direction='column' spacing={2}>
+            <Grid item>
+              <Typography variant='h5'> 
+                {title}
+              </Typography>
+            </Grid>
+          <Grid item>
+            <Typography variant='h7'> 
+              {duration}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <audio
+              controls
+              style={{ width: '100%' }}
+              ref={audioRef} >
+              <source src={audioSrc} type='audio/mpeg' />
+            </audio>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
+    </div>
   );
 }
 
@@ -64,7 +108,7 @@ function AudioTranscript(props) {
     <>
       <Header />
       <TranscriptView transcript={transcriptParagraphs} title={metadata.title} />
-      <AudioPlayer audioSrc={audio} audioRef={audioRef} />
+      <AudioPlayer audioSrc={audio} audioRef={audioRef} title={metadata.title} duration={metadata.duration} img={metadata.img} />
     </>
   );
 }
