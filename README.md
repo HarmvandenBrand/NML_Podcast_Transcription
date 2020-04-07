@@ -1,7 +1,11 @@
 # Podcast Transcription App
+
 Group Repository of the Podcast Transcription App for the New Media Lab Course.
 
+Also see [info on React]( .\React_README.md ).
+
 ## React development instructions
+
 1. Download node package manager (npm): https://nodejs.org/en/
 2. Navigate to the root directory of the project.
 3. Install dependencies: `npm i`  
