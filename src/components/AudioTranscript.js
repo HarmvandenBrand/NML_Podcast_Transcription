@@ -1,8 +1,13 @@
 import React from 'react';
-import { Grid, Container, Typography, Paper } from '@material-ui/core';
+import { Grid, Container, Typography } from '@material-ui/core';
 import Header from './Header';
 import { makeStyles } from '@material-ui/core/styles';
 import { metadata, audio, transcript } from '../examplePodcast'; // example
+//import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
+import IconButton from '@material-ui/core/IconButton';
+import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
+import Replay10Icon from '@material-ui/icons/Replay10';
+import Forward10Icon from '@material-ui/icons/Forward10';
 
 const useStyles = makeStyles(theme => ({
   audioplayer: {
@@ -47,19 +52,39 @@ function AudioPlayer(props) {
         <Grid item xs={2}>
           <img class={classes.image} src={img} alt='Podcast logo' />
         </Grid>
+
         <Grid item xs={10} container> 
           <Grid item container direction='column' spacing={2}>
-            <Grid item>
-              <Typography variant='h5'> 
+            <Grid item >
+              <Typography variant='h5'>
                 {title}
               </Typography>
             </Grid>
-          <Grid item>
-            <Typography variant='h7'> 
-              {duration}
-            </Typography>
-          </Grid>
-          <Grid item>
+
+            <Grid item container spacing={2} justify='space-evenly'>
+                <Grid item>
+                  <IconButton>
+                    <Replay10Icon color='primary' style={{ fontSize: 50 }}/>
+                  </IconButton>
+                </Grid>
+                <Grid item>
+                  <IconButton onClick={ () => this.setState({ player: "playing"}) }>
+                    <PlayCircleFilledIcon color='primary' style={{ fontSize: 50 }} />
+                  </IconButton>
+                </Grid>
+                <Grid item>
+                  <IconButton>
+                    <Forward10Icon color='primary' style={{ fontSize: 50 }} />
+                  </IconButton>
+                </Grid>
+                <Grid item>
+                  <Typography variant='h7'> 
+                    {duration}
+                  </Typography>
+                </Grid>
+            </Grid>
+
+          <Grid item justify='flex-start'>
             <audio
               controls
               style={{ width: '100%' }}
