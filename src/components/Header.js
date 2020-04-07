@@ -1,13 +1,15 @@
 import React from 'react';
-import { Link } from '@reach/router';
+import { navigate } from '@reach/router';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   AppBar,
   Toolbar,
   Typography,
   useScrollTrigger,
-  Slide
+  Slide,
+  IconButton
 } from '@material-ui/core';
+import { ArrowBack } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({
   appName: {
@@ -28,27 +30,39 @@ function HideOnScroll(props) {
   const trigger = useScrollTrigger();
 
   return (
-    <Slide appear={false} direction="down" in={!trigger}>
+    <Slide appear={false} direction='down' in={!trigger}>
       {children}
     </Slide>
   );
 }
 
 export default function Header(props) {
+  const { allowBack } = props;
   const classes = useStyles();
 
   return (
     <HideOnScroll>
-      <AppBar position="sticky">
+      <AppBar
+        position='sticky'
+        elevation={2}
+        color='default'
+      >
         <Toolbar>
+          {allowBack &&
+            <IconButton
+              edge='start'
+              onClick={() => navigate(-1)}
+            >
+              <ArrowBack />
+            </IconButton>
+          }
           <Typography
             className={classes.appName}
-            component={Link}
-            to="/"
             variant='h5'
           >
-            ScribeCast
-      		</Typography>
+            Placeholder
+          </Typography>
+          {props.children}
         </Toolbar>
       </AppBar>
     </HideOnScroll>
