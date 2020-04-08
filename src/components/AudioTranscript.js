@@ -51,21 +51,25 @@ function mapParagraphTag(transcript, handleClick) {
     </p>);
 }
 
+/**
+ * Returns the transcript to be downloaded by the user as a text file.
+ */
 function PrepareTranscript() {
   return ('data:text/plain;charset=utf-16,' + transcript.replace(/\n/g, '%0A'));
 }
 
+/**
+ * User can click this button to download the audio transcript.
+ */
 function TranscriptDownloadButton(props) {
+const { title } = props;
 
 return (
     <IconButton
-    // id = "downloadlink"
-    // component={Link}
-    // fullWidth
     // variant='contained'
     // color='primary'
     href = {PrepareTranscript()}
-    download='transcript.txt'
+    download= {title + '.txt'}
     width='40px'
     >
       <GetAppIcon/>
@@ -80,13 +84,13 @@ function AudioTranscript(props) {
     audioRef.current.currentTime = Math.fround(idx * 20);
   };
 
-  // example with dummy timestamps
+  // example with dummy timestamps  
   let transcriptParagraphs = mapParagraphTag(transcript, handleClick);
 
   return (
     <>
       <Header allowBack>
-        <TranscriptDownloadButton />
+        <TranscriptDownloadButton title={metadata.title}/>
       </Header>
       <TranscriptView transcript={transcriptParagraphs} title={metadata.title} />
       <AudioPlayer audioSrc={audio} audioRef={audioRef} />
