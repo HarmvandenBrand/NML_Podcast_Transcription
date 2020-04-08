@@ -13,8 +13,9 @@ import Slider from '@material-ui/core/Slider';
  * 1. Navigeer van audio (progress slider) naar tekst timestamp
  * 2. Maak ook responsive voor hele kleine schermen
  * 3. Ik haal "duration" niet meer uit de metadata maar uit de audio zelf; dit vraagt om een consistentere aanpak over de hele app. Mogelijk dat in een hogere component doen en dan alsnog hier naartoe passen. N.B. duration moet in *seconden* gegeven worden!
- * 4. Finetune positie podcast titel
- * 5. Meer aftand tot navigatie bar?
+ * 4. Audio volume knop toevoegen
+ * 5. Finetune positie podcast titel
+ * 6. Meer aftand tot navigatie bar?
  */
 
 const useStyles = makeStyles(theme => ({
