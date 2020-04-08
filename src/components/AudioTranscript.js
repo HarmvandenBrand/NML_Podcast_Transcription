@@ -27,7 +27,13 @@ const useStyles = makeStyles(theme => ({
     width: 128,
     height: 128,
   },
-
+  audio: {
+    width: '100%'
+  },
+  progressBar: {
+    width: '85%',
+    height: '10px',
+  }
 }));
 
 function TranscriptView(props) {
@@ -45,13 +51,17 @@ function TranscriptView(props) {
 
 function AudioPlayer(props) {
   // TODO duration uit audio halen en niet als metadata passen (huidige waarde is fout btw)
-  const { audioSrc, audioRef, title, duration, img } = props;
-  //const { audioSrc, audioRef, title, img } = props;
+  //const { audioSrc, audioRef, title, duration, img } = props;
+  const { audioSrc, audioRef, title, img } = props;
+  // TODO hardcoded for now; have duration in seconds
+  const duration = 1694;
   const classes = useStyles();
   // Add a state hook for keeping track if the audio player is paused or not
   const [playerState, setPlayerState] = useState("paused"); 
-  // TODO betere dateformat
-  const [currentTime, setCurrentTime] = useState("0:00:00"); 
+  const [currentTime, setCurrentTime] = useState(0); 
+  const FormatTime = function(timeSeconds){
+  return new Date(timeSeconds*1000).toISOString().substr(11,8); 
+}
 
   useEffect(() => {
     if ( playerState === 'playing' )
@@ -59,8 +69,10 @@ function AudioPlayer(props) {
     if ( playerState === 'paused' )
       console.log("pause button pressed");
     // TODO do this only once?
+    // TODO Is nu per milliseconde; kunnen we de hoeveelheid updates minimaliseren?
     audioRef.current.addEventListener("timeupdate",  ()=> {
-      setCurrentTime(new Date(Math.floor(audioRef.current.currentTime) * 1000).toISOString().substr(11, 8));});
+      setCurrentTime(Math.floor(audioRef.current.currentTime))
+    });
   })
 
   return (
@@ -115,7 +127,10 @@ function AudioPlayer(props) {
                 </Grid>
                 <Grid item>
                   <Typography variant='subtitle2'> 
-                    { currentTime } / {duration}
+                    { FormatTime(currentTime) }
+                    <br/>
+                    <hr/>
+                    { FormatTime(duration)} 
                   </Typography>
                 </Grid>
             </Grid>
@@ -123,11 +138,12 @@ function AudioPlayer(props) {
           <Grid item>
             <audio
               // TODO custom slider instead of default controls
-              controls
-              style={{ width: '100%' }}
+              //controls
+              className={classes.audio}
               ref={audioRef} >
               <source src={audioSrc} type='audio/mpeg' />
             </audio>
+            <progress className={classes.progressBar} value={currentTime} max={duration} ></progress>
           </Grid>
         </Grid>
       </Grid>
