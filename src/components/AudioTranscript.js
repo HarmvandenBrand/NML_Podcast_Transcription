@@ -9,6 +9,7 @@ import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
 import Replay10Icon from '@material-ui/icons/Replay10';
 import Forward10Icon from '@material-ui/icons/Forward10';
+import Slider from '@material-ui/core/Slider';
 
 const useStyles = makeStyles(theme => ({
   audioplayer: {
@@ -30,9 +31,8 @@ const useStyles = makeStyles(theme => ({
   audio: {
     width: '100%'
   },
-  progressBar: {
-    width: '85%',
-    height: '10px',
+  slider: {
+    width: '90%',
   }
 }));
 
@@ -56,7 +56,6 @@ function AudioPlayer(props) {
   // TODO hardcoded for now; have duration in seconds
   const duration = 1694;
   const classes = useStyles();
-  // Add a state hook for keeping track if the audio player is paused or not
   const [playerState, setPlayerState] = useState("paused"); 
   const [currentTime, setCurrentTime] = useState(0); 
   const FormatTime = function(timeSeconds){
@@ -137,13 +136,16 @@ function AudioPlayer(props) {
 
           <Grid item>
             <audio
-              // TODO custom slider instead of default controls
-              //controls
               className={classes.audio}
               ref={audioRef} >
               <source src={audioSrc} type='audio/mpeg' />
             </audio>
-            <progress className={classes.progressBar} value={currentTime} max={duration} ></progress>
+            <Slider 
+              className={classes.slider} 
+              value={currentTime} 
+              min={0} 
+              step={0.1}
+              max={duration}/>
           </Grid>
         </Grid>
       </Grid>
