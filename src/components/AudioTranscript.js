@@ -13,12 +13,9 @@ import Slider from '@material-ui/core/Slider';
 
 const useStyles = makeStyles(theme => ({
   audioplayer: {
-    //marginTop: '1vw',
-    position: 'fixed', 
     position: 'sticky', 
     bottom: '56px',
     width: '100%',
-    //height: '150px',
     padding: '1vw',
     borderStyle: 'solid',
     borderColor: theme.palette.primary.main,
@@ -50,28 +47,28 @@ function TranscriptView(props) {
 }
 
 function AudioPlayer(props) {
-  // TODO duration uit audio halen en niet als metadata passen (huidige waarde is fout btw)
-  //const { audioSrc, audioRef, title, duration, img } = props;
+  // TODO ik haal "duration" niet meer uit de metadata
+  // dit vraagt om een consistentere aanpak over de hele app
   const { audioSrc, audioRef, title, img } = props;
-  // TODO hardcoded for now; have duration in seconds
-  const duration = 1694;
   const classes = useStyles();
   const [playerState, setPlayerState] = useState("paused"); 
   const [currentTime, setCurrentTime] = useState(0); 
+  const [duration, setDuration] = useState(0); 
   const FormatTime = function(timeSeconds){
-  return new Date(timeSeconds*1000).toISOString().substr(11,8); 
-}
+    return new Date(timeSeconds*1000).toISOString().substr(11,8);}
+  const handleProgress = (event, newValue) => {
+    setCurrentTime(newValue);
+    audioRef.current.currentTime=newValue;
+  };
 
   useEffect(() => {
-    if ( playerState === 'playing' )
-      console.log("play button pressed");
-    if ( playerState === 'paused' )
-      console.log("pause button pressed");
-    // TODO do this only once?
-    // TODO Is nu per milliseconde; kunnen we de hoeveelheid updates minimaliseren?
+    // Empty array at the end indicates to only add listener once
+    audioRef.current.addEventListener('loadedmetadata', ()=> {
+      setDuration(Math.floor(audioRef.current.duration))
+    }, []);
     audioRef.current.addEventListener("timeupdate",  ()=> {
       setCurrentTime(Math.floor(audioRef.current.currentTime))
-    });
+    }, []);
   })
 
   return (
@@ -143,9 +140,11 @@ function AudioPlayer(props) {
             <Slider 
               className={classes.slider} 
               value={currentTime} 
+              onChange={handleProgress}
               min={0} 
               step={0.1}
-              max={duration}/>
+              max={duration}
+            />
           </Grid>
         </Grid>
       </Grid>
@@ -188,7 +187,7 @@ function AudioTranscript(props) {
     <>
       <Header />
       <TranscriptView transcript={transcriptParagraphs} title={metadata.title} />
-      <AudioPlayer audioSrc={audio} audioRef={audioRef} title={metadata.title} duration={metadata.duration} img={metadata.img} />
+      <AudioPlayer audioSrc={audio} audioRef={audioRef} title={metadata.title} img={metadata.img} />
     </>
   );
 }
