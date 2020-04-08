@@ -77,7 +77,7 @@ function AudioPlayer(props) {
   return (
     <div className={ classes.audioplayer }>
       <Grid container spacing={2}>
-        <Grid item xs={2}>
+        <Grid item xs={2} container direction='column' justify='center'>
           <img className={classes.image} src={img} alt='Podcast logo' />
         </Grid>
 
