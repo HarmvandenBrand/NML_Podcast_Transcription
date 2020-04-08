@@ -1,7 +1,8 @@
 import React from 'react';
-import { Grid, Container, Typography } from '@material-ui/core';
+import { Container, Typography, IconButton } from '@material-ui/core';
 import Header from './Header';
 import { metadata, audio, transcript } from '../examplePodcast'; // example
+import GetAppIcon from '@material-ui/icons/GetApp';
 import AudioPlayer from './AudioPlayer';
 
 function TranscriptView(props) {
@@ -37,6 +38,28 @@ function mapParagraphTag(transcript, handleClick) {
     </p>);
 }
 
+function PrepareTranscript() {
+  return ('data:text/plain;charset=utf-16,' + transcript.replace(/\n/g, '%0A'));
+}
+
+function TranscriptDownloadButton(props) {
+
+return (
+    <IconButton
+    // id = "downloadlink"
+    // component={Link}
+    // fullWidth
+    // variant='contained'
+    // color='primary'
+    href = {PrepareTranscript()}
+    download='transcript.txt'
+    width='40px'
+    >
+      <GetAppIcon/>
+    </IconButton>
+  );
+}
+
 function AudioTranscript(props) {
   const audioRef = React.useRef(null);
 
@@ -49,7 +72,9 @@ function AudioTranscript(props) {
 
   return (
     <>
-      <Header />
+      <Header allowBack>
+        <TranscriptDownloadButton />
+      </Header>
       <TranscriptView transcript={transcriptParagraphs} title={metadata.title} />
       <AudioPlayer audioSrc={audio} audioRef={audioRef} title={metadata.title} img={metadata.img} />
     </>
