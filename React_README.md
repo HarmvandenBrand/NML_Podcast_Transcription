@@ -43,6 +43,8 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
+Everything on [React Hooks](https://reactjs.org/docs/hooks-intro.html).
+
 ### Code Splitting
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
@@ -66,3 +68,9 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+### React references
+
+- Found [a nice blog](https://nickymeuleman.netlify.com/blog/react-refs)
+    * [example code](https://codesandbox.io/s/4jzlzr7937?file=/src/FunctionUseRef.js)
+
