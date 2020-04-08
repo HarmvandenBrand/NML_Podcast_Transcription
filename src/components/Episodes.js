@@ -1,22 +1,29 @@
 import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import { Container } from '@material-ui/core';
-import MediaItem from './MediaItem';
 import Header from './Header';
+import ShowDetails from './ShowDetails';
 import { metadata } from '../examplePodcast'; // example
 
-// Placeholder: design a proper list of episodes screen
+const useStyles = makeStyles(theme => ({
+  container: {
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+  },
+}));
+
 function Episodes(props) {
+  const classes = useStyles();
+
   return (
     <>
       <Header allowBack />
-      <Container>
-        <MediaItem
-          id={metadata.id}
-          title={metadata.title}
-          series={metadata.series}
-          duration={metadata.duration}
+      <Container className={classes.container} maxWidth='md'>
+        <ShowDetails
           img={metadata.img}
-          desc={metadata.desc}
+          showTitle={metadata.series}
+          producer={metadata.producer}
+          desc={metadata.series_desc}
         />
       </Container>
     </>

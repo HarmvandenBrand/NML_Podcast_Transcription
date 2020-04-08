@@ -15,21 +15,30 @@ import {
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
-    height: '12vh',
-    minHeight: '100px',
+    [theme.breakpoints.only('xs')]: {
+      height: '96px',
+    },
+    [theme.breakpoints.up('sm')]: {
+      height: '128px',
+    },
   },
   cover: {
     flex: 'none',
-    width: '12vh',
-    minWidth: '100px',
+    [theme.breakpoints.only('xs')]: {
+      width: '96px',
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: '128px',
+    },
   },
   subtitle1: {
     fontSize: '1.2em',
-    lineHeight: '1.2em',
+    lineHeight: '1.15',
   },
   subtitle2: {
+    marginTop: theme.spacing(0.5),
+    marginBottom: theme.spacing(1),
     fontSize: '1.0em',
-    lineHeight: '2.0em',
   }
 }));
 
@@ -60,7 +69,7 @@ export default function ShowCard(props) {
           </Typography>
           <Hidden only='xs'>
             <Typography
-              className='clamp1'
+              className='clamp2'
               variant='caption'
             >
               {desc}
