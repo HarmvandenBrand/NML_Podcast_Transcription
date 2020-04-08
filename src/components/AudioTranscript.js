@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid, Container, Typography } from '@material-ui/core';
 import Header from './Header';
 import { makeStyles } from '@material-ui/core/styles';
@@ -6,6 +6,7 @@ import { metadata, audio, transcript } from '../examplePodcast'; // example
 //import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import IconButton from '@material-ui/core/IconButton';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
+import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
 import Replay10Icon from '@material-ui/icons/Replay10';
 import Forward10Icon from '@material-ui/icons/Forward10';
 
@@ -45,12 +46,22 @@ function TranscriptView(props) {
 function AudioPlayer(props) {
   const { audioSrc, audioRef, title, duration, img } = props;
   const classes = useStyles();
+  // Add a state hook for keeping track if the audio player is paused or not
+  const [player, setPlayer] = useState("paused"); 
+
+  useEffect(() => {
+    // if { player === "playing"}, set play?
+    if ( player === 'playing' )
+      console.log("play button pressed");
+    if ( player === 'paused' )
+      console.log("pause button pressed");
+  })
 
   return (
-    <div class={ classes.audioplayer }>
-      <Grid container xs={12} spacing={2}>
+    <div className={ classes.audioplayer }>
+      <Grid container spacing={2}>
         <Grid item xs={2}>
-          <img class={classes.image} src={img} alt='Podcast logo' />
+          <img className={classes.image} src={img} alt='Podcast logo' />
         </Grid>
 
         <Grid item xs={10} container> 
@@ -67,24 +78,33 @@ function AudioPlayer(props) {
                     <Replay10Icon color='primary' style={{ fontSize: 50 }}/>
                   </IconButton>
                 </Grid>
-                <Grid item>
-                  <IconButton onClick={ () => this.setState({ player: "playing"}) }>
-                    <PlayCircleFilledIcon color='primary' style={{ fontSize: 50 }} />
-                  </IconButton>
-                </Grid>
+                { player === "paused" && (
+                  <Grid item>
+                    <IconButton onClick={ () => setPlayer("playing") }>
+                      <PlayCircleFilledIcon color='primary' style={{ fontSize: 50 }} />
+                    </IconButton>
+                  </Grid>
+                )}
+                { player === "playing" && (
+                  <Grid item>
+                    <IconButton onClick={ () => setPlayer("paused") }>
+                      <PauseCircleFilledIcon color='primary' style={{ fontSize: 50 }} />
+                    </IconButton>
+                  </Grid>
+                )}
                 <Grid item>
                   <IconButton>
                     <Forward10Icon color='primary' style={{ fontSize: 50 }} />
                   </IconButton>
                 </Grid>
                 <Grid item>
-                  <Typography variant='h7'> 
+                  <Typography variant='subtitle2'> 
                     {duration}
                   </Typography>
                 </Grid>
             </Grid>
 
-          <Grid item justify='flex-start'>
+          <Grid item>
             <audio
               controls
               style={{ width: '100%' }}
