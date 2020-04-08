@@ -31,11 +31,11 @@ const useStyles = makeStyles(theme => ({
       width: '128px',
     },
   },
-  subtitle1: {
+  showTitle: {
     fontSize: '1.2em',
     lineHeight: '1.15',
   },
-  subtitle2: {
+  producer: {
     marginTop: theme.spacing(0.5),
     marginBottom: theme.spacing(1),
     fontSize: '1.0em',
@@ -56,14 +56,15 @@ export default function ShowCard(props) {
       >
         <CardContent className={classes.content}>
           <Typography
-            className={`${classes.subtitle1} ${xsBreakpoint ? 'clamp2' : 'clamp1'}`}
-            variant='subtitle1'
+            className={`${classes.showTitle} ${xsBreakpoint ? 'clamp2' : 'clamp1'}`}
+            variant='h5'
           >
             {showTitle}
           </Typography>
           <Typography
-            className={`${classes.subtitle2} clamp1`}
-            variant='subtitle2'
+            className={`${classes.producer} clamp1`}
+            variant='subtitle1'
+            color='textSecondary'
           >
             {producer}
           </Typography>

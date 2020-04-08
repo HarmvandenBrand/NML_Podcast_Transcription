@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { BottomNavigation, BottomNavigationAction, Paper } from '@material-ui/core';
-import { HomeRounded, HearingRounded, StarRounded } from '@material-ui/icons';
+import { HomeRounded, GraphicEqRounded, Favorite } from '@material-ui/icons';
 import { Link, Location } from '@reach/router';
 
 const useStyles = makeStyles(theme => ({
@@ -53,14 +53,14 @@ export default function Navigation(props) {
             to={paths.player}
             value={paths.player}
             label='Listen Now'
-            icon={<HearingRounded />}
+            icon={<GraphicEqRounded />}
           />
           <BottomNavigationAction
             component={Link}
             to={paths.favorites}
             value={paths.favorites}
             label='Favorites'
-            icon={<StarRounded />}
+            icon={<Favorite />}
           />
         </BottomNavigation>
 

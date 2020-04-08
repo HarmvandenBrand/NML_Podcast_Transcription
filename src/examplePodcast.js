@@ -12,9 +12,10 @@ let series_description = `Our online life is real life. We walk, talk, work, LOL
 
 const metadata = {
   id: '123456789',
+  date: 'July 15, 2019',
   title: 'The Internet\'s Carbon Footprint',
   series: 'IRL - Online Life is Real Life',
-  duration: '28:12',
+  duration: '28:14',
   img: 'https://irlpodcast.org/images/episodes/S05E03/artwork.png',
   desc: description,
   series_desc: series_description,
