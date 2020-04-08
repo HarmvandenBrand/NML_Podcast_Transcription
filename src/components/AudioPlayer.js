@@ -8,6 +8,15 @@ import Replay10Icon from '@material-ui/icons/Replay10';
 import Forward10Icon from '@material-ui/icons/Forward10';
 import Slider from '@material-ui/core/Slider';
 
+/* TODO
+ *
+ * 1. Navigeer van audio (progress slider) naar tekst timestamp
+ * 2. Maak ook responsive voor hele kleine schermen
+ * 3. Ik haal "duration" niet meer uit de metadata maar uit de audio zelf; dit vraagt om een consistentere aanpak over de hele app. Mogelijk dat in een hogere component doen en dan alsnog hier naartoe passen. N.B. duration moet in *seconden* gegeven worden!
+ * 4. Finetune positie podcast titel
+ * 5. Meer aftand tot navigatie bar?
+ */
+
 const useStyles = makeStyles(theme => ({
   audioplayer: {
     position: 'sticky', 
@@ -31,8 +40,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function AudioPlayer(props) {
-  // TODO ik haal "duration" niet meer uit de metadata
-  // dit vraagt om een consistentere aanpak over de hele app
   const { audioSrc, audioRef, title, img } = props;
   const classes = useStyles();
   const [playerState, setPlayerState] = useState("paused"); 
