@@ -46,17 +46,21 @@ function TranscriptView(props) {
 function AudioPlayer(props) {
   // TODO duration uit audio halen en niet als metadata passen (huidige waarde is fout btw)
   const { audioSrc, audioRef, title, duration, img } = props;
+  //const { audioSrc, audioRef, title, img } = props;
   const classes = useStyles();
   // Add a state hook for keeping track if the audio player is paused or not
   const [playerState, setPlayerState] = useState("paused"); 
-  // TODO waar current time managen? Hier of in AudioTranscript? State liften?
-  const [currentTime, setCurrentTime] = useState(0); 
+  // TODO betere dateformat
+  const [currentTime, setCurrentTime] = useState("0:00:00"); 
 
   useEffect(() => {
     if ( playerState === 'playing' )
       console.log("play button pressed");
     if ( playerState === 'paused' )
       console.log("pause button pressed");
+    // TODO do this only once?
+    audioRef.current.addEventListener("timeupdate",  ()=> {
+      setCurrentTime(new Date(Math.floor(audioRef.current.currentTime) * 1000).toISOString().substr(11, 8));});
   })
 
   return (
@@ -76,7 +80,9 @@ function AudioPlayer(props) {
 
             <Grid item container spacing={2} justify='space-evenly'>
                 <Grid item>
-                  <IconButton>
+                  <IconButton onClick={()=>{
+                    audioRef.current.currentTime -= 10;}
+                    }>
                     <Replay10Icon color='primary' style={{ fontSize: 50 }}/>
                   </IconButton>
                 </Grid>
@@ -101,19 +107,22 @@ function AudioPlayer(props) {
                   </Grid>
                 )}
                 <Grid item>
-                  <IconButton>
+                  <IconButton onClick={()=> {
+                    audioRef.current.currentTime += 10;}
+                    }>
                     <Forward10Icon color='primary' style={{ fontSize: 50 }} />
                   </IconButton>
                 </Grid>
                 <Grid item>
                   <Typography variant='subtitle2'> 
-                    0 / {duration}
+                    { currentTime } / {duration}
                   </Typography>
                 </Grid>
             </Grid>
 
           <Grid item>
             <audio
+              // TODO custom slider instead of default controls
               controls
               style={{ width: '100%' }}
               ref={audioRef} >
@@ -158,11 +167,11 @@ function AudioTranscript(props) {
   let transcriptParagraphs = mapParagraphTag(transcript, handleClick);
 
   return (
-    <React.Fragment>
+    <>
       <Header />
       <TranscriptView transcript={transcriptParagraphs} title={metadata.title} />
       <AudioPlayer audioSrc={audio} audioRef={audioRef} title={metadata.title} duration={metadata.duration} img={metadata.img} />
-    </React.Fragment>
+    </>
   );
 }
 
