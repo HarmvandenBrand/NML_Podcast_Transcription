@@ -44,16 +44,18 @@ function TranscriptView(props) {
 }
 
 function AudioPlayer(props) {
+  // TODO duration uit audio halen en niet als metadata passen (huidige waarde is fout btw)
   const { audioSrc, audioRef, title, duration, img } = props;
   const classes = useStyles();
   // Add a state hook for keeping track if the audio player is paused or not
-  const [player, setPlayer] = useState("paused"); 
+  const [playerState, setPlayerState] = useState("paused"); 
+  // TODO waar current time managen? Hier of in AudioTranscript? State liften?
+  const [currentTime, setCurrentTime] = useState(0); 
 
   useEffect(() => {
-    // if { player === "playing"}, set play?
-    if ( player === 'playing' )
+    if ( playerState === 'playing' )
       console.log("play button pressed");
-    if ( player === 'paused' )
+    if ( playerState === 'paused' )
       console.log("pause button pressed");
   })
 
@@ -78,16 +80,22 @@ function AudioPlayer(props) {
                     <Replay10Icon color='primary' style={{ fontSize: 50 }}/>
                   </IconButton>
                 </Grid>
-                { player === "paused" && (
+                { playerState === "paused" && (
                   <Grid item>
-                    <IconButton onClick={ () => setPlayer("playing") }>
+                    <IconButton onClick={ () => {
+                      setPlayerState("playing");
+                      audioRef.current.play();
+                      }}>
                       <PlayCircleFilledIcon color='primary' style={{ fontSize: 50 }} />
                     </IconButton>
                   </Grid>
                 )}
-                { player === "playing" && (
+                { playerState === "playing" && (
                   <Grid item>
-                    <IconButton onClick={ () => setPlayer("paused") }>
+                    <IconButton onClick={ () => {
+                      audioRef.current.pause();
+                      setPlayerState("paused");}
+                      }>
                       <PauseCircleFilledIcon color='primary' style={{ fontSize: 50 }} />
                     </IconButton>
                   </Grid>
@@ -99,7 +107,7 @@ function AudioPlayer(props) {
                 </Grid>
                 <Grid item>
                   <Typography variant='subtitle2'> 
-                    {duration}
+                    0 / {duration}
                   </Typography>
                 </Grid>
             </Grid>
@@ -150,11 +158,11 @@ function AudioTranscript(props) {
   let transcriptParagraphs = mapParagraphTag(transcript, handleClick);
 
   return (
-    <>
+    <React.Fragment>
       <Header />
       <TranscriptView transcript={transcriptParagraphs} title={metadata.title} />
       <AudioPlayer audioSrc={audio} audioRef={audioRef} title={metadata.title} duration={metadata.duration} img={metadata.img} />
-    </>
+    </React.Fragment>
   );
 }
 
