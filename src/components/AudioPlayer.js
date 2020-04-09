@@ -83,7 +83,7 @@ export default function AudioPlayer(props) {
 
   return (
     <div className={ classes.audioplayer }>
-      <Grid container spacing={2}>
+      <Grid container spacing={1}>
         <Grid item xs={1} md={2} container direction='column' justify='center'>
           <Hidden smDown>
             <img className={classes.image} src={img} alt='Podcast logo' />
