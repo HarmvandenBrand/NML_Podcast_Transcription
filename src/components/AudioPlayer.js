@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Typography } from '@material-ui/core';
+import { Divider, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
@@ -23,35 +23,48 @@ const useStyles = makeStyles(theme => ({
     position: 'sticky', 
     bottom: '56px',
     width: '100%',
+    height: '200px',
     padding: '1vw',
     borderStyle: 'solid',
+    border: 0,
+    borderTop: 1,
     borderColor: theme.palette.primary.main,
     background: theme.palette.background.default,
   },
   image: {
     width: 128,
-    height: 128,
-  },
-  audio: {
-    width: '100%'
+    height: 128
   },
   slider: {
     width: '90%',
+  },
+  divider: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+    height: 2
+  },
+  icon: {
+    fontSize: 50,
+    color: theme.palette.primary.main 
   }
 }));
 
 export default function AudioPlayer(props) {
   const { audioSrc, audioRef, title, img } = props;
   const classes = useStyles();
-  const [playerState, setPlayerState] = useState("paused"); 
+  const [isPlaying, setPlayerState] = useState(false); 
   const [currentTime, setCurrentTime] = useState(0); 
   const [duration, setDuration] = useState(0); 
-  const FormatTime = function(timeSeconds){
-    return new Date(timeSeconds*1000).toISOString().substr(11,8);}
+  const formatTime = timeSeconds => {
+    return new Date(timeSeconds*1000).toISOString().substr(11,8)};
   const handleProgress = (event, newValue) => {
     setCurrentTime(newValue);
     audioRef.current.currentTime=newValue;
   };
+  const handleEnd = () => {
+    setCurrentTime(0);
+    setPlayerState(false)
+  }
 
   useEffect(() => {
     // Empty array at the end indicates to only add listener once
@@ -83,50 +96,48 @@ export default function AudioPlayer(props) {
                   <IconButton onClick={()=>{
                     audioRef.current.currentTime -= 10;}
                     }>
-                    <Replay10Icon color='primary' style={{ fontSize: 50 }}/>
+                    <Replay10Icon className={classes.icon}/>
                   </IconButton>
                 </Grid>
-                { playerState === "paused" && (
-                  <Grid item>
-                    <IconButton onClick={ () => {
-                      setPlayerState("playing");
-                      audioRef.current.play();
-                      }}>
-                      <PlayCircleFilledIcon color='primary' style={{ fontSize: 50 }} />
-                    </IconButton>
-                  </Grid>
-                )}
-                { playerState === "playing" && (
+                { isPlaying ?
                   <Grid item>
                     <IconButton onClick={ () => {
                       audioRef.current.pause();
-                      setPlayerState("paused");}
+                      setPlayerState(false);}
                       }>
-                      <PauseCircleFilledIcon color='primary' style={{ fontSize: 50 }} />
+                      <PauseCircleFilledIcon className={classes.icon} />
                     </IconButton>
                   </Grid>
-                )}
+                  :
+                  <Grid item>
+                    <IconButton onClick={ () => {
+                      setPlayerState(true);
+                      audioRef.current.play();
+                      }}>
+                      <PlayCircleFilledIcon className={classes.icon}/>
+                    </IconButton>
+                  </Grid>
+                }
                 <Grid item>
                   <IconButton onClick={()=> {
                     audioRef.current.currentTime += 10;}
                     }>
-                    <Forward10Icon color='primary' style={{ fontSize: 50 }} />
+                    <Forward10Icon className={classes.icon}/>
                   </IconButton>
                 </Grid>
                 <Grid item>
                   <Typography variant='subtitle2'> 
-                    { FormatTime(currentTime) }
-                    <br/>
-                    <hr/>
-                    { FormatTime(duration)} 
+                    { formatTime(currentTime) }
+                    <Divider className={classes.divider}/>
+                    { formatTime(duration)} 
                   </Typography>
                 </Grid>
             </Grid>
 
           <Grid item>
             <audio
-              className={classes.audio}
-              ref={audioRef} >
+              ref={audioRef}
+              onEnded={handleEnd}>
               <source src={audioSrc} type='audio/mpeg' />
             </audio>
             <Slider 
