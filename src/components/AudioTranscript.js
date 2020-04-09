@@ -3,6 +3,7 @@ import { Container, Typography, IconButton } from '@material-ui/core';
 import Header from './Header';
 import { metadata, audio, transcript } from '../examplePodcast'; // example
 import GetAppIcon from '@material-ui/icons/GetApp';
+import AudioPlayer from './AudioPlayer';
 
 function TranscriptView(props) {
   const { transcript, title } = props;
@@ -14,20 +15,6 @@ function TranscriptView(props) {
         {transcript}
       </Typography>
     </Container>
-  );
-}
-
-function AudioPlayer(props) {
-  const { audioSrc, audioRef } = props;
-
-  return (
-    <audio
-      controls
-      style={{ position: 'fixed', bottom: '56px', width: '100%' }}
-      ref={audioRef}
-    >
-      <source src={audioSrc} type='audio/mpeg' />
-    </audio>
   );
 }
 
@@ -89,7 +76,7 @@ function AudioTranscript(props) {
         <TranscriptDownloadButton />
       </Header>
       <TranscriptView transcript={transcriptParagraphs} title={metadata.title} />
-      <AudioPlayer audioSrc={audio} audioRef={audioRef} />
+      <AudioPlayer audioSrc={audio} audioRef={audioRef} title={metadata.title} img={metadata.img} series={metadata.series} producer={metadata.producer} />
     </>
   );
 }
