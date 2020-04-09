@@ -76,7 +76,7 @@ function AudioTranscript(props) {
         <TranscriptDownloadButton />
       </Header>
       <TranscriptView transcript={transcriptParagraphs} title={metadata.title} />
-      <AudioPlayer audioSrc={audio} audioRef={audioRef} title={metadata.title} img={metadata.img} />
+      <AudioPlayer audioSrc={audio} audioRef={audioRef} title={metadata.title} img={metadata.img} series={metadata.series} producer={metadata.producer} />
     </>
   );
 }

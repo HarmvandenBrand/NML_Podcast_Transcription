@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Divider, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
+import Hidden from '@material-ui/core/Hidden';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
 import Replay10Icon from '@material-ui/icons/Replay10';
@@ -15,7 +16,6 @@ import Slider from '@material-ui/core/Slider';
  * 3. Ik haal "duration" niet meer uit de metadata maar uit de audio zelf; dit vraagt om een consistentere aanpak over de hele app. Mogelijk dat in een hogere component doen en dan alsnog hier naartoe passen. N.B. duration moet in *seconden* gegeven worden!
  * 4. Audio volume knop toevoegen
  * 5. Finetune positie podcast titel
- * 6. Meer aftand tot navigatie bar?
  */
 
 const useStyles = makeStyles(theme => ({
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     position: 'sticky', 
     bottom: '56px',
     width: '100%',
-    height: '200px',
+    height: '165px',
     padding: '1vw',
     borderStyle: 'solid',
     border: 0,
@@ -44,13 +44,13 @@ const useStyles = makeStyles(theme => ({
     height: 2
   },
   icon: {
-    fontSize: 50,
+    fontSize: 40,
     color: theme.palette.primary.main 
   }
 }));
 
 export default function AudioPlayer(props) {
-  const { audioSrc, audioRef, title, img } = props;
+  const { audioSrc, audioRef, title, img, series, producer } = props;
   const classes = useStyles();
   const [isPlaying, setPlayerState] = useState(false); 
   const [currentTime, setCurrentTime] = useState(0); 
@@ -84,19 +84,20 @@ export default function AudioPlayer(props) {
   return (
     <div className={ classes.audioplayer }>
       <Grid container spacing={2}>
-        <Grid item xs={2} container direction='column' justify='center'>
-          <img className={classes.image} src={img} alt='Podcast logo' />
+        <Grid item xs={1} md={2} container direction='column' justify='center'>
+          <Hidden smDown>
+            <img className={classes.image} src={img} alt='Podcast logo' />
+          </Hidden>
         </Grid>
 
-        <Grid item xs={10} container> 
-          <Grid item container direction='column' spacing={2}>
+        <Grid item xs={11} md={10} container> 
+          <Grid item container direction='column' spacing={1}>
             <Grid item >
-              <Typography variant='h5'>
-                {title}
+              <Typography variant='subtitle1'>
+                {series}: {title} ({producer})
               </Typography>
             </Grid>
-
-            <Grid item container spacing={2} justify='space-evenly'>
+            <Grid item container spacing={1} justify='space-evenly'>
                 <Grid item>
                   <IconButton onClick={()=>{
                     audioRef.current.currentTime -= 10;}
@@ -116,8 +117,8 @@ export default function AudioPlayer(props) {
                   :
                   <Grid item>
                     <IconButton onClick={ () => {
-                      setPlayerState(true);
                       audioRef.current.play();
+                      setPlayerState(true);
                       }}>
                       <PlayCircleFilledIcon className={classes.icon}/>
                     </IconButton>
