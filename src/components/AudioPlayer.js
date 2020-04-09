@@ -63,16 +63,21 @@ export default function AudioPlayer(props) {
   };
   const handleEnd = () => {
     setCurrentTime(0);
-    setPlayerState(false)
+    setPlayerState(false);
   }
 
+  // TODO currently audioRef is not maintained across screens causing a null
+  // pointer exception. Removing the event listeners is an option but for now
+  // does not make much sense, because the problem is caused elsewhere.
   useEffect(() => {
     // Empty array at the end indicates to only add listener once
     audioRef.current.addEventListener('loadedmetadata', ()=> {
-      setDuration(Math.floor(audioRef.current.duration))
+      if (audioRef.current)
+        setDuration(Math.floor(audioRef.current.duration))
     }, []);
     audioRef.current.addEventListener("timeupdate",  ()=> {
-      setCurrentTime(Math.floor(audioRef.current.currentTime))
+      if (audioRef.current)
+        setCurrentTime(Math.floor(audioRef.current.currentTime))
     }, []);
   })
 
@@ -133,7 +138,6 @@ export default function AudioPlayer(props) {
                   </Typography>
                 </Grid>
             </Grid>
-
           <Grid item>
             <audio
               ref={audioRef}
