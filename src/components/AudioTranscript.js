@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Typography, IconButton } from '@material-ui/core';
+import { Container, TextField, Typography, IconButton, Button, Input} from '@material-ui/core';
 import Header from './Header';
 import { metadata, audio, transcript } from '../examplePodcast'; // example
 import GetAppIcon from '@material-ui/icons/GetApp';
@@ -44,7 +44,7 @@ function mapParagraphTag(transcript, handleClick) {
   // index as key is bad practice in general but as the order of 
   // the paragraphs is fixed this is not an issue here
   return paragraphs.map((p, idx) =>
-    <p key={idx}>
+    <p key={idx} id={'transcript_p' + idx}>
       <span onClick={() => handleClick(idx)}>
         {p}
       </span>
@@ -64,10 +64,8 @@ function PrepareTranscript() {
 function TranscriptDownloadButton(props) {
 const { title } = props;
 
-return (
+  return (
     <IconButton
-    // variant='contained'
-    // color='primary'
     href = {PrepareTranscript()}
     download= {title + '.txt'}
     width='40px'
@@ -76,6 +74,33 @@ return (
     </IconButton>
   );
 }
+
+//Searches the page for the phrase in the search field
+function Search() {
+  var searchval = document.getElementById("transcript-search").value;  
+  window.find(searchval);
+}
+
+//Searches the page for the phrase in the search field. Only fires when triggered by pressing the 'Enter' key.
+function SearchKey(event) {
+  if (event.keyCode == 13)
+  {
+    try
+    {
+      var searchval = document.getElementById("transcript-search").value;
+
+      //If called during eventhandling, works for Chrome, not for Firefox :(.
+      window.find(searchval);
+    }
+    catch(error) {
+      if(error.name == "NS_ERROR_ILLEGAL_VALUE")
+      {
+        console.error("Please press the 'Search' button instead.");
+      }
+    }
+  }
+}
+
 
 function AudioTranscript(props) {
   const audioRef = React.useRef(null);
@@ -91,6 +116,8 @@ function AudioTranscript(props) {
     <>
       <Header allowBack>
         <TranscriptDownloadButton title={metadata.title}/>
+        <TextField id="transcript-search" label="Search Transcript" type="search" variant="outlined" onKeyDown={(event) => {SearchKey(event)}}/>
+        <Button id='search-button' onClick={() => {Search()}}>Search</Button>
       </Header>
       <TranscriptView transcript={transcriptParagraphs} title={metadata.title} />
       <AudioPlayer audioSrc={audio} audioRef={audioRef} />
