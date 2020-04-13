@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Container, TextField, Typography, IconButton} from '@material-ui/core';
 import Header from './Header';
 import { metadata, audio, transcript } from '../examplePodcast'; // example
@@ -26,13 +26,13 @@ function TranscriptView(props) {
  * @param {string} transcript the podcast transcript
  * @param {function} handleClick _onClick_ handler
  */
-function mapParagraphTag(transcript, handleClick) {
+function mapParagraphTag(transcript, handleClick, setTextRef) {
   let paragraphs = transcript.split(/\r?\n/).filter(Boolean);
   // index as key is bad practice in general but as the order of 
   // the paragraphs is fixed this is not an issue here
   return paragraphs.map((p, idx) =>
     <p key={idx} id={'transcript_p' + idx}>
-      <span onClick={() => handleClick(idx)}>
+      <span ref={ref => setTextRef(ref, idx)} onClick={() => handleClick(idx)}>
         {p}
       </span>
     </p>);
@@ -86,13 +86,23 @@ function SearchKey(event) {
 
 function AudioTranscript(props) {
   const audioRef = React.useRef(null);
+  const refsArray = useRef([]);
 
   const handleClick = (idx) => {
     audioRef.current.currentTime = Math.fround(idx * 20);
+    refsArray.current[idx].scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
   };
 
-  // example with dummy timestamps  
-  let transcriptParagraphs = mapParagraphTag(transcript, handleClick);
+  const setTextRef = (ref, idx) => {
+    refsArray.current[idx] = ref;
+  }
+
+  // example with dummy timestamps
+  let transcriptParagraphs = mapParagraphTag(transcript, handleClick, setTextRef);
+
 
   return (
     <>
@@ -101,7 +111,7 @@ function AudioTranscript(props) {
         <TranscriptDownloadButton title={metadata.title}/>
       </Header>
       <TranscriptView transcript={transcriptParagraphs} title={metadata.title} />
-      <AudioPlayer audioSrc={audio} audioRef={audioRef} title={metadata.title} img={metadata.img} series={metadata.series} producer={metadata.producer} />
+      <AudioPlayer audioSrc={audio} audioRef={audioRef} textRefs={refsArray} title={metadata.title} img={metadata.img} series={metadata.series} producer={metadata.producer} />
     </>
   );
 }
