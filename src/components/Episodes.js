@@ -1,23 +1,45 @@
 import React from 'react';
-import { Container } from '@material-ui/core';
-import MediaItem from './MediaItem';
+import { makeStyles } from '@material-ui/core/styles';
+import { Container, Typography } from '@material-ui/core';
 import Header from './Header';
+import ShowDetails from './ShowDetails';
+import EpisodeCard from './EpisodeCard';
 import { metadata } from '../examplePodcast'; // example
 
-// Placeholder: design a proper list of episodes screen
+const useStyles = makeStyles(theme => ({
+  container: {
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+  }, card: {
+    padding: theme.spacing(1, 0, 1, 0),
+  }
+}));
+
 function Episodes(props) {
+  // const { showId, ...showDetails } = props;
+  const classes = useStyles();
+
   return (
     <>
       <Header allowBack />
-      <Container>
-        <MediaItem
-          id={metadata.id}
-          title={metadata.title}
-          series={metadata.series}
-          duration={metadata.duration}
+      <Container className={classes.container} maxWidth='md'>
+        <ShowDetails
           img={metadata.img}
-          desc={metadata.desc}
+          showTitle={metadata.series}
+          producer={metadata.producer}
+          desc={metadata.series_desc}
         />
+        <Typography variant='h6'>Episodes</Typography>
+        {[1, 2, 3, 4, 5].map((idx) => (
+          <div className={classes.card} key={idx}>
+            <EpisodeCard
+              date={metadata.date}
+              title={metadata.title}
+              duration={metadata.duration}
+              desc={metadata.desc}
+            />
+          </div>
+        ))}
       </Container>
     </>
   );

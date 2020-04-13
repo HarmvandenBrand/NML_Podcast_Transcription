@@ -8,15 +8,14 @@ let description = `Manoush Zomorodi explores the surprising environmental impact
 
 Music professor Kyle Devine considers the environmental costs of streaming music. Geophysicist and pop scientist Miles Traer takes his best shot at calculating the carbon footprint of the IRL podcast. Climate journalist Tatiana Schlossberg explores the environmental influence we don’t know we have and what the web’s got to do with it. Greenpeace’s Gary Cook explains which tech companies are committed to renewable energy — and which are not. Kris De Decker tries powering his website with a homebrew solar power system. And, Ecosia’s Chief Tree Planting Officer Pieter Van Midwoud discusses how his company uses online search to plant trees.`
 
-let series_description = `Host Manoush Zomorodi shares real stories of life online and real talk about the future of the Web.
-
-IRL is an original podcast from Firefox.`
+let series_description = `Our online life is real life. We walk, talk, work, LOL and even love on the Internet – but we don’t always treat it like real life. Host Manoush Zomorodi explores this disconnect with stories from the wilds of the Web, and gets to the bottom of online issues that affect us all. Whether it’s privacy breaches, closed platforms, hacking, fake news, or cyber bullying, we the people have the power to change the course of the Internet, keeping it ethical, safe, weird, and wonderful for everyone. IRL is an original podcast from Firefox, the tech company that believes privacy isn’t a policy. It’s a right.`
 
 const metadata = {
   id: '123456789',
+  date: 'July 15, 2019',
   title: 'The Internet\'s Carbon Footprint',
   series: 'IRL - Online Life is Real Life',
-  duration: '28:12',
+  duration: '28:14',
   img: 'https://irlpodcast.org/images/episodes/S05E03/artwork.png',
   desc: description,
   series_desc: series_description,
