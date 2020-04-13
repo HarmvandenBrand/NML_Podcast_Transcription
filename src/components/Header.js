@@ -7,7 +7,8 @@ import {
   Typography,
   useScrollTrigger,
   Slide,
-  IconButton
+  IconButton,
+  Grid
 } from '@material-ui/core';
 import { ArrowBack } from '@material-ui/icons';
 
@@ -48,21 +49,34 @@ export default function Header(props) {
         color='default'
       >
         <Toolbar>
-          {allowBack &&
-            <IconButton
-              edge='start'
-              onClick={() => navigate(-1)}
-            >
-              <ArrowBack />
-            </IconButton>
-          }
-          <Typography
-            className={classes.appName}
-            variant='h5'
-          >
-            Placeholder
-          </Typography>
-          {props.children}
+          <Grid container spacing={2} alignItems='center'>
+
+            <Grid item md={4} sm={2} xs={1}>
+              {allowBack &&
+              <IconButton
+                edge='start'
+                onClick={() => navigate(-1)}
+              >
+                <ArrowBack />
+              </IconButton>
+              }
+            </Grid>
+
+            <Grid item md={4} sm={3} xs={2}>
+              <Typography
+                className={classes.appName}
+                variant='h5'
+                style={{flex:1, textAlign:'center'}}
+              >
+                Placeholder
+              </Typography>
+            </Grid>
+
+            <Grid item md={4} sm={7} xs={9} style={{textAlign:'right'}}>
+              {props.children}
+            </Grid>
+
+          </Grid>
         </Toolbar>
       </AppBar>
     </HideOnScroll>
