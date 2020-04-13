@@ -20,7 +20,7 @@ import Slider from '@material-ui/core/Slider';
 
 const useStyles = makeStyles(theme => ({
   audioplayer: {
-    position: 'sticky', 
+    position: 'sticky',
     bottom: '56px',
     width: '100%',
     height: '165px',
@@ -45,49 +45,48 @@ const useStyles = makeStyles(theme => ({
   },
   icon: {
     fontSize: 40,
-    color: theme.palette.primary.main 
+    color: theme.palette.primary.main
   }
 }));
 
 export default function AudioPlayer(props) {
   const { audioSrc, audioRef, textRefs, title, img, series, producer } = props;
   const classes = useStyles();
-  const [isPlaying, setPlayerState] = useState(false); 
-  const [currentTime, setCurrentTime] = useState(0); 
-  const [duration, setDuration] = useState(0); 
+  const [isPlaying, setPlayerState] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+
   const formatTime = timeSeconds => {
-    return new Date(timeSeconds*1000).toISOString().substr(11,8)};
+    return new Date(timeSeconds * 1000).toISOString().substr(11, 8)
+  };
+
   const handleProgress = (event, newValue) => {
     setCurrentTime(newValue);
-    audioRef.current.currentTime=newValue;
+    audioRef.current.currentTime = newValue;
     // TODO dit is de DUMMY implementatie 
-    textRefs.current[Math.floor(newValue/20)].scrollIntoView({
+    textRefs.current[Math.floor(newValue / 20)].scrollIntoView({
       behavior: 'smooth',
       block: 'start'
     });
   };
+
   const handleEnd = () => {
     setCurrentTime(0);
     setPlayerState(false);
   }
 
-  // TODO currently audioRef is not maintained across screens causing a null
-  // pointer exception. Removing the event listeners is an option but for now
-  // does not make much sense, because the problem is caused elsewhere.
   useEffect(() => {
     // Empty array at the end indicates to only add listener once
-    audioRef.current.addEventListener('loadedmetadata', ()=> {
-      if (audioRef.current)
-        setDuration(Math.floor(audioRef.current.duration))
+    audioRef.current.addEventListener('loadedmetadata', (event) => {
+      setDuration(Math.floor(event.target.duration))
     }, []);
-    audioRef.current.addEventListener("timeupdate",  ()=> {
-      if (audioRef.current)
-        setCurrentTime(Math.floor(audioRef.current.currentTime))
+    audioRef.current.addEventListener("timeupdate", (event) => {
+      setCurrentTime(Math.floor(event.target.currentTime))
     }, []);
   })
 
   return (
-    <div className={ classes.audioplayer }>
+    <div className={classes.audioplayer}>
       <Grid container spacing={1}>
         <Grid item xs={1} md={2} container direction='column' justify='center'>
           <Hidden smDown>
@@ -95,7 +94,7 @@ export default function AudioPlayer(props) {
           </Hidden>
         </Grid>
 
-        <Grid item xs={11} md={10} container> 
+        <Grid item xs={11} md={10} container>
           <Grid item container direction='column' spacing={1}>
             <Grid item >
               <Typography variant='subtitle1'>
@@ -103,65 +102,68 @@ export default function AudioPlayer(props) {
               </Typography>
             </Grid>
             <Grid item container spacing={1} justify='space-evenly'>
-                <Grid item>
-                  <IconButton onClick={()=>{
-                    audioRef.current.currentTime -= 10;}
-                    }>
-                    <Replay10Icon className={classes.icon}/>
-                  </IconButton>
-                </Grid>
-                { isPlaying ?
-                  <Grid item>
-                    <IconButton onClick={ () => {
-                      audioRef.current.pause();
-                      setPlayerState(false);}
-                      }>
-                      <PauseCircleFilledIcon className={classes.icon} />
-                    </IconButton>
-                  </Grid>
-                  :
-                  <Grid item>
-                    <IconButton onClick={ () => {
-                      audioRef.current.play();
-                      setPlayerState(true);
-                      }}>
-                      <PlayCircleFilledIcon className={classes.icon}/>
-                    </IconButton>
-                  </Grid>
+              <Grid item>
+                <IconButton onClick={() => {
+                  audioRef.current.currentTime -= 10;
                 }
+                }>
+                  <Replay10Icon className={classes.icon} />
+                </IconButton>
+              </Grid>
+              {isPlaying ?
                 <Grid item>
-                  <IconButton onClick={()=> {
-                    audioRef.current.currentTime += 10;}
-                    }>
-                    <Forward10Icon className={classes.icon}/>
+                  <IconButton onClick={() => {
+                    audioRef.current.pause();
+                    setPlayerState(false);
+                  }
+                  }>
+                    <PauseCircleFilledIcon className={classes.icon} />
                   </IconButton>
                 </Grid>
+                :
                 <Grid item>
-                  <Typography variant='subtitle2'> 
-                    { formatTime(currentTime) }
-                    <Divider className={classes.divider}/>
-                    { formatTime(duration)} 
-                  </Typography>
+                  <IconButton onClick={() => {
+                    audioRef.current.play();
+                    setPlayerState(true);
+                  }}>
+                    <PlayCircleFilledIcon className={classes.icon} />
+                  </IconButton>
                 </Grid>
+              }
+              <Grid item>
+                <IconButton onClick={() => {
+                  audioRef.current.currentTime += 10;
+                }
+                }>
+                  <Forward10Icon className={classes.icon} />
+                </IconButton>
+              </Grid>
+              <Grid item>
+                <Typography variant='subtitle2'>
+                  {formatTime(currentTime)}
+                  <Divider className={classes.divider} />
+                  {formatTime(duration)}
+                </Typography>
+              </Grid>
             </Grid>
-          <Grid item>
-            <audio
-              ref={audioRef}
-              onEnded={handleEnd}>
-              <source src={audioSrc} type='audio/mpeg' />
-            </audio>
-            <Slider 
-              className={classes.slider} 
-              value={currentTime} 
-              onChange={handleProgress}
-              min={0} 
-              step={0.1}
-              max={duration}
-            />
+            <Grid item>
+              <audio
+                ref={audioRef}
+                onEnded={handleEnd}>
+                <source src={audioSrc} type='audio/mpeg' />
+              </audio>
+              <Slider
+                className={classes.slider}
+                value={currentTime}
+                onChange={handleProgress}
+                min={0}
+                step={0.1}
+                max={duration}
+              />
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
-    </Grid>
     </div>
   );
 }
