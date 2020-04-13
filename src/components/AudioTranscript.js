@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Container, TextField, Typography, IconButton } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import Header from './Header';
@@ -90,18 +90,21 @@ function AudioTranscript(props) {
   useEffect(() => {
     audioRef.current.addEventListener('timeupdate', (event) => {
       let roundedTime = Math.round(event.target.currentTime);
-      refsArray.current.map(text => {
-        let timestamp = parseInt(text.id)
-        // hardcode timestamp range
-        if (timestamp <= roundedTime && roundedTime < timestamp + 20) {
-          text.style.backgroundColor = theme.palette.primary.main;
-          text.style.color = 'black';
-        }
-        else {
-          text.style.backgroundColor = 'transparent';
-          text.style.color = theme.palette.text.primary;
-        }
-      });
+      // workaround to fix nullpointer exception for now when switching screens
+      if (refsArray.current[0]) {
+        refsArray.current.map(text => {
+          let timestamp = parseInt(text.id)
+          // hardcode timestamp range
+          if (timestamp <= roundedTime && roundedTime < timestamp + 20) {
+            text.style.backgroundColor = theme.palette.primary.main;
+            text.style.color = 'black';
+          }
+          else {
+            text.style.backgroundColor = 'transparent';
+            text.style.color = theme.palette.text.primary;
+          }
+        });
+      }
     });
   }, [])
 
