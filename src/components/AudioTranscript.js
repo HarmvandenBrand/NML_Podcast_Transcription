@@ -42,7 +42,7 @@ function mapParagraphTag(transcript, handleClick) {
  * Returns the transcript to be downloaded by the user as a text file.
  */
 function PrepareTranscript() {
-  return ('data:text/plain;charset=utf-16,' + transcript.replace(/\n/g, '%0A'));
+  return ('data:text/plain;charset=utf-8,' + transcript.replace(/\n/g, '%0A'));
 }
 
 /**
