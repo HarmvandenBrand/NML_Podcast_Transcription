@@ -50,7 +50,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function AudioPlayer(props) {
-  const { audioSrc, audioRef, title, img, series, producer } = props;
+  const { audioSrc, audioRef, textRefs, title, img, series, producer } = props;
   const classes = useStyles();
   const [isPlaying, setPlayerState] = useState(false); 
   const [currentTime, setCurrentTime] = useState(0); 
@@ -60,6 +60,11 @@ export default function AudioPlayer(props) {
   const handleProgress = (event, newValue) => {
     setCurrentTime(newValue);
     audioRef.current.currentTime=newValue;
+    // TODO dit is de DUMMY implementatie 
+    textRefs.current[Math.floor(newValue/20)].scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
   };
   const handleEnd = () => {
     setCurrentTime(0);

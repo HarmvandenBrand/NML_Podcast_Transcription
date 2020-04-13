@@ -62,12 +62,14 @@ return (
 
 function AudioTranscript(props) {
   const audioRef = React.useRef(null);
-  const textRef = React.useRef(null);
   const refsArray = useRef([]);
 
   const handleClick = (idx) => {
     audioRef.current.currentTime = Math.fround(idx * 20);
-    refsArray.current[idx].scrollIntoView();
+    refsArray.current[idx].scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
   };
 
   const setTextRef = (ref, idx) => {
@@ -83,7 +85,7 @@ function AudioTranscript(props) {
         <TranscriptDownloadButton />
       </Header>
       <TranscriptView transcript={transcriptParagraphs} title={metadata.title} />
-      <AudioPlayer audioSrc={audio} audioRef={audioRef} title={metadata.title} img={metadata.img} series={metadata.series} producer={metadata.producer} />
+      <AudioPlayer audioSrc={audio} audioRef={audioRef} textRefs={refsArray} title={metadata.title} img={metadata.img} series={metadata.series} producer={metadata.producer} />
     </>
   );
 }
