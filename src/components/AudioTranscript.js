@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, TextField, Typography, IconButton, Button, Input} from '@material-ui/core';
+import { Container, TextField, Typography, IconButton} from '@material-ui/core';
 import Header from './Header';
 import { metadata, audio, transcript } from '../examplePodcast'; // example
 import GetAppIcon from '@material-ui/icons/GetApp';
@@ -75,15 +75,9 @@ const { title } = props;
   );
 }
 
-//Searches the page for the phrase in the search field
-function Search() {
-  var searchval = document.getElementById("transcript-search").value;  
-  window.find(searchval);
-}
-
 //Searches the page for the phrase in the search field. Only fires when triggered by pressing the 'Enter' key.
 function SearchKey(event) {
-  if (event.keyCode == 13)
+  if (event.keyCode === 13)
   {
     try
     {
@@ -93,9 +87,10 @@ function SearchKey(event) {
       window.find(searchval);
     }
     catch(error) {
-      if(error.name == "NS_ERROR_ILLEGAL_VALUE")
+      //Weird Firefox error
+      if(error.name === "NS_ERROR_ILLEGAL_VALUE")
       {
-        console.error("Please press the 'Search' button instead.");
+        console.error(error.name);
       }
     }
   }
@@ -115,9 +110,8 @@ function AudioTranscript(props) {
   return (
     <>
       <Header allowBack>
-        <TranscriptDownloadButton title={metadata.title}/>
         <TextField id="transcript-search" label="Search Transcript" type="search" variant="outlined" onKeyDown={(event) => {SearchKey(event)}}/>
-        <Button id='search-button' onClick={() => {Search()}}>Search</Button>
+        <TranscriptDownloadButton title={metadata.title}/>
       </Header>
       <TranscriptView transcript={transcriptParagraphs} title={metadata.title} />
       <AudioPlayer audioSrc={audio} audioRef={audioRef} />
