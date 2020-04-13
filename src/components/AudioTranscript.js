@@ -1,5 +1,6 @@
-import React, { useRef } from 'react';
-import { Container, TextField, Typography, IconButton} from '@material-ui/core';
+import React, { useRef, useState, useEffect } from 'react';
+import { Container, TextField, Typography, IconButton } from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
 import Header from './Header';
 import { metadata, audio, transcript } from '../examplePodcast'; // example
 import GetAppIcon from '@material-ui/icons/GetApp';
@@ -32,7 +33,7 @@ function mapParagraphTag(transcript, handleClick, setTextRef) {
   // the paragraphs is fixed this is not an issue here
   return paragraphs.map((p, idx) =>
     <p key={idx} id={'transcript_p' + idx}>
-      <span ref={ref => setTextRef(ref, idx)} onClick={() => handleClick(idx)}>
+      <span id={idx * 20} ref={ref => setTextRef(ref, idx)} onClick={() => handleClick(idx)}>
         {p}
       </span>
     </p>);
@@ -49,34 +50,31 @@ function PrepareTranscript() {
  * User can click this button to download the audio transcript.
  */
 function TranscriptDownloadButton(props) {
-const { title } = props;
+  const { title } = props;
 
   return (
     <IconButton
-    href = {PrepareTranscript()}
-    download= {title + '.txt'}
-    width='40px'
+      href={PrepareTranscript()}
+      download={title + '.txt'}
+      width='40px'
     >
-      <GetAppIcon/>
+      <GetAppIcon />
     </IconButton>
   );
 }
 
 //Searches the page for the phrase in the search field. Only fires when triggered by pressing the 'Enter' key.
 function SearchKey(event) {
-  if (event.keyCode === 13)
-  {
-    try
-    {
+  if (event.keyCode === 13) {
+    try {
       var searchval = document.getElementById("transcript-search").value;
 
       //If called during eventhandling, works for Chrome, not for Firefox :(.
       window.find(searchval);
     }
-    catch(error) {
+    catch (error) {
       //Weird Firefox error
-      if(error.name === "NS_ERROR_ILLEGAL_VALUE")
-      {
+      if (error.name === "NS_ERROR_ILLEGAL_VALUE") {
         console.error(error.name);
       }
     }
@@ -85,8 +83,27 @@ function SearchKey(event) {
 
 
 function AudioTranscript(props) {
-  const audioRef = React.useRef(null);
+  const theme = useTheme();
+  const audioRef = useRef(null);
   const refsArray = useRef([]);
+
+  useEffect(() => {
+    audioRef.current.addEventListener('timeupdate', (event) => {
+      let roundedTime = Math.round(event.target.currentTime);
+      refsArray.current.map(text => {
+        let timestamp = parseInt(text.id)
+        // hardcode timestamp range
+        if (timestamp <= roundedTime && roundedTime < timestamp + 20) {
+          text.style.backgroundColor = theme.palette.primary.main;
+          text.style.color = 'black';
+        }
+        else {
+          text.style.backgroundColor = 'transparent';
+          text.style.color = theme.palette.text.primary;
+        }
+      });
+    });
+  }, [])
 
   const handleClick = (idx) => {
     audioRef.current.currentTime = Math.fround(idx * 20);
@@ -103,12 +120,11 @@ function AudioTranscript(props) {
   // example with dummy timestamps
   let transcriptParagraphs = mapParagraphTag(transcript, handleClick, setTextRef);
 
-
   return (
     <>
       <Header allowBack>
-        <TextField id="transcript-search" label="Search Transcript" type="search" variant="outlined" onKeyDown={(event) => {SearchKey(event)}}/>
-        <TranscriptDownloadButton title={metadata.title}/>
+        <TextField id="transcript-search" label="Search Transcript" type="search" variant="outlined" onKeyDown={(event) => { SearchKey(event) }} />
+        <TranscriptDownloadButton title={metadata.title} />
       </Header>
       <TranscriptView transcript={transcriptParagraphs} title={metadata.title} />
       <AudioPlayer audioSrc={audio} audioRef={audioRef} textRefs={refsArray} title={metadata.title} img={metadata.img} series={metadata.series} producer={metadata.producer} />
