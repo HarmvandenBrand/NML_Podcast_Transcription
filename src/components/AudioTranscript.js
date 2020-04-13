@@ -1,4 +1,4 @@
-import React, { useRef, createRef } from 'react';
+import React, { useRef } from 'react';
 import { Container, Typography, IconButton } from '@material-ui/core';
 import Header from './Header';
 import { metadata, audio, transcript } from '../examplePodcast'; // example
