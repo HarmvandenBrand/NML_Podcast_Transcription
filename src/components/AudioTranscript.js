@@ -42,7 +42,7 @@ function mapParagraphTag(transcript, handleClick, setTextRef) {
 /**
  * Returns the transcript to be downloaded by the user as a text file.
  */
-function PrepareTranscript() {
+function prepareTranscript() {
   return ('data:text/plain;charset=utf-8,' + transcript.replace(/\n/g, '%0A'));
 }
 
@@ -54,9 +54,9 @@ function TranscriptDownloadButton(props) {
 
   return (
     <IconButton
-      href={PrepareTranscript()}
+      edge='end'
+      href={prepareTranscript()}
       download={title + '.txt'}
-      width='40px'
     >
       <GetAppIcon />
     </IconButton>
@@ -64,7 +64,7 @@ function TranscriptDownloadButton(props) {
 }
 
 //Searches the page for the phrase in the search field. Only fires when triggered by pressing the 'Enter' key.
-function SearchKey(event) {
+function searchKey(event) {
   if (event.keyCode === 13) {
     try {
       var searchval = document.getElementById("transcript-search").value;
@@ -80,7 +80,6 @@ function SearchKey(event) {
     }
   }
 }
-
 
 function AudioTranscript(props) {
   const theme = useTheme();
@@ -126,7 +125,14 @@ function AudioTranscript(props) {
   return (
     <>
       <Header allowBack>
-        <TextField id="transcript-search" label="Search Transcript" type="search" variant="outlined" onKeyDown={(event) => { SearchKey(event) }} />
+        <TextField
+          id='transcript-search'
+          label='Search transcript'
+          type='search'
+          variant='outlined'
+          margin='dense'
+          onKeyDown={(event) => { searchKey(event) }}
+        />
         <TranscriptDownloadButton title={metadata.title} />
       </Header>
       <TranscriptView transcript={transcriptParagraphs} title={metadata.title} />
