@@ -91,7 +91,7 @@ function AudioTranscript(props) {
       let roundedTime = Math.round(event.target.currentTime);
       // workaround to fix nullpointer exception for now when switching screens
       if (refsArray.current[0]) {
-        refsArray.current.map(text => {
+        refsArray.current.forEach(text => {
           let timestamp = parseInt(text.id)
           // hardcode timestamp range
           if (timestamp <= roundedTime && roundedTime < timestamp + 20) {
@@ -105,7 +105,7 @@ function AudioTranscript(props) {
         });
       }
     });
-  }, [])
+  }, [theme])
 
   const handleClick = (idx) => {
     audioRef.current.currentTime = Math.fround(idx * 20);
