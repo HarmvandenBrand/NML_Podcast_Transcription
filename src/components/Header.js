@@ -15,7 +15,6 @@ import { ArrowBack } from '@material-ui/icons';
 const useStyles = makeStyles(theme => ({
   appName: {
     color: theme.palette.text.primary,
-    textDecoration: 'none',
   }
 }));
 
@@ -53,12 +52,12 @@ export default function Header(props) {
 
             <Grid item md={4} sm={2} xs={1}>
               {allowBack &&
-              <IconButton
-                edge='start'
-                onClick={() => navigate(-1)}
-              >
-                <ArrowBack />
-              </IconButton>
+                <IconButton
+                  edge='start'
+                  onClick={() => navigate(-1)}
+                >
+                  <ArrowBack />
+                </IconButton>
               }
             </Grid>
 
@@ -66,13 +65,13 @@ export default function Header(props) {
               <Typography
                 className={classes.appName}
                 variant='h5'
-                style={{flex:1, textAlign:'center'}}
+                style={{ flex: 1, textAlign: 'center' }}
               >
                 Placeholder
               </Typography>
             </Grid>
 
-            <Grid item md={4} sm={7} xs={9} style={{textAlign:'right'}}>
+            <Grid item md={4} sm={7} xs={9} style={{ textAlign: 'right' }}>
               {props.children}
             </Grid>
 

@@ -1,5 +1,6 @@
-import React, { useRef } from 'react';
-import { Container, TextField, Typography, IconButton} from '@material-ui/core';
+import React, { useRef, useEffect } from 'react';
+import { Container, TextField, Typography, IconButton } from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
 import Header from './Header';
 import { metadata, audio, transcript } from '../examplePodcast'; // example
 import GetAppIcon from '@material-ui/icons/GetApp';
@@ -32,7 +33,7 @@ function mapParagraphTag(transcript, handleClick, setTextRef) {
   // the paragraphs is fixed this is not an issue here
   return paragraphs.map((p, idx) =>
     <p key={idx} id={'transcript_p' + idx}>
-      <span ref={ref => setTextRef(ref, idx)} onClick={() => handleClick(idx)}>
+      <span id={idx * 20} ref={ref => setTextRef(ref, idx)} onClick={() => handleClick(idx)}>
         {p}
       </span>
     </p>);
@@ -41,7 +42,7 @@ function mapParagraphTag(transcript, handleClick, setTextRef) {
 /**
  * Returns the transcript to be downloaded by the user as a text file.
  */
-function PrepareTranscript() {
+function prepareTranscript() {
   return ('data:text/plain;charset=utf-8,' + transcript.replace(/\n/g, '%0A'));
 }
 
@@ -49,44 +50,62 @@ function PrepareTranscript() {
  * User can click this button to download the audio transcript.
  */
 function TranscriptDownloadButton(props) {
-const { title } = props;
+  const { title } = props;
 
   return (
     <IconButton
-    href = {PrepareTranscript()}
-    download= {title + '.txt'}
-    width='40px'
+      edge='end'
+      href={prepareTranscript()}
+      download={title + '.txt'}
     >
-      <GetAppIcon/>
+      <GetAppIcon />
     </IconButton>
   );
 }
 
 //Searches the page for the phrase in the search field. Only fires when triggered by pressing the 'Enter' key.
-function SearchKey(event) {
-  if (event.keyCode === 13)
-  {
-    try
-    {
+function searchKey(event) {
+  if (event.keyCode === 13) {
+    try {
       var searchval = document.getElementById("transcript-search").value;
 
       //If called during eventhandling, works for Chrome, not for Firefox :(.
       window.find(searchval);
     }
-    catch(error) {
+    catch (error) {
       //Weird Firefox error
-      if(error.name === "NS_ERROR_ILLEGAL_VALUE")
-      {
+      if (error.name === "NS_ERROR_ILLEGAL_VALUE") {
         console.error(error.name);
       }
     }
   }
 }
 
-
 function AudioTranscript(props) {
-  const audioRef = React.useRef(null);
+  const theme = useTheme();
+  const audioRef = useRef(null);
   const refsArray = useRef([]);
+
+  useEffect(() => {
+    audioRef.current.addEventListener('timeupdate', (event) => {
+      let roundedTime = Math.round(event.target.currentTime);
+      // workaround to fix nullpointer exception for now when switching screens
+      if (refsArray.current[0]) {
+        refsArray.current.forEach(text => {
+          let timestamp = parseInt(text.id)
+          // hardcode timestamp range
+          if (timestamp <= roundedTime && roundedTime < timestamp + 20) {
+            text.style.backgroundColor = theme.palette.primary.main;
+            text.style.color = 'black';
+          }
+          else {
+            text.style.backgroundColor = 'transparent';
+            text.style.color = theme.palette.text.primary;
+          }
+        });
+      }
+    });
+  }, [theme])
 
   const handleClick = (idx) => {
     audioRef.current.currentTime = Math.fround(idx * 20);
@@ -103,12 +122,18 @@ function AudioTranscript(props) {
   // example with dummy timestamps
   let transcriptParagraphs = mapParagraphTag(transcript, handleClick, setTextRef);
 
-
   return (
     <>
       <Header allowBack>
-        <TextField id="transcript-search" label="Search Transcript" type="search" variant="outlined" onKeyDown={(event) => {SearchKey(event)}}/>
-        <TranscriptDownloadButton title={metadata.title}/>
+        <TextField
+          id='transcript-search'
+          label='Search transcript'
+          type='search'
+          variant='outlined'
+          margin='dense'
+          onKeyDown={(event) => { searchKey(event) }}
+        />
+        <TranscriptDownloadButton title={metadata.title} />
       </Header>
       <TranscriptView transcript={transcriptParagraphs} title={metadata.title} />
       <AudioPlayer audioSrc={audio} audioRef={audioRef} textRefs={refsArray} title={metadata.title} img={metadata.img} series={metadata.series} producer={metadata.producer} />
