@@ -28,7 +28,7 @@ const generate = () => {
     .map((name)=> {
       let podcastData = Array.from(readdirSync(podcastsDir+name, encoding='utf8'))
       .map( datum => {
-        return `${datum.replace(/\.[^/.]+$/, "")}: require(${name}/${datum})`}).join(',\n')
+        return `${datum.replace(/\.[^/.]+$/, "")}: require("./${name}/${datum}")`}).join(',\n')
     return `${name}: {
       ${podcastData}
     }`

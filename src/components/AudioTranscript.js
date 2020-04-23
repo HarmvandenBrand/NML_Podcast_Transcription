@@ -3,6 +3,7 @@ import { Container, TextField, Typography, IconButton } from '@material-ui/core'
 import { useTheme } from '@material-ui/core/styles';
 import Header from './Header';
 import { metadata, audio, transcript } from '../examplePodcast'; // example
+import podcasts from '../podcasts/podcasts.js'
 import GetAppIcon from '@material-ui/icons/GetApp';
 import AudioPlayer from './AudioPlayer';
 
