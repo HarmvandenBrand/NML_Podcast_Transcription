@@ -5,7 +5,7 @@ import { Container } from '@material-ui/core';
 import Header from './Header';
 import Episodes from './Episodes';
 import ShowCard from './ShowCard';
-import { metadata } from '../examplePodcast'; // example
+import podcasts from '../podcasts/podcasts.js' // TODO schrijf alles om dat momenteel examplePodcast gebruikt
 
 const useStyles = makeStyles(theme => ({
   list: {
@@ -20,6 +20,9 @@ const useStyles = makeStyles(theme => ({
 function Shows(props) {
   const classes = useStyles();
 
+  // TODO assign this dynamically from props
+  let podcast = podcasts.internet_carbon_footprint
+
   return (
     <>
       <Header />
@@ -27,10 +30,10 @@ function Shows(props) {
         {[1, 2, 3, 4, 5].map(idx => (
           <div className={classes.card} key={idx}>
             <ShowCard
-              img={metadata.img}
-              showTitle={metadata.series}
-              producer={metadata.producer}
-              desc={metadata.series_desc}
+              img={podcast.metadata.img}
+              showTitle={podcast.metadata.series}
+              producer={podcast.metadata.producer}
+              desc={podcast.metadata.series_desc}
             />
           </div>
         ))}

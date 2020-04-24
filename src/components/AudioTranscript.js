@@ -2,8 +2,8 @@ import React, { useRef, useEffect } from 'react';
 import { Container, TextField, Typography, IconButton } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import Header from './Header';
-import { metadata, audio, transcript } from '../examplePodcast'; // example
-import podcasts from '../podcasts/podcasts.js'
+import { transcript } from '../examplePodcast'; // example TODO verwijderen
+import podcasts from '../podcasts/podcasts.js' // TODO schrijf alles om dat momenteel examplePodcast gebruikt
 import GetAppIcon from '@material-ui/icons/GetApp';
 import AudioPlayer from './AudioPlayer';
 
@@ -123,6 +123,9 @@ function AudioTranscript(props) {
 
   // example with dummy timestamps
   let transcriptParagraphs = mapParagraphTag(transcript, handleClick, setTextRef);
+  // TODO assign this dynamically from props
+  let podcast = podcasts.internet_carbon_footprint
+
 
   return (
     <>
@@ -135,10 +138,10 @@ function AudioTranscript(props) {
           margin='dense'
           onKeyDown={(event) => { searchKey(event) }}
         />
-        <TranscriptDownloadButton title={metadata.title} />
+        <TranscriptDownloadButton title={podcast.metadata.title} />
       </Header>
-      <TranscriptView transcript={transcriptParagraphs} title={metadata.title} />
-      <AudioPlayer audioSrc={audio} audioRef={audioRef} textRefs={refsArray} title={metadata.title} img={metadata.img} series={metadata.series} producer={metadata.producer} />
+      <TranscriptView transcript={transcriptParagraphs} title={podcast.metadata.title} />
+      <AudioPlayer audioSrc={podcast.audio} audioRef={audioRef} textRefs={refsArray} title={podcast.metadata.title} img={podcast.metadata.img} series={podcast.metadata.series} producer={podcast.metadata.producer} />
     </>
   );
 }
