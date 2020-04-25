@@ -50,7 +50,14 @@ export default function ShowCard(props) {
 
   return (
     <Card className={classes.root} >
-      <CardMedia className={classes.cover} alt='IMG' image={img} />
+      <CardMedia
+        component={Link}
+        to={`episodes/${showKey}`}
+        onClick={() => setShow(show)}
+        className={classes.cover}
+        alt='IMG'
+        image={img}
+      />
       <CardActionArea
         component={Link}
         to={`episodes/${showKey}`}

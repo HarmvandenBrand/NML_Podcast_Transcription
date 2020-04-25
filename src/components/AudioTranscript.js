@@ -40,13 +40,6 @@ function mapParagraphTag(transcript, handleClick, setTextRef) {
 }
 
 /**
- * Returns the transcript to be downloaded by the user as a text file.
- */
-function prepareTranscript() {
-  return ('data:text/plain;charset=utf-8,' + transcript.replace(/\n/g, '%0A'));
-}
-
-/**
  * User can click this button to download the audio transcript.
  */
 function TranscriptDownloadButton(props) {
@@ -55,7 +48,7 @@ function TranscriptDownloadButton(props) {
   return (
     <IconButton
       edge='end'
-      href={prepareTranscript()}
+      href={'data:text/plain;charset=utf-8,' + transcript.replace(/\n/g, '%0A')}
       download={title + '.txt'}
     >
       <GetAppIcon />

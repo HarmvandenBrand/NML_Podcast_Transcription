@@ -10,8 +10,9 @@ import podcasts from './podcasts/podcasts.js'; // TODO schrijf alles om dat mome
 
 function App() {
   // temporary
-  const defaultShow = podcasts['IRL']
+  const defaultShow = podcasts['IRL'] 
   const defaultEpisode = defaultShow['internet_carbon_footprint']
+
   const [show, setShow] = React.useState(defaultShow);
   const [episode, setEpisode] = React.useState(defaultEpisode); 
 
