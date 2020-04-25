@@ -21,7 +21,7 @@ function Shows(props) {
   const classes = useStyles();
 
   // TODO assign this dynamically from props
-  let podcast = podcasts.internet_carbon_footprint;
+  let podcast = podcasts.IRL.internet_carbon_footprint;
 
   return (
     <>

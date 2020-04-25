@@ -16,45 +16,34 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Episodes(props) {
-  const { seriesTitle } = props;
   const classes = useStyles();
-  let podcastsKeys = [];
-  let seriesMetadata = {};
-
-  // Quite inefficient to loop over all podcasts each time
-  // TODO instead have a pre-generated JSON that lists all episodes per series
-  // as well as the series-specific metadata so you don't have to retrieve this from an episode
-  Object.keys(podcasts).map( (key, index) => {
-    // Quick hack because I have to retrieve series metadata from the episode itself
-    if (podcasts[key].metadata.series === seriesTitle){
-      podcastsKeys.push(key)
-      if (index === 0){
-        seriesMetadata['series'] = podcasts[key].metadata.series
-        seriesMetadata['series_desc'] = podcasts[key].metadata.series_desc
-        seriesMetadata['img'] = podcasts[key].metadata.img
-        seriesMetadata['producer'] = podcasts[key].metadata.producer
-      }
+  // TODO retrieve seriesKey from props
+  const seriesKey = 'IRL';
+  const metadata = podcasts[seriesKey].metadata;
+  const episodes = []
+  Object.keys(podcasts[seriesKey]).map( (key, index) => {
+    if (key !== 'metadata'){
+      episodes.push(key)
     }
-  })
-
+  });
   return (
     <>
       <Header allowBack />
       <Container className={classes.container} maxWidth='md'>
         <ShowDetails
-          img={seriesMetadata.img}
-          showTitle={seriesMetadata.series}
-          producer={seriesMetadata.producer}
-          desc={seriesMetadata.series_desc}
+          img={metadata.img}
+          showTitle={metadata.title}
+          producer={metadata.producer}
+          desc={metadata.desc}
         />
         <Typography variant='h6'>Episodes</Typography>
-        {podcastsKeys.map((key) => (
+        {Array.from(episodes).map((key) => (
           <div className={classes.card} key={key}>
             <EpisodeCard
-              date={podcasts[key].metadata.date}
-              title={podcasts[key].metadata.title}
-              duration={podcasts[key].metadata.duration}
-              desc={podcasts[key].metadata.desc}
+              date={podcasts[seriesKey][key].metadata.date}
+              title={podcasts[seriesKey][key].metadata.title}
+              duration={podcasts[seriesKey][key].metadata.duration}
+              desc={podcasts[seriesKey][key].metadata.desc}
             />
           </div>
         ))}

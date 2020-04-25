@@ -3,10 +3,9 @@ import { Container, TextField, Typography, IconButton } from '@material-ui/core'
 import { useTheme } from '@material-ui/core/styles';
 import Header from './Header';
 import { transcript } from '../examplePodcast'; // example TODO verwijderen
-import podcasts from '../podcasts/podcasts.js' // TODO schrijf alles om dat momenteel examplePodcast gebruikt
+import podcasts from '../podcasts/podcasts.js' 
 import GetAppIcon from '@material-ui/icons/GetApp';
 import AudioPlayer from './AudioPlayer';
-
 
 function TranscriptView(props) {
   const { transcript, title } = props;
@@ -123,9 +122,9 @@ function AudioTranscript(props) {
 
   // example with dummy timestamps
   let transcriptParagraphs = mapParagraphTag(transcript, handleClick, setTextRef);
-  // TODO assign this dynamically from props
-  let podcast = podcasts.internet_carbon_footprint
 
+  // TODO assign this dynamically from props
+  let podcast = podcasts.IRL.internet_carbon_footprint
 
   return (
     <>
