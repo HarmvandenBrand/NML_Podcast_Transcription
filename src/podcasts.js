@@ -10,57 +10,59 @@ const podcastsDir = './podcasts/'
 
 /*
  * Reads names of podcast series folders in ./podcasts/
- * Returns unique folder names
- * TODO set kan weg
+ * Returns folder names
  */
 const readSeries = () => {
-  return Array.from(new Set( 
+  return Array.from(
     readdirSync(podcastsDir, encoding='utf8', withFileTypes=true)
-    .filter(f => statSync(join(podcastsDir, f)).isDirectory())))
+    .filter(f => statSync(join(podcastsDir, f)).isDirectory()))
 }
 
 /* 
- * Returns directory names corresponding to a single episode of arg series
+ * Returns directory names corresponding to a single episode of series arg 
  */
 const readEpisodes = (series) => {
   const seriesDir = join(podcastsDir, series);
-  return Array.from(new Set( 
-    readdirSync(seriesDir, encoding='utf8', withFileTypes=true)
-    .filter(f => statSync(join(seriesDir, f)).isDirectory())))
+  return readdirSync(seriesDir, encoding='utf8', withFileTypes=true)
+    .filter(f => statSync(join(seriesDir, f)).isDirectory())
 }
 
-//TODO function for readData
+/*
+ * Reads the data of a single episode
+ */
+const readPodcastData = (series, episode) => {
+  return Array.from(readdirSync(join(podcastsDir, series, episode), encoding='utf8'))
+        .map( datum => {
+          return `${datum.replace(/\.[^/.]+$/, "")}: require("./${series}/${episode}/${datum}")`}).join(', ')
+}
 
 /*
- * Generate a JSON file that lists the required resources per podcast
+ * Generate a JSON file that lists the required resources per series and per podcast
  */
 const generate = () => {
   let json = readSeries()
     .map( series => { 
       let episodes = readEpisodes(series)
       .map((episode)=> {
-        let podcastData = Array.from(readdirSync(join(podcastsDir, series, episode), encoding='utf8'))
-
-        .map( datum => {
-          return `${datum.replace(/\.[^/.]+$/, "")}: require("./${series}/${episode}/${datum}")`}).join(',\n')
-
-      return `${episode}: {
-        ${podcastData}
-      }`
+        let podcastData = readPodcastData(series, episode)
+        return `${episode}: {
+          ${podcastData}
+        }`
       }).join(',\n')
-      return `${series}: {
-       ${episodes} 
-      }`
+      return `
+        ${series}: {
+          'metadata': require('${series}/metadata.json'),
+          ${episodes} 
+        }`
     }).join(',\n')
 
-const string = `const podcasts = {
+  const string = `const podcasts = {
   ${json}
-}
+  }
 
 export default podcasts
 `
-
-writeFileSync(`${podcastsDir}podcasts.js`, string, 'utf8')
+  writeFileSync(`${podcastsDir}podcasts.js`, string, 'utf8')
 }
 
 generate()
