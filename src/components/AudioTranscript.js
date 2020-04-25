@@ -2,8 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { Container, TextField, Typography, IconButton } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import Header from './Header';
-import { transcript } from '../examplePodcast'; // example TODO verwijderen
-import podcasts from '../podcasts/podcasts.js' 
+import { transcript } from '../examplePodcast'; // TODO remove when real transcript can be handled
 import GetAppIcon from '@material-ui/icons/GetApp';
 import AudioPlayer from './AudioPlayer';
 
@@ -70,7 +69,7 @@ function searchKey(event) {
     try {
       var searchval = document.getElementById("transcript-search").value;
 
-      //If called during eventhandling, works for Chrome, not for Firefox :(.
+      //If called during event handling, works for Chrome, not for Firefox :(.
       window.find(searchval);
     }
     catch (error) {
@@ -83,7 +82,7 @@ function searchKey(event) {
 }
 
 function AudioTranscript(props) {
-  const { show, episode } = props;
+  const { showInfo, episode } = props;
   const theme = useTheme();
   const audioRef = useRef(null);
   const refsArray = useRef([]);
@@ -124,12 +123,9 @@ function AudioTranscript(props) {
   // example with dummy timestamps
   let transcriptParagraphs = mapParagraphTag(transcript, handleClick, setTextRef);
 
-  // TODO assign this dynamically from props
-  let podcast = podcasts.IRL.internet_carbon_footprint
-
   return (
     <>
-      <Header allowBack>
+      <Header>
         <TextField
           id='transcript-search'
           label='Search transcript'
@@ -138,10 +134,21 @@ function AudioTranscript(props) {
           margin='dense'
           onKeyDown={(event) => { searchKey(event) }}
         />
-        <TranscriptDownloadButton title={podcast.metadata.title} />
+        <TranscriptDownloadButton title={episode.metadata.title} />
       </Header>
-      <TranscriptView transcript={transcriptParagraphs} title={podcast.metadata.title} />
-      <AudioPlayer audioSrc={podcast.audio} audioRef={audioRef} textRefs={refsArray} title={podcast.metadata.title} img={podcast.metadata.img} series={podcast.metadata.series} producer={podcast.metadata.producer} />
+      <TranscriptView
+        transcript={transcriptParagraphs}
+        title={episode.metadata.title}
+      />
+      <AudioPlayer
+        audioSrc={episode.audio}
+        audioRef={audioRef}
+        textRefs={refsArray}
+        title={episode.metadata.title}
+        img={showInfo.img}
+        series={showInfo.title}
+        producer={showInfo.producer}
+      />
     </>
   );
 }

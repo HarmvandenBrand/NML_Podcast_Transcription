@@ -4,7 +4,6 @@ import { Container, Typography } from '@material-ui/core';
 import Header from './Header';
 import ShowDetails from './ShowDetails';
 import EpisodeCard from './EpisodeCard';
-import podcasts from '../podcasts/podcasts.js'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -16,20 +15,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Episodes(props) {
-<<<<<<< HEAD
-  const { show, setEpisode, seriesTitle } = props;
-=======
->>>>>>> b2aa4bf06fc3f98bb61a9d962bf7d3d33aed214f
+  const { show, setEpisode } = props;
+  const { metadata, ...episodes } = show;
   const classes = useStyles();
-  // TODO retrieve seriesKey from props
-  const seriesKey = 'IRL';
-  const metadata = podcasts[seriesKey].metadata;
-  const episodes = []
-  Object.keys(podcasts[seriesKey]).map( (key, index) => {
-    if (key !== 'metadata'){
-      episodes.push(key)
-    }
-  });
+
   return (
     <>
       <Header allowBack />
@@ -41,22 +30,11 @@ function Episodes(props) {
           desc={metadata.desc}
         />
         <Typography variant='h6'>Episodes</Typography>
-        {Array.from(episodes).map((key) => (
+        {Object.keys(episodes).map(key => (
           <div className={classes.card} key={key}>
             <EpisodeCard
-<<<<<<< HEAD
               setEpisode={setEpisode}
-              episodeKey={'internet_carbon_footprint'}
-              date={podcasts[key].metadata.date}
-              title={podcasts[key].metadata.title}
-              duration={podcasts[key].metadata.duration}
-              desc={podcasts[key].metadata.desc}
-=======
-              date={podcasts[seriesKey][key].metadata.date}
-              title={podcasts[seriesKey][key].metadata.title}
-              duration={podcasts[seriesKey][key].metadata.duration}
-              desc={podcasts[seriesKey][key].metadata.desc}
->>>>>>> b2aa4bf06fc3f98bb61a9d962bf7d3d33aed214f
+              episode={episodes[key]}
             />
           </div>
         ))}
