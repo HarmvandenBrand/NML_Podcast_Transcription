@@ -51,7 +51,7 @@ const generate = () => {
       }).join(',\n')
       return `
         ${series}: {
-          'metadata': require('${series}/metadata.json'),
+          'metadata': require('./${series}/metadata.json'),
           ${episodes} 
         }`
     }).join(',\n')
