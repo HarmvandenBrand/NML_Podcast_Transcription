@@ -20,8 +20,6 @@ const podcasts = () => {
 
 /*
  * Generate a JSON file that lists the required resources per podcast
-        .map( datum => return `${datum}: require(${podcastDir}${name}${datum})`)
-        .join(',\n ');
  */
 const generate = () => {
   let properties = podcasts()

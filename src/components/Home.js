@@ -21,7 +21,7 @@ function Shows(props) {
   const classes = useStyles();
 
   // TODO assign this dynamically from props
-  let podcast = podcasts.internet_carbon_footprint
+  let podcast = podcasts.internet_carbon_footprint;
 
   return (
     <>
@@ -46,7 +46,7 @@ function Home(props) {
   return (
     <Router>
       <Shows path='/' />
-      <Episodes path='episodes' />
+      <Episodes path='episodes' seriesTitle='IRL - Online Life is Real Life'/>
     </Router>
   );
 }
