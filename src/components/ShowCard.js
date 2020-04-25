@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function ShowCard(props) {
-  const { img, showTitle, producer, desc } = props;
+  const { setShow, showKey, img, showTitle, producer, desc } = props;
   const classes = useStyles();
   const xsBreakpoint = useMediaQuery(theme => theme.breakpoints.only('xs'));
 
@@ -52,7 +52,8 @@ export default function ShowCard(props) {
       <CardMedia className={classes.cover} alt='IMG' image={img} />
       <CardActionArea
         component={Link}
-        to={'episodes'}
+        to={`episodes/${showKey}`}
+        onClick={() => setShow(showKey)}
       >
         <CardContent className={classes.content}>
           <Typography

@@ -18,6 +18,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Shows(props) {
+  const { setShow } = props;
   const classes = useStyles();
 
   // TODO assign this dynamically from props
@@ -30,6 +31,8 @@ function Shows(props) {
         {[1, 2, 3, 4, 5].map(idx => (
           <div className={classes.card} key={idx}>
             <ShowCard
+              setShow={setShow}
+              showKey={'IRL'}
               img={podcast.metadata.img}
               showTitle={podcast.metadata.series}
               producer={podcast.metadata.producer}
@@ -37,16 +40,27 @@ function Shows(props) {
             />
           </div>
         ))}
+        {/* {Object.keys(podcasts).map(key => (
+          <div className={classes.card} key={key}>
+            <ShowCard
+              setShow={setShow}
+              showKey={key}
+              show={podcasts[key]}
+            />
+          </div>
+        ))} */}
       </Container>
     </>
   );
 }
 
 function Home(props) {
+  const { show, setShow, setEpisode } = props;
+
   return (
     <Router>
-      <Shows path='/' />
-      <Episodes path='episodes' seriesTitle='IRL - Online Life is Real Life'/>
+      <Shows path='/' setShow={setShow} />
+      <Episodes path='episodes/:showKey' show={show} setEpisode={setEpisode} seriesTitle='IRL - Online Life is Real Life' />
     </Router>
   );
 }

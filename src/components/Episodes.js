@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Episodes(props) {
-  const { seriesTitle } = props;
+  const { show, setEpisode, seriesTitle } = props;
   const classes = useStyles();
   let podcastsKeys = [];
   let seriesMetadata = {};
@@ -51,6 +51,8 @@ function Episodes(props) {
         {podcastsKeys.map((key) => (
           <div className={classes.card} key={key}>
             <EpisodeCard
+              setEpisode={setEpisode}
+              episodeKey={'internet_carbon_footprint'}
               date={podcasts[key].metadata.date}
               title={podcasts[key].metadata.title}
               duration={podcasts[key].metadata.duration}

@@ -7,7 +7,6 @@ import podcasts from '../podcasts/podcasts.js' // TODO schrijf alles om dat mome
 import GetAppIcon from '@material-ui/icons/GetApp';
 import AudioPlayer from './AudioPlayer';
 
-
 function TranscriptView(props) {
   const { transcript, title } = props;
 
@@ -84,6 +83,7 @@ function searchKey(event) {
 }
 
 function AudioTranscript(props) {
+  const { show, episode } = props;
   const theme = useTheme();
   const audioRef = useRef(null);
   const refsArray = useRef([]);

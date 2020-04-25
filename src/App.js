@@ -8,13 +8,16 @@ import Navigation from './components/Navigation';
 import theme from './theme';
 
 function App() {
+  const [show, setShow] = React.useState(null);
+  const [episode, setEpisode] = React.useState(null); 
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router style={{ marginBottom: '56px' }}>
         <Redirect from='/' to='/home' noThrow />
-        <Home path='/home/*' />
-        <AudioTranscript path='player' />
+        <Home path='/home/*' show={show} setShow={setShow} setEpisode={setEpisode}/>
+        <AudioTranscript path='player' show={show} episode={episode}/>
       </Router>
       <Navigation />
     </ThemeProvider>
