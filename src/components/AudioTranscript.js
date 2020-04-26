@@ -75,7 +75,8 @@ function searchKey(event) {
 }
 
 function AudioTranscript(props) {
-  const { showInfo, episode } = props;
+  const { episode } = props;
+  const { title, img, series, producer } = episode.metadata;
   const theme = useTheme();
   const audioRef = useRef(null);
   const refsArray = useRef([]);
@@ -127,20 +128,20 @@ function AudioTranscript(props) {
           margin='dense'
           onKeyDown={(event) => { searchKey(event) }}
         />
-        <TranscriptDownloadButton title={episode.metadata.title} />
+        <TranscriptDownloadButton title={title} />
       </Header>
       <TranscriptView
         transcript={transcriptParagraphs}
-        title={episode.metadata.title}
+        title={title}
       />
       <AudioPlayer
         audioSrc={episode.audio}
         audioRef={audioRef}
         textRefs={refsArray}
-        title={episode.metadata.title}
-        img={showInfo.img}
-        series={showInfo.title}
-        producer={showInfo.producer}
+        title={title}
+        img={img}
+        series={series}
+        producer={producer}
       />
     </>
   );

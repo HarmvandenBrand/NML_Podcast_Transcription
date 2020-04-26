@@ -39,7 +39,9 @@ function Shows(props) {
 }
 
 function Home(props) {
-  const { podcasts, show, setShow, setEpisode } = props;
+  const { podcasts, setEpisode } = props;
+  const defaultShow = podcasts['IRL']; // temporary
+  const [show, setShow] = React.useState(defaultShow);
 
   return (
     <Router>
