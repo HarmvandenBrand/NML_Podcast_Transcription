@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { Container, TextField, Typography, IconButton } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import Header from './Header';
-import { metadata, audio, transcript } from '../examplePodcast'; // example
+import { transcript } from '../examplePodcast'; // TODO remove when real transcript can be handled
 import GetAppIcon from '@material-ui/icons/GetApp';
 import AudioPlayer from './AudioPlayer';
 
@@ -40,13 +40,6 @@ function mapParagraphTag(transcript, handleClick, setTextRef) {
 }
 
 /**
- * Returns the transcript to be downloaded by the user as a text file.
- */
-function prepareTranscript() {
-  return ('data:text/plain;charset=utf-8,' + transcript.replace(/\n/g, '%0A'));
-}
-
-/**
  * User can click this button to download the audio transcript.
  */
 function TranscriptDownloadButton(props) {
@@ -55,7 +48,7 @@ function TranscriptDownloadButton(props) {
   return (
     <IconButton
       edge='end'
-      href={prepareTranscript()}
+      href={'data:text/plain;charset=utf-8,' + transcript.replace(/\n/g, '%0A')}
       download={title + '.txt'}
     >
       <GetAppIcon />
@@ -69,7 +62,7 @@ function searchKey(event) {
     try {
       var searchval = document.getElementById("transcript-search").value;
 
-      //If called during eventhandling, works for Chrome, not for Firefox :(.
+      //If called during event handling, works for Chrome, not for Firefox :(.
       window.find(searchval);
     }
     catch (error) {
@@ -82,6 +75,8 @@ function searchKey(event) {
 }
 
 function AudioTranscript(props) {
+  const { episode } = props;
+  const { title, img, series, producer } = episode.metadata;
   const theme = useTheme();
   const audioRef = useRef(null);
   const refsArray = useRef([]);
@@ -124,7 +119,7 @@ function AudioTranscript(props) {
 
   return (
     <>
-      <Header allowBack>
+      <Header>
         <TextField
           id='transcript-search'
           label='Search transcript'
@@ -133,10 +128,21 @@ function AudioTranscript(props) {
           margin='dense'
           onKeyDown={(event) => { searchKey(event) }}
         />
-        <TranscriptDownloadButton title={metadata.title} />
+        <TranscriptDownloadButton title={title} />
       </Header>
-      <TranscriptView transcript={transcriptParagraphs} title={metadata.title} />
-      <AudioPlayer audioSrc={audio} audioRef={audioRef} textRefs={refsArray} title={metadata.title} img={metadata.img} series={metadata.series} producer={metadata.producer} />
+      <TranscriptView
+        transcript={transcriptParagraphs}
+        title={title}
+      />
+      <AudioPlayer
+        audioSrc={episode.audio}
+        audioRef={audioRef}
+        textRefs={refsArray}
+        title={title}
+        img={img}
+        series={series}
+        producer={producer}
+      />
     </>
   );
 }

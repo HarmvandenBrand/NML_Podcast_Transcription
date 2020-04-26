@@ -4,7 +4,6 @@ import { Container, Typography } from '@material-ui/core';
 import Header from './Header';
 import ShowDetails from './ShowDetails';
 import EpisodeCard from './EpisodeCard';
-import { metadata } from '../examplePodcast'; // example
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -16,7 +15,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Episodes(props) {
-  // const { showId, ...showDetails } = props;
+  const { show, setEpisode } = props;
+  const { metadata, ...episodes } = show;
   const classes = useStyles();
 
   return (
@@ -25,18 +25,16 @@ function Episodes(props) {
       <Container className={classes.container} maxWidth='md'>
         <ShowDetails
           img={metadata.img}
-          showTitle={metadata.series}
+          showTitle={metadata.title}
           producer={metadata.producer}
-          desc={metadata.series_desc}
+          desc={metadata.desc}
         />
         <Typography variant='h6'>Episodes</Typography>
-        {[1, 2, 3, 4, 5].map((idx) => (
-          <div className={classes.card} key={idx}>
+        {Object.keys(episodes).map(key => (
+          <div className={classes.card} key={key}>
             <EpisodeCard
-              date={metadata.date}
-              title={metadata.title}
-              duration={metadata.duration}
-              desc={metadata.desc}
+              setEpisode={setEpisode}
+              episode={episodes[key]}
             />
           </div>
         ))}
