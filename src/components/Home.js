@@ -46,7 +46,7 @@ function Home(props) {
   return (
     <Router>
       <Shows path='/' podcasts={podcasts} setShow={setShow} />
-      <Episodes path='episodes/:showKey' show={show} setEpisode={setEpisode} seriesTitle='IRL - Online Life is Real Life' />
+      <Episodes path='episodes/:showKey' show={show} setEpisode={setEpisode}  />
     </Router>
   );
 }
