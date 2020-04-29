@@ -6,6 +6,7 @@
 const { readdirSync, writeFileSync, statSync } = require('fs')
 const { join } = require('path')
 
+// Assumes script is called from /src folder
 const podcastsDir = './podcasts/'
 
 /*
