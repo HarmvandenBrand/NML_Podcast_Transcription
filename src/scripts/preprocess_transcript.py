@@ -15,6 +15,7 @@ So to convert to ms, divide the timestamp by 10.000
 """
 
 import json
+import os
 import re
 from collections import Counter
 
@@ -76,9 +77,7 @@ def merge_sentences(transcript):
         end = chunk[-1][1]+chunk[-1][2] # offset of last word + its duration
         duration = end-offset
         sentence = ' '.join([word[0] for word in chunk])
-
         speaker_id = determine_sentence_speaker(chunk)
-
         sentences.append([sentence, offset, duration, speaker_id])
     return sentences
 
@@ -90,11 +89,14 @@ def test(transcript):
 
 if __name__ == '__main__':
     
-    # TODO logica om over podcast folder heen te loopen
-    filename = r'../podcasts/GeologySociety/salt_tectonics/transcript.json'
-    output = r'../podcasts/GeologySociety/salt_tectonics/sentence_transcript.json'
-    transcript = load_transcript(filename)
-    test(transcript)
-    timestamped_sentences = merge_sentences(transcript)
-    with open(output, 'w') as f:
-        json.dump(timestamped_sentences, f)
+    for root, dirs, files in os.walk(r'.'):
+        # Do not bother with hidden files and dirs
+        files = [f for f in files if not f[0] == '.']
+        dirs[:] = [d for d in dirs if not d[0] == '.']
+        for file in files:
+            if file == 'transcript.json':
+                transcript = load_transcript(os.path.join(root,file))
+                #test(transcript)
+                timestamped_sentences = merge_sentences(transcript)
+                with open(os.path.join(root,'sentence_transcript.json'), 'w') as f:
+                    json.dump(timestamped_sentences, f)
