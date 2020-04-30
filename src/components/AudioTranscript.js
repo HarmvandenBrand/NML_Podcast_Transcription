@@ -5,12 +5,15 @@ import Header from './Header';
 import { metadata, audio, transcript } from '../examplePodcast'; // example
 import GetAppIcon from '@material-ui/icons/GetApp';
 import AudioPlayer from './AudioPlayer';
+import findandreplacedomtext from '../../node_modules/findandreplacedomtext';
+import theme from "../theme.js"
+import SearchField from './SearchField'
 
 function TranscriptView(props) {
   const { transcript, title } = props;
 
   return (
-    <Container maxWidth={'md'} style={{ paddingTop: '32px', paddingBottom: '64px' }}>
+    <Container id='transcript-container' maxWidth={'md'} style={{ paddingTop: '32px', paddingBottom: '64px' }}>
       <Typography variant='h6'>{title}</Typography>
       <Typography component={'div'}>
         {transcript}
@@ -63,24 +66,6 @@ function TranscriptDownloadButton(props) {
   );
 }
 
-//Searches the page for the phrase in the search field. Only fires when triggered by pressing the 'Enter' key.
-function searchKey(event) {
-  if (event.keyCode === 13) {
-    try {
-      var searchval = document.getElementById("transcript-search").value;
-
-      //If called during eventhandling, works for Chrome, not for Firefox :(.
-      window.find(searchval);
-    }
-    catch (error) {
-      //Weird Firefox error
-      if (error.name === "NS_ERROR_ILLEGAL_VALUE") {
-        console.error(error.name);
-      }
-    }
-  }
-}
-
 function AudioTranscript(props) {
   const theme = useTheme();
   const audioRef = useRef(null);
@@ -125,14 +110,7 @@ function AudioTranscript(props) {
   return (
     <>
       <Header allowBack>
-        <TextField
-          id='transcript-search'
-          label='Search transcript'
-          type='search'
-          variant='outlined'
-          margin='dense'
-          onKeyDown={(event) => { searchKey(event) }}
-        />
+        <SearchField/>
         <TranscriptDownloadButton title={metadata.title} />
       </Header>
       <TranscriptView transcript={transcriptParagraphs} title={metadata.title} />
