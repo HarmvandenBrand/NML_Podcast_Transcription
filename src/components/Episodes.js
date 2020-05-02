@@ -1,11 +1,10 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Typography, TextField } from '@material-ui/core';
+import { Container, Typography } from '@material-ui/core';
 import Header from './Header';
 import ShowDetails from './ShowDetails';
 import EpisodeCard from './EpisodeCard';
 import { metadata } from '../examplePodcast'; // example
-import findandreplacedomtext from '../../node_modules/findandreplacedomtext';
 import SearchField from './SearchField';
 
 

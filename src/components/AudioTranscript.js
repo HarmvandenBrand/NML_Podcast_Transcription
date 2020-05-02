@@ -1,12 +1,10 @@
 import React, { useRef, useEffect } from 'react';
-import { Container, TextField, Typography, IconButton } from '@material-ui/core';
+import { Container, Typography, IconButton } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import Header from './Header';
 import { metadata, audio, transcript } from '../examplePodcast'; // example
 import GetAppIcon from '@material-ui/icons/GetApp';
 import AudioPlayer from './AudioPlayer';
-import findandreplacedomtext from '../../node_modules/findandreplacedomtext';
-import theme from "../theme.js"
 import SearchField from './SearchField'
 
 function TranscriptView(props) {

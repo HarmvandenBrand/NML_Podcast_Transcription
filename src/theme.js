@@ -6,6 +6,9 @@ let primaryTextColor = '#EF8321'; // intended for headers etc.
 let subtitleTextColor = '#EF8321' // currently used for podcast series title
 let surfaceColor = '#EF8321'; // intended for menus etc.
 
+export let searchHighlightColor = '#EF4300' // background color for highlighted search results
+
+
 const theme = createMuiTheme({
   palette: {
     type: 'dark',
