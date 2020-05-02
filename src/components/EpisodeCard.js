@@ -19,7 +19,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function EpisodeCard(props) {
-  const { id, title, date, duration, desc } = props;
+  const { setEpisode, episode } = props;
+  const { title, date, duration, desc  } = episode.metadata;
   const classes = useStyles();
   const captionRef = React.useRef(null);
   const [readMore, setReadMore] = React.useState(false);
@@ -62,6 +63,7 @@ export default function EpisodeCard(props) {
             className={classes.listenButton}
             component={Link}
             to={'/player'}
+            onClick={() => setEpisode(episode)}
             variant='contained'
             size='small'
             color='primary'

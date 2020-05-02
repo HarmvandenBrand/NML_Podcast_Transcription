@@ -6,15 +6,19 @@ import Home from './components/Home';
 import AudioTranscript from './components/AudioTranscript';
 import Navigation from './components/Navigation';
 import theme from './theme';
+import podcasts from './podcasts/podcasts.js';
 
 function App() {
+  const defaultEpisode = podcasts['IRL']['internet_carbon_footprint'] // temporary
+  const [episode, setEpisode] = React.useState(defaultEpisode);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router style={{ marginBottom: '56px' }}>
         <Redirect from='/' to='/home' noThrow />
-        <Home path='/home/*' />
-        <AudioTranscript path='player' />
+        <Home path='/home/*' podcasts={podcasts} setEpisode={setEpisode} />
+        <AudioTranscript path='player' episode={episode} />
       </Router>
       <Navigation />
     </ThemeProvider>

@@ -5,7 +5,6 @@ import { Container } from '@material-ui/core';
 import Header from './Header';
 import Episodes from './Episodes';
 import ShowCard from './ShowCard';
-import { metadata } from '../examplePodcast'; // example
 
 const useStyles = makeStyles(theme => ({
   list: {
@@ -18,19 +17,19 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Shows(props) {
+  const { podcasts, setShow } = props;
   const classes = useStyles();
 
   return (
     <>
       <Header />
       <Container className={classes.list} maxWidth='md' disableGutters>
-        {[1, 2, 3, 4, 5].map(idx => (
-          <div className={classes.card} key={idx}>
+        {Object.keys(podcasts).map(key => (
+          <div className={classes.card} key={key}>
             <ShowCard
-              img={metadata.img}
-              showTitle={metadata.series}
-              producer={metadata.producer}
-              desc={metadata.series_desc}
+              setShow={setShow}
+              showKey={key}
+              show={podcasts[key]}
             />
           </div>
         ))}
@@ -40,10 +39,14 @@ function Shows(props) {
 }
 
 function Home(props) {
+  const { podcasts, setEpisode } = props;
+  const defaultShow = podcasts['IRL']; // temporary
+  const [show, setShow] = React.useState(defaultShow);
+
   return (
     <Router>
-      <Shows path='/' />
-      <Episodes path='episodes' />
+      <Shows path='/' podcasts={podcasts} setShow={setShow} />
+      <Episodes path='episodes/:showKey' show={show} setEpisode={setEpisode}  />
     </Router>
   );
 }
