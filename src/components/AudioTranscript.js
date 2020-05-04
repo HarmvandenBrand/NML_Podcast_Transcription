@@ -10,7 +10,7 @@ function TranscriptView(props) {
   const { transcript, title } = props;
 
   return (
-    <Container maxWidth={'md'} style={{ paddingTop: '32px', paddingBottom: '64px' }}>
+    <Container maxWidth={'md'} style={{ paddingTop: '32px', paddingBottom: '32px' }}>
       <Typography variant='h6'>{title}</Typography>
       <Typography component={'div'}>
         {transcript}

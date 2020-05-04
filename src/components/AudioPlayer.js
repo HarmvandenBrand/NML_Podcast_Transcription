@@ -1,60 +1,53 @@
 import React, { useState, useEffect } from 'react';
-import { Divider, Grid, Typography } from '@material-ui/core';
+import { Divider, Grid, Typography, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import Hidden from '@material-ui/core/Hidden';
-import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
-import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
-import Replay10Icon from '@material-ui/icons/Replay10';
-import Forward10Icon from '@material-ui/icons/Forward10';
+import PlayCircleFilledRoundedIcon from '@material-ui/icons/PlayCircleFilledRounded';
+import PauseCircleFilledRoundedIcon from '@material-ui/icons/PauseCircleFilledRounded';
+import Replay10RoundedIcon from '@material-ui/icons/Replay10Rounded';
+import Forward10RoundedIcon from '@material-ui/icons/Forward10Rounded';
 import Slider from '@material-ui/core/Slider';
+import '../styles/lineclamp.css';
 
 /* TODO
- *
  * 1. Navigeer van audio (progress slider) naar tekst timestamp
- * 2. Maak ook responsive voor hele kleine schermen
- * 3. Ik haal "duration" niet meer uit de metadata maar uit de audio zelf; dit vraagt om een consistentere aanpak over de hele app. Mogelijk dat in een hogere component doen en dan alsnog hier naartoe passen. N.B. duration moet in *seconden* gegeven worden!
- * 4. Audio volume knop toevoegen
- * 5. Finetune positie podcast titel
+ * 2. Audio volume knop toevoegen
  */
 
 const useStyles = makeStyles(theme => ({
-  audioplayer: {
+  root: {
     position: 'sticky',
     bottom: '56px',
     width: '100%',
-    height: '165px',
-    padding: '1vw',
-    borderStyle: 'solid',
-    border: 0,
-    borderTop: 1,
-    borderColor: theme.palette.primary.main,
+    maxHeight: '128px',
+    padding: theme.spacing(1),
+    borderTop: `1px solid ${theme.palette.primary.main}`,
     background: theme.palette.background.default,
   },
-  image: {
-    width: 128,
-    height: 128
-  },
-  slider: {
-    width: '90%',
+  cover: {
+    width: '100%',
+    maxWidth: '100px',
+    borderRadius: theme.shape.borderRadius,
   },
   divider: {
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
     height: 2
   },
-  icon: {
+  mainIcon: {
     fontSize: 40,
-    color: theme.palette.primary.main
+  },
+  secondaryIcon: {
+    fontSize: 40,
+    color: theme.palette.text.secondary,
   }
 }));
 
-export default function AudioPlayer(props) {
+function AudioPlayer(props) {
   const { audioSrc, audioRef, textRefs, title, img, series, producer } = props;
-  const classes = useStyles();
   const [isPlaying, setPlayerState] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const classes = useStyles();
 
   const formatTime = timeSeconds => {
     return new Date(timeSeconds * 1000).toISOString().substr(11, 8)
@@ -86,84 +79,94 @@ export default function AudioPlayer(props) {
   })
 
   return (
-    <div className={classes.audioplayer}>
-      <Grid container spacing={1}>
-        <Grid item xs={1} md={2} container direction='column' justify='center'>
-          <Hidden smDown>
-            <img className={classes.image} src={img} alt='Podcast logo' />
-          </Hidden>
-        </Grid>
+    <Paper className={classes.root} square elevation={2}>
+      <Grid container spacing={2}>
 
-        <Grid item xs={11} md={10} container>
-          <Grid item container direction='column' spacing={1}>
-            <Grid item >
-              <Typography variant='subtitle1'>
-                {series}: {title} ({producer})
-              </Typography>
+        <Hidden only='xs'>
+          <Grid item sm={2} md={1} container direction='column' justify='center'>
+            <img className={classes.cover} src={img} alt='Podcast logo' />
+          </Grid>
+        </Hidden>
+
+        <Grid item xs={12} sm={10} md={11} container>
+          <Grid item xs={12}>
+            <Typography className='marquee' variant='subtitle1'>
+              <span>{series}: {title} (by {producer})</span>
+            </Typography>
+          </Grid>
+
+          <Grid item xs={12} container spacing={1} justify='space-evenly'>
+            <Grid item>
+              <IconButton
+                size='small'
+                onClick={() => { audioRef.current.currentTime -= 10 }}
+              >
+                <Replay10RoundedIcon className={classes.secondaryIcon} />
+              </IconButton>
             </Grid>
-            <Grid item container spacing={1} justify='space-evenly'>
+            {isPlaying ?
               <Grid item>
-                <IconButton onClick={() => {
-                  audioRef.current.currentTime -= 10;
-                }
-                }>
-                  <Replay10Icon className={classes.icon} />
-                </IconButton>
-              </Grid>
-              {isPlaying ?
-                <Grid item>
-                  <IconButton onClick={() => {
+                <IconButton
+                  color='primary'
+                  size='small'
+                  onClick={() => {
                     audioRef.current.pause();
                     setPlayerState(false);
-                  }
-                  }>
-                    <PauseCircleFilledIcon className={classes.icon} />
-                  </IconButton>
-                </Grid>
-                :
-                <Grid item>
-                  <IconButton onClick={() => {
-                    audioRef.current.play();
-                    setPlayerState(true);
-                  }}>
-                    <PlayCircleFilledIcon className={classes.icon} />
-                  </IconButton>
-                </Grid>
-              }
-              <Grid item>
-                <IconButton onClick={() => {
-                  audioRef.current.currentTime += 10;
-                }
-                }>
-                  <Forward10Icon className={classes.icon} />
+                  }}
+                >
+                  <PauseCircleFilledRoundedIcon className={classes.mainIcon} />
                 </IconButton>
               </Grid>
+              :
               <Grid item>
-                <Typography variant='subtitle2'>
-                  {formatTime(currentTime)}
-                  <Divider className={classes.divider} />
-                  {formatTime(duration)}
-                </Typography>
+                <IconButton
+                  color='primary'
+                  size='small'
+                  onClick={() => {
+                    audioRef.current.play();
+                    setPlayerState(true);
+                  }}
+                >
+                  <PlayCircleFilledRoundedIcon className={classes.mainIcon} />
+                </IconButton>
               </Grid>
+            }
+            <Grid item>
+              <IconButton
+                size='small'
+                onClick={() => { audioRef.current.currentTime += 10 }}
+              >
+                <Forward10RoundedIcon className={classes.secondaryIcon} />
+              </IconButton>
             </Grid>
             <Grid item>
-              <audio
-                ref={audioRef}
-                onEnded={handleEnd}>
-                <source src={audioSrc} type='audio/mpeg' />
-              </audio>
-              <Slider
-                className={classes.slider}
-                value={currentTime}
-                onChange={handleProgress}
-                min={0}
-                step={0.1}
-                max={duration}
-              />
+              <Typography variant='caption'>
+                {formatTime(currentTime)}
+                <Divider className={classes.divider} />
+                {formatTime(duration)}
+              </Typography>
             </Grid>
           </Grid>
+
+          <Grid item xs={12} container justify='center'>
+            <audio
+              ref={audioRef}
+              onEnded={handleEnd}>
+              <source src={audioSrc} type='audio/mpeg' />
+            </audio>
+            <Slider
+              value={currentTime}
+              onChange={handleProgress}
+              min={0}
+              step={0.1}
+              max={duration}
+            />
+          </Grid>
         </Grid>
+
       </Grid>
-    </div>
+    </Paper>
   );
 }
+
+export default AudioPlayer;
