@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Divider, Grid, Typography, Paper } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import Hidden from '@material-ui/core/Hidden';
 import PlayCircleFilledRoundedIcon from '@material-ui/icons/PlayCircleFilledRounded';
@@ -23,15 +23,21 @@ const useStyles = makeStyles(theme => ({
     maxHeight: '128px',
     padding: theme.spacing(1),
     borderTop: `1px solid ${theme.palette.primary.main}`,
-    background: theme.palette.background.default,
+    background: '#212121',
   },
   cover: {
     width: '100%',
     maxWidth: '100px',
     borderRadius: theme.shape.borderRadius,
   },
+  title: {
+    color: theme.palette.primary.main,
+  },
   divider: {
     height: 2
+  },
+  slider: {
+    width: '95%'
   },
   mainIcon: {
     fontSize: 40,
@@ -41,6 +47,26 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.secondary,
   }
 }));
+
+const CustomSlider = withStyles(theme => ({
+  root: {
+    height: 4,
+  },
+  thumb: {
+    height: 16,
+    width: 16,
+    marginTop: -6,
+  },
+  track: {
+    height: 4,
+    borderRadius: 4,
+  },
+  rail: {
+    height: 4,
+    borderRadius: 4,
+    color: theme.palette.action.disabled,
+  }
+}))(Slider);
 
 function AudioPlayer(props) {
   const { audioSrc, audioRef, textRefs, title, img, series, producer } = props;
@@ -90,8 +116,10 @@ function AudioPlayer(props) {
 
         <Grid item xs={12} sm={10} md={11} container>
           <Grid item xs={12}>
-            <Typography className='marquee' variant='subtitle1'>
-              <span>{series}: {title} (by {producer})</span>
+            <Typography component='div' className='marquee' variant='overline'>
+              <div>
+                <span className={classes.title}>{series} ({producer}):</span> {title}
+              </div>
             </Typography>
           </Grid>
 
@@ -154,7 +182,8 @@ function AudioPlayer(props) {
               onEnded={handleEnd}>
               <source src={audioSrc} type='audio/mpeg' />
             </audio>
-            <Slider
+            <CustomSlider
+              className={classes.slider}
               value={currentTime}
               onChange={handleProgress}
               min={0}
