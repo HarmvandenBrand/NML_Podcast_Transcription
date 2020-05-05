@@ -2,7 +2,7 @@
 
 Group Repository of the Podcast Transcription App for the New Media Lab Course.
 
-Also see [info on React]( .\React_README.md ).
+Also see [info on React]( ./React_README.md ).
 
 ## React development instructions
 
@@ -13,3 +13,7 @@ Also see [info on React]( .\React_README.md ).
 4. Start development server: `npm start`  
     Supports hot reloading, which means that changes saved in your editor will immediately be reflected on the development server (i.e., automatically refreshes).
 5. Stop the development server: `Ctrl + C`
+
+## Load and preprocess podcasts
+
+Run `npm run update` from the root directory of the project.
