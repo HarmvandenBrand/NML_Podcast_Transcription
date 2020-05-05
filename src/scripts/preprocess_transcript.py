@@ -1,17 +1,12 @@
 #!/bin/python3
-
 """
-Takes a transcript with timestamps on the world level 
-of format: [[word, offset, duration, speaker_id], ... etc.]
-and outputs a new transcript now timestamped on sentence level.
+Takes a transcript with timestamps on the word level.
+Format: [[word, offset, duration, speaker_id], ... etc.]
+Outputs the transcript timestamped on sentence level, 
+and with lower precision.
 
 Additional preprocessing: if multiple speakers occur within a sentence,
 take a majority vote to decide who is the speaker of the sentence.
-
-TODO Important: also changes timestamps to milliseconds
-Time seems to be a "tick" i.e. 100 nanoseconds (1 nanosecond = 1*10^-9 second) i.e. 1*10^-7 seconds.
-So to convert to ms, divide the timestamp by 10.000
-
 """
 
 import json
@@ -21,6 +16,7 @@ from collections import Counter
 
 def load_transcript(filename):
     with open(filename, 'r', encoding='utf-8') as f:
+        print('Processing', filename)
         data = json.load(f)
     return data['transcript']
 
@@ -38,7 +34,6 @@ def get_sentences(full_text):
     return { index:sentence for index, sentence in enumerate(full_text.replace('?','.').split('. ')) }
 
 def split_on_sentences(transcript):
-    # TODO maybe use a regex instead. 
     # Find indices for sentence splits
     split_ids = []
     for idx, word_data in enumerate(transcript):
@@ -56,21 +51,22 @@ def split_on_sentences(transcript):
 
 def determine_sentence_speaker(chunk):
     """
-    Validate for a chunk of the transcript that there is one speaker
-    if not, take a majority vote to decide the speaker
+    Validate for a chunk of the transcript (e.g. sentence) that there is one speaker.
+    If not, take a majority vote to decide the speaker
     """
     speaker_ids = [ word[3] for word in chunk ]
     if len(set(speaker_ids)) != 1:
-        print("Multiple speakers:\n", chunk )
+        print("Multiple speakers within one sentence:\n", chunk )
         return Counter(speaker_ids).most_common(1)[0]
     return chunk[0][3]
 
 def merge_sentences(transcript):
-
+    """
+    Convert from word representation to sentence representation
+    N.B. to avoid rounding errors I only lower the precision at a later point
+    """
     sentence_chunks = split_on_sentences(transcript)
     sentences = []
-
-    # TODO convert timestamps to microseconds + handle rounding mistakes
 
     for chunk in sentence_chunks:
         offset = chunk[0][1]
@@ -81,13 +77,27 @@ def merge_sentences(transcript):
         sentences.append([sentence, offset, duration, speaker_id])
     return sentences
 
+def lower_time_precision(transcript, factor):
+    """
+    Truncates precision of the timestamps (offset and duration)
+    from units of 100 nanoseconds (10^-7) i.e. a 'tick'
+    to milliseconds (10^-3).
+    N.B. this introduces rounding errors, so you can't 
+    accurately compute the next offset by summing all previous times
+    N.B. disregards decimal places
+    """
+    return [[x[0], int(x[1]/factor), int(x[2]/factor), x[3]] for x in transcript]
+
 def test(transcript):
     full_text = get_full_text(transcript)
     print(get_words_per_speaker(transcript))
     print(get_sentences(full_text))
     merge_sentences(transcript)
+    lower_time_precision(transcript, 10000)
 
 if __name__ == '__main__':
+
+    factor = 10000  # lower timestamp precision with this factor
     
     for root, dirs, files in os.walk(r'.'):
         # Do not bother with hidden files and dirs
@@ -96,7 +106,6 @@ if __name__ == '__main__':
         for file in files:
             if file == 'transcript.json':
                 transcript = load_transcript(os.path.join(root,file))
-                #test(transcript)
-                timestamped_sentences = merge_sentences(transcript)
+                timestamped_sentences = lower_time_precision(merge_sentences(transcript), factor)
                 with open(os.path.join(root,'sentence_transcript.json'), 'w') as f:
                     json.dump(timestamped_sentences, f)
