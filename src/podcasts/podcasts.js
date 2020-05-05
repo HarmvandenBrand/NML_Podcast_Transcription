@@ -3,7 +3,7 @@ const podcasts = {
         '99PercentInvisible': {
           'metadata': require('./99PercentInvisible/metadata.json'),
           'WipeOut': {
-           '01_397_Wipe_Out_pt_01': require("./99PercentInvisible/WipeOut/01_397_Wipe_Out_pt_01.mp3"), 'metadata': require("./99PercentInvisible/WipeOut/metadata.json"), 'sentence_transcript': require("./99PercentInvisible/WipeOut/sentence_transcript.json"), 'transcript': require("./99PercentInvisible/WipeOut/transcript.json")
+          'audio': require("./99PercentInvisible/WipeOut/audio.mp3"), 'metadata': require("./99PercentInvisible/WipeOut/metadata.json"), 'sentence_transcript': require("./99PercentInvisible/WipeOut/sentence_transcript.json"), 'transcript': require("./99PercentInvisible/WipeOut/transcript.json")
         } 
         },
 
