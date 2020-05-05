@@ -34,7 +34,7 @@ const readEpisodes = (series) => {
 const readPodcastData = (series, episode) => {
   return Array.from(readdirSync(join(podcastsDir, series, episode), encoding='utf8'))
         .map( datum => {
-          return `${datum.replace(/\.[^/.]+$/, "")}: require("./${series}/${episode}/${datum}")`}).join(', ')
+          return `'${datum.replace(/\.[^/.]+$/, "")}': require("./${series}/${episode}/${datum}")`}).join(', ')
 }
 
 /*
@@ -46,12 +46,12 @@ const generate = () => {
       let episodes = readEpisodes(series)
       .map((episode)=> {
         let podcastData = readPodcastData(series, episode)
-        return `${episode}: {
+        return `'${episode}': {
           ${podcastData}
         }`
       }).join(',\n')
       return `
-        ${series}: {
+        '${series}': {
           'metadata': require('./${series}/metadata.json'),
           ${episodes} 
         }`
