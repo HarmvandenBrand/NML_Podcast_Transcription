@@ -1,5 +1,12 @@
 const podcasts = {
   
+        99PercentInvisible: {
+          'metadata': require('./99PercentInvisible/metadata.json'),
+          WipeOut: {
+          01_397_Wipe_Out_pt_01: require("./99PercentInvisible/WipeOut/01_397_Wipe_Out_pt_01.mp3"), metadata: require("./99PercentInvisible/WipeOut/metadata.json"), sentence_transcript: require("./99PercentInvisible/WipeOut/sentence_transcript.json"), transcript: require("./99PercentInvisible/WipeOut/transcript.json")
+        } 
+        },
+
         GeologySociety: {
           'metadata': require('./GeologySociety/metadata.json'),
           salt_tectonics: {
@@ -10,10 +17,10 @@ const podcasts = {
         IRL: {
           'metadata': require('./IRL/metadata.json'),
           internet_carbon_footprint: {
-          audio: require("./IRL/internet_carbon_footprint/audio.mp3"), metadata: require("./IRL/internet_carbon_footprint/metadata.json"), transcript: require("./IRL/internet_carbon_footprint/transcript.json")
+          audio: require("./IRL/internet_carbon_footprint/audio.mp3"), metadata: require("./IRL/internet_carbon_footprint/metadata.json"), sentence_transcript: require("./IRL/internet_carbon_footprint/sentence_transcript.json"), transcript: require("./IRL/internet_carbon_footprint/transcript.json")
         },
 internet_carbon_footprint_kopie: {
-          audio: require("./IRL/internet_carbon_footprint_kopie/audio.mp3"), metadata: require("./IRL/internet_carbon_footprint_kopie/metadata.json"), transcript: require("./IRL/internet_carbon_footprint_kopie/transcript.json")
+          audio: require("./IRL/internet_carbon_footprint_kopie/audio.mp3"), metadata: require("./IRL/internet_carbon_footprint_kopie/metadata.json"), sentence_transcript: require("./IRL/internet_carbon_footprint_kopie/sentence_transcript.json"), transcript: require("./IRL/internet_carbon_footprint_kopie/transcript.json")
         } 
         }
   }
