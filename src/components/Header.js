@@ -7,7 +7,7 @@ import {
   Typography,
   useScrollTrigger,
   Slide,
-  IconButton
+  IconButton,
 } from '@material-ui/core';
 import { ArrowBack } from '@material-ui/icons';
 
@@ -60,7 +60,7 @@ export default function Header(props) {
               </IconButton>
             }
 
-            <MediaQuery query='(min-device-width: 400px)'>
+            <MediaQuery query='(min-device-width: 420px)'>
 
               <Typography
                 className={classes.appName}
@@ -69,6 +69,7 @@ export default function Header(props) {
               >
                 Elecast
               </Typography>
+
             </MediaQuery>
 
             {props.children}
