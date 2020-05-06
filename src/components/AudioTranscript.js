@@ -67,7 +67,6 @@ function AudioTranscript(props) {
   const theme = useTheme();
   const audioRef = useRef(null);
   const textRefs = useRef([]);
-  const timestampPrecision = 1000; // milliseconds
 
   useEffect(() => {
     const handleClick = (event, idx) => {
@@ -76,10 +75,11 @@ function AudioTranscript(props) {
       audioRef.current.currentTime = start;
       textRefs.current[idx].scrollIntoView({
         behavior: 'smooth',
-        block: 'start'
+        block: 'center'
       });
     }
     const processTranscript = (transcript, handleClick) => {
+      let timestampPrecision = 1000; // milliseconds
       return transcript.map(([sentence, start, duration, speakerId], idx) =>
         <p key={idx}>
           <span
@@ -98,13 +98,16 @@ function AudioTranscript(props) {
   }, [transcriptJSON]);
 
   useEffect(() => {
+    // const speakerColors = [theme.palette.primary.main, 'dodgerblue']; // temporary colors
     audioRef.current.addEventListener('timeupdate', (event) => {
       let currentTime = event.target.currentTime;
       if (textRefs.current[0]) {
         textRefs.current.forEach(text => {
           let start = text.dataset.start;
           let end = text.dataset.end;
+          // let speaker = text.dataset.speaker;
           if (currentTime >= start && currentTime < end) {
+            // text.style.backgroundColor = speakerColors[speaker - 1];
             text.style.backgroundColor = theme.palette.primary.main;
             text.style.color = '#000';
           }

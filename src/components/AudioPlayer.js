@@ -91,7 +91,7 @@ function AudioPlayer(props) {
     if (currentText) {
       currentText.scrollIntoView({
         behavior: 'smooth',
-        block: 'start'
+        block: 'center'
       });
     }
   };
