@@ -57,7 +57,7 @@ function SearchField() {
   return (
     <TextField
     id='transcript-search'
-    label='Search transcript'
+    label='Search text'
     type='search'
     variant='outlined'  
     margin='dense'
