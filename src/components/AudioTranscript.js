@@ -2,7 +2,6 @@ import React, { useRef, useEffect } from 'react';
 import { Container, TextField, Typography, IconButton } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import Header from './Header';
-import { transcript } from '../examplePodcast'; // TODO remove when real transcript can be handled
 import GetAppIcon from '@material-ui/icons/GetApp';
 import AudioPlayer from './AudioPlayer';
 
@@ -20,35 +19,21 @@ function TranscriptView(props) {
 }
 
 /**
- * Maps paragraph tags around each paragraph of the transcript.
- * For illustrative purposes, it also maps a span around the paragraph
- * with dummy (meaningless) timestamps to make the paragraph clickable.
- * 
- * @param {string} transcript the podcast transcript
- * @param {function} handleClick _onClick_ handler
- */
-function mapParagraphTag(transcript, handleClick, setTextRef) {
-  let paragraphs = transcript.split(/\r?\n/).filter(Boolean);
-  // index as key is bad practice in general but as the order of 
-  // the paragraphs is fixed this is not an issue here
-  return paragraphs.map((p, idx) =>
-    <p key={idx} id={'transcript_p' + idx}>
-      <span id={idx * 20} ref={ref => setTextRef(ref, idx)} onClick={() => handleClick(idx)}>
-        {p}
-      </span>
-    </p>);
-}
-
-/**
  * User can click this button to download the audio transcript.
  */
 function TranscriptDownloadButton(props) {
-  const { title } = props;
+  const { transcriptJSON, title } = props;
+
+  // Joins the transcript on sentences with double newlines.
+  const joinTranscriptJSON = () => {
+    let transcriptList = transcriptJSON.map(([text, ...rest]) => text);
+    return encodeURIComponent(transcriptList.join('\r\n\r\n'));
+  };
 
   return (
     <IconButton
       edge='end'
-      href={'data:text/plain;charset=utf-8,' + transcript.replace(/\n/g, '%0A')}
+      href={'data:text/plain;charset=utf-8,' + joinTranscriptJSON()}
       download={title + '.txt'}
     >
       <GetAppIcon />
@@ -77,21 +62,51 @@ function searchKey(event) {
 function AudioTranscript(props) {
   const { episode } = props;
   const { title, img, series, producer } = episode.metadata;
+  const transcriptJSON = episode.sentence_transcript;
+  const [transcript, setTranscript] = React.useState(null);
   const theme = useTheme();
   const audioRef = useRef(null);
   const refsArray = useRef([]);
+  const timestampPrecision = 1000; // milliseconds
+
+  useEffect(() => {
+    const handleClick = (event, idx) => {
+      let text = event.target;
+      let start = text.dataset.start;
+      audioRef.current.currentTime = start;
+      refsArray.current[idx].scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+    const processTranscript = (transcript, handleClick) => {
+      return transcript.map(([sentence, start, duration, speakerId], idx) =>
+        <p key={idx}>
+          <span
+            data-start={start / timestampPrecision}
+            data-end={(start + duration) / timestampPrecision}
+            data-speaker={speakerId}
+            onClick={e => handleClick(e, idx)}
+            ref={ref => refsArray.current[idx] = ref}
+          >
+            {sentence}
+          </span>
+        </p>
+      );
+    }
+    setTranscript(processTranscript(transcriptJSON, handleClick));
+  }, [transcriptJSON]);
 
   useEffect(() => {
     audioRef.current.addEventListener('timeupdate', (event) => {
-      let roundedTime = Math.round(event.target.currentTime);
-      // workaround to fix nullpointer exception for now when switching screens
+      let currentTime = event.target.currentTime;
       if (refsArray.current[0]) {
         refsArray.current.forEach(text => {
-          let timestamp = parseInt(text.id)
-          // hardcode timestamp range
-          if (timestamp <= roundedTime && roundedTime < timestamp + 20) {
+          let start = text.dataset.start;
+          let end = text.dataset.end;
+          if (currentTime >= start && currentTime < end) {
             text.style.backgroundColor = theme.palette.primary.main;
-            text.style.color = 'black';
+            text.style.color = '#000';
           }
           else {
             text.style.backgroundColor = 'transparent';
@@ -100,22 +115,7 @@ function AudioTranscript(props) {
         });
       }
     });
-  }, [theme])
-
-  const handleClick = (idx) => {
-    audioRef.current.currentTime = Math.fround(idx * 20);
-    refsArray.current[idx].scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
-    });
-  };
-
-  const setTextRef = (ref, idx) => {
-    refsArray.current[idx] = ref;
-  }
-
-  // example with dummy timestamps
-  let transcriptParagraphs = mapParagraphTag(transcript, handleClick, setTextRef);
+  }, [theme]);
 
   return (
     <>
@@ -128,10 +128,13 @@ function AudioTranscript(props) {
           margin='dense'
           onKeyDown={(event) => { searchKey(event) }}
         />
-        <TranscriptDownloadButton title={title} />
+        <TranscriptDownloadButton
+          transcriptJSON={transcriptJSON}
+          title={title}
+        />
       </Header>
       <TranscriptView
-        transcript={transcriptParagraphs}
+        transcript={transcript}
         title={title}
       />
       <AudioPlayer
