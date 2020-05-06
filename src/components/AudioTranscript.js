@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Container, TextField, Typography, IconButton } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import Header from './Header';
@@ -63,10 +63,10 @@ function AudioTranscript(props) {
   const { episode } = props;
   const { title, img, series, producer } = episode.metadata;
   const transcriptJSON = episode.sentence_transcript;
-  const [transcript, setTranscript] = React.useState(null);
+  const [transcript, setTranscript] = useState(null);
   const theme = useTheme();
   const audioRef = useRef(null);
-  const refsArray = useRef([]);
+  const textRefs = useRef([]);
   const timestampPrecision = 1000; // milliseconds
 
   useEffect(() => {
@@ -74,7 +74,7 @@ function AudioTranscript(props) {
       let text = event.target;
       let start = text.dataset.start;
       audioRef.current.currentTime = start;
-      refsArray.current[idx].scrollIntoView({
+      textRefs.current[idx].scrollIntoView({
         behavior: 'smooth',
         block: 'start'
       });
@@ -87,7 +87,7 @@ function AudioTranscript(props) {
             data-end={(start + duration) / timestampPrecision}
             data-speaker={speakerId}
             onClick={e => handleClick(e, idx)}
-            ref={ref => refsArray.current[idx] = ref}
+            ref={ref => textRefs.current[idx] = ref}
           >
             {sentence}
           </span>
@@ -100,8 +100,8 @@ function AudioTranscript(props) {
   useEffect(() => {
     audioRef.current.addEventListener('timeupdate', (event) => {
       let currentTime = event.target.currentTime;
-      if (refsArray.current[0]) {
-        refsArray.current.forEach(text => {
+      if (textRefs.current[0]) {
+        textRefs.current.forEach(text => {
           let start = text.dataset.start;
           let end = text.dataset.end;
           if (currentTime >= start && currentTime < end) {
@@ -140,7 +140,7 @@ function AudioTranscript(props) {
       <AudioPlayer
         audioSrc={episode.audio}
         audioRef={audioRef}
-        textRefs={refsArray}
+        textRefs={textRefs}
         title={title}
         img={img}
         series={series}

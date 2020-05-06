@@ -10,11 +10,6 @@ import Forward10RoundedIcon from '@material-ui/icons/Forward10Rounded';
 import Slider from '@material-ui/core/Slider';
 import '../styles/lineclamp.css';
 
-/* TODO
- * 1. Navigeer van audio (progress slider) naar tekst timestamp
- * 2. Audio volume knop toevoegen
- */
-
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'sticky',
@@ -85,17 +80,26 @@ function AudioPlayer(props) {
   const handleProgress = (event, newValue) => {
     setCurrentTime(newValue);
     audioRef.current.currentTime = newValue;
-    // TODO dit is de DUMMY implementatie 
-    textRefs.current[Math.floor(newValue / 20)].scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
+    let currentText = null;
+    textRefs.current.forEach(text => {
+      let start = text.dataset.start;
+      let end = text.dataset.end;
+      if (newValue >= start && newValue < end) {
+        currentText = text;
+      }
     });
+    if (currentText) {
+      currentText.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
   };
 
   const handleEnd = () => {
-    setCurrentTime(0);
+    audioRef.current.currentTime = 0;
     setPlayerState(false);
-  }
+  };
 
   useEffect(() => {
     // Empty array at the end indicates to only add listener once
@@ -105,7 +109,7 @@ function AudioPlayer(props) {
     audioRef.current.addEventListener("timeupdate", (event) => {
       setCurrentTime(Math.floor(event.target.currentTime))
     }, []);
-  })
+  });
 
   return (
     <Paper className={classes.root} square elevation={2}>
