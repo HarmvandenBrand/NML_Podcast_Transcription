@@ -8,10 +8,10 @@ import {
   useScrollTrigger,
   Slide,
   IconButton,
+  useMediaQuery
 } from '@material-ui/core';
 import { ArrowBack } from '@material-ui/icons';
 
-import MediaQuery from 'react-responsive';
 
 const useStyles = makeStyles(theme => ({
   appName: {
@@ -40,7 +40,8 @@ function HideOnScroll(props) {
 export default function Header(props) {
   const { allowBack } = props;
   const classes = useStyles();
-  
+  const matches = useMediaQuery('(min-width:420px)');
+
   return (
 
     <HideOnScroll>
@@ -60,8 +61,7 @@ export default function Header(props) {
               </IconButton>
             }
 
-            <MediaQuery query='(min-device-width: 420px)'>
-
+            {matches &&
               <Typography
                 className={classes.appName}
                 variant='h5'
@@ -69,8 +69,7 @@ export default function Header(props) {
               >
                 Elecast
               </Typography>
-
-            </MediaQuery>
+            }
 
             {props.children}
 

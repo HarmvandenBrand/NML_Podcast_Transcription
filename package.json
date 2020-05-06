@@ -12,14 +12,14 @@
     "findandreplacedomtext": "^0.4.6",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
-    "react-responsive": "^8.0.3",
     "react-scripts": "3.4.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "update": "cd src & node scripts/podcasts.js & python scripts/preprocess_transcript.py"
   },
   "eslintConfig": {
     "extends": "react-app"

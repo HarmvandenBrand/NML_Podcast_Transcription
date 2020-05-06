@@ -4,6 +4,9 @@ import { Grid, Typography, Button, Box } from '@material-ui/core';
 import { FavoriteBorder, Favorite } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({
+  cover: {
+    borderRadius: theme.shape.borderRadius,
+  },
   showTitle: {
     lineHeight: '1.25',
     [theme.breakpoints.only('xs')]: {
@@ -33,7 +36,7 @@ export default function ShowDetails(props) {
   return (
     <Grid container spacing={2}>
       <Grid item xs={3} sm={2}>
-        <img src={img} alt='img' width='100%' />
+        <img className={classes.cover} src={img} alt='img' width='100%' />
       </Grid>
       <Grid item xs={9} sm={10}>
         <Typography
