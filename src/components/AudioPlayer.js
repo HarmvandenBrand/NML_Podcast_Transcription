@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Divider, Grid, Typography, Paper } from '@material-ui/core';
+import { Divider, Grid, Typography, Paper, useMediaQuery } from '@material-ui/core';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import Hidden from '@material-ui/core/Hidden';
@@ -22,7 +22,6 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     maxHeight: '128px',
     padding: theme.spacing(1),
-    borderTop: `1px solid ${theme.palette.primary.main}`,
     background: '#212121',
   },
   cover: {
@@ -37,7 +36,10 @@ const useStyles = makeStyles(theme => ({
     height: 2
   },
   slider: {
-    width: '95%'
+    width: '95%',
+    [theme.breakpoints.only('xs')]: {
+      margin: '0 auto',
+    },
   },
   mainIcon: {
     fontSize: 40,
@@ -74,6 +76,7 @@ function AudioPlayer(props) {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const classes = useStyles();
+  const xsBreakpoint = useMediaQuery(theme => theme.breakpoints.only('xs'));
 
   const formatTime = timeSeconds => {
     return new Date(timeSeconds * 1000).toISOString().substr(11, 8)
@@ -116,7 +119,10 @@ function AudioPlayer(props) {
 
         <Grid item xs={12} sm={10} md={11} container>
           <Grid item xs={12}>
-            <Typography component='div' className='marquee' variant='overline'>
+            <Typography
+              className={`${xsBreakpoint ? 'marquee' : 'clamp1'}`}
+              component='div'
+              variant='overline'>
               <div>
                 <span className={classes.title}>{series} ({producer}):</span> {title}
               </div>
@@ -176,7 +182,7 @@ function AudioPlayer(props) {
             </Grid>
           </Grid>
 
-          <Grid item xs={12} container justify='center'>
+          <Grid item xs={12} container>
             <audio
               ref={audioRef}
               onEnded={handleEnd}>
