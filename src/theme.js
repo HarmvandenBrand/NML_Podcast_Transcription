@@ -6,7 +6,7 @@ let primaryTextColor = '#EF8321'; // intended for headers etc.
 let subtitleTextColor = '#EF8321' // currently used for podcast series title
 let surfaceColor = '#EF8321'; // intended for menus etc.
 
-let searchHighlightColor = '#FF0000'; // background color for highlighted search results
+let searchHighlightColor = '#FF2000'; // background color for highlighted search results
 let searchHiglightFocusColor = '#FFC3A0'; // background color for the currently focussed search result
 
 

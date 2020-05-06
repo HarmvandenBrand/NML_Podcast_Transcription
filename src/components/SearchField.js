@@ -47,9 +47,9 @@ function SearchField() {
       //Only scroll when enter is pressed and a search term is entered
       if (event.keyCode === 13 && searchResults.length > 0)
       {
-        searchIndex %= searchResults.length ;
+        searchIndex %= searchResults.length;
         searchResults[searchIndex].scrollIntoView({block: "center", behavior: "smooth"});
-        searchResults[searchIndex].setAttribute("style", `background-color:${theme.highlighting.searchResultFocus}`);
+        searchResults[searchIndex].setAttribute("style", `background-color :${theme.highlighting.searchResultFocus}`);
       }
     }    
   }

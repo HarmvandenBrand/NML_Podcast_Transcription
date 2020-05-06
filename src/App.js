@@ -12,6 +12,19 @@ function App() {
   const defaultEpisode = podcasts['IRL']['internet_carbon_footprint'] // temporary
   const [episode, setEpisode] = React.useState(defaultEpisode);
 
+
+  // Click animation for the usability study
+  function clickEffect(e){
+    console.log("clickt");
+    var d=document.createElement("div");
+    d.className="clickEffect";
+    d.style.top=e.clientY+"px";d.style.left=e.clientX+"px";
+    document.body.appendChild(d);
+    d.addEventListener('animationend',function(){d.parentElement.removeChild(d);}.bind(this));
+  }
+  document.addEventListener('click', clickEffect);
+
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
