@@ -11,23 +11,29 @@ function SearchField() {
 
   var finder = null;
   var searchIndex = 0;
-  var searchVal = 0;
+  var searchVal = null;
 
   function search(event) {
   
     var resultNodeId = "search_result";
-  
+    
+    //Retrieve new search term
+    var newSearchVal = document.getElementById("transcript-search").value;
+
+    //If the search term has not been changed (no new search) and the key is not enter (no browsing through search results), terminate.
+    if (newSearchVal === searchVal && event.keyCode !== 13)
+      return;
+
     //Revert highlighting of previous search
     if (finder !== null)
-    {
       finder.revert();
-    }    
   
-    //If the previous search searched for the same term, increase searchindex
-    searchIndex = (document.getElementById("transcript-search").value === searchVal ? searchIndex+1 : 0);
-  
-    //Retrieve search term
-    searchVal = document.getElementById("transcript-search").value;
+    //If searching for new search term, reset searchIndex.
+    if (newSearchVal !== searchVal)
+      searchIndex = -1;
+
+    //Assign new search term
+    searchVal = newSearchVal;
 
     if (searchVal.length > 0)
     {
@@ -43,13 +49,38 @@ function SearchField() {
   
       //Retrieve highlight-wrapped elements and scroll to them
       var searchResults = document.getElementsByClassName(resultNodeId);
-  
-      //Only scroll when enter is pressed and a search term is entered
+        
+
+      
+      //Only scroll and focusHighlight when enter is pressed and search results exist
       if (event.keyCode === 13 && searchResults.length > 0)
       {
-        searchIndex %= searchResults.length;
-        searchResults[searchIndex].scrollIntoView({block: "center", behavior: "smooth"});
-        searchResults[searchIndex].setAttribute("style", `background-color :${theme.highlighting.searchResultFocus}`);
+        //Forward search
+        if (!event.shiftKey)
+        {
+          searchIndex = (searchIndex + 1) % searchResults.length;
+
+          //Scroll to focus and highlight it
+          searchResults[searchIndex].scrollIntoView({block: "center", behavior: "smooth"});
+          searchResults[searchIndex].setAttribute("style", `background-color :${theme.highlighting.searchResultFocus}`);
+        }
+
+        //Backward search
+        else
+        {
+          //Decrease search index on shift-enter. Make an exception for the 'starting state' of -1.
+          if (!(searchIndex === -1))
+            searchIndex = searchIndex - 1;
+
+          //Loop around the searchResults
+          if (searchIndex < 0)
+            searchIndex += searchResults.length;
+
+          //Scroll to focus and highlight it
+          searchResults[searchIndex].scrollIntoView({block: "center", behavior: "smooth"});
+          searchResults[searchIndex].setAttribute("style", `background-color :${theme.highlighting.searchResultFocus}`);
+        }
+
       }
     }    
   }
