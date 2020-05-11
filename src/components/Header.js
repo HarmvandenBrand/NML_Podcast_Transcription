@@ -8,9 +8,10 @@ import {
   useScrollTrigger,
   Slide,
   IconButton,
-  Grid
+  useMediaQuery
 } from '@material-ui/core';
 import { ArrowBack } from '@material-ui/icons';
+
 
 const useStyles = makeStyles(theme => ({
   appName: {
@@ -39,45 +40,42 @@ function HideOnScroll(props) {
 export default function Header(props) {
   const { allowBack } = props;
   const classes = useStyles();
+  const matches = useMediaQuery('(min-width:420px)');
 
   return (
+
     <HideOnScroll>
       <AppBar
         position='sticky'
         elevation={2}
         color='default'
       >
-        <Toolbar>
-          <Grid container spacing={2} alignItems='center'>
+       <Toolbar style={{ textAlign: 'right' }}>
+            
+            {allowBack &&
+              <IconButton
+                edge='start'
+                onClick={() => navigate(-1)}
+              >
+                <ArrowBack />
+              </IconButton>
+            }
 
-            <Grid item md={4} sm={2} xs={1}>
-              {allowBack &&
-                <IconButton
-                  edge='start'
-                  onClick={() => navigate(-1)}
-                >
-                  <ArrowBack />
-                </IconButton>
-              }
-            </Grid>
-
-            <Grid item md={4} sm={3} xs={2}>
+            {matches &&
               <Typography
                 className={classes.appName}
                 variant='h5'
                 style={{ flex: 1, textAlign: 'center' }}
               >
-                Placeholder
+                Elecast
               </Typography>
-            </Grid>
+            }
 
-            <Grid item md={4} sm={7} xs={9} style={{ textAlign: 'right' }}>
-              {props.children}
-            </Grid>
+            {props.children}
 
-          </Grid>
         </Toolbar>
       </AppBar>
     </HideOnScroll>
+
   );
 }

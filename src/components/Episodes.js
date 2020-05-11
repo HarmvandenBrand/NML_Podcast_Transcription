@@ -4,6 +4,8 @@ import { Container, Typography } from '@material-ui/core';
 import Header from './Header';
 import ShowDetails from './ShowDetails';
 import EpisodeCard from './EpisodeCard';
+import SearchField from './SearchField';
+
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -21,8 +23,10 @@ function Episodes(props) {
 
   return (
     <>
-      <Header allowBack />
-      <Container className={classes.container} maxWidth='md'>
+      <Header allowBack>
+        <SearchField />
+      </Header>
+      <Container id='episodes-container' className={classes.container} maxWidth='md'>
         <ShowDetails
           img={metadata.img}
           showTitle={metadata.title}
