@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Router, Redirect } from '@reach/router';
 import { ThemeProvider } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,18 +10,19 @@ import podcasts from './podcasts/podcasts.js';
 import './styles/ClickAnimation.css';
 
 function App() {
-  const defaultEpisode = podcasts['IRL']['internet_carbon_footprint'] // temporary
+  const defaultEpisode = podcasts['99PercentInvisible']['WipeOut'] // temporary
   const [episode, setEpisode] = React.useState(defaultEpisode);
+  const audioRef = useRef();
 
-  function clickEffect(e){
-      var d=document.createElement("div");
-      d.className="clickEffect";
-      d.style.top=e.clientY+"px";d.style.left=e.clientX+"px";
-      document.body.appendChild(d);
-      d.addEventListener('animationend',function(){d.parentElement.removeChild(d);}.bind(this));
-      console.log("clickeffect");
-    }
-    document.addEventListener('click',clickEffect);
+  function clickEffect(e) {
+    var d = document.createElement("div");
+    d.className = "clickEffect";
+    d.style.top = e.clientY + "px"; d.style.left = e.clientX + "px";
+    document.body.appendChild(d);
+    d.addEventListener('animationend', function () { d.parentElement.removeChild(d); }.bind(this));
+    console.log("clickeffect");
+  }
+  document.addEventListener('click', clickEffect);
 
   return (
     <ThemeProvider theme={theme}>
@@ -29,8 +30,9 @@ function App() {
       <Router style={{ marginBottom: '56px' }}>
         <Redirect from='/' to='/home' noThrow />
         <Home path='/home/*' podcasts={podcasts} setEpisode={setEpisode} />
-        <AudioTranscript path='player' episode={episode} />
+        <AudioTranscript path='player' audioRef={audioRef} episode={episode} />
       </Router>
+      <audio ref={audioRef} src={episode.audio} />
       <Navigation />
     </ThemeProvider>
   );

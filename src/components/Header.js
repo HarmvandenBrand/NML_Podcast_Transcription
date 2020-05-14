@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { navigate } from '@reach/router';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -28,10 +28,23 @@ const useStyles = makeStyles(theme => ({
  */
 function HideOnScroll(props) {
   const { children } = props;
+  const [searchFocused, setSearchFocused] = useState(false);
   const trigger = useScrollTrigger();
 
+  useEffect(() => {
+    // If header has no search bar, then searchFocused always remains false, i.e., not relevant
+    if (document.getElementById("transcript-search")) {
+      let focused = document.getElementById("transcript-search") === document.activeElement;
+      setSearchFocused(focused);
+    }
+  }, [trigger]);
+
   return (
-    <Slide appear={false} direction='down' in={!trigger}>
+    <Slide
+      appear={false}
+      direction='down'
+      in={!trigger || searchFocused}
+    >
       {children}
     </Slide>
   );
@@ -50,28 +63,28 @@ export default function Header(props) {
         elevation={2}
         color='default'
       >
-       <Toolbar style={{ textAlign: 'right' }}>
-            
-            {allowBack &&
-              <IconButton
-                edge='start'
-                onClick={() => navigate(-1)}
-              >
-                <ArrowBack />
-              </IconButton>
-            }
+        <Toolbar style={{ textAlign: 'right' }}>
 
-            {matches &&
-              <Typography
-                className={classes.appName}
-                variant='h5'
-                style={{ flex: 1, textAlign: 'center' }}
-              >
-                Elecast
+          {allowBack &&
+            <IconButton
+              edge='start'
+              onClick={() => navigate(-1)}
+            >
+              <ArrowBack />
+            </IconButton>
+          }
+
+          {(!props.children || matches) &&
+            <Typography
+              className={classes.appName}
+              variant='h5'
+              style={{ flex: 1, textAlign: 'center' }}
+            >
+              Elecast
               </Typography>
-            }
+          }
 
-            {props.children}
+          {props.children}
 
         </Toolbar>
       </AppBar>

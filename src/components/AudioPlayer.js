@@ -66,12 +66,32 @@ const CustomSlider = withStyles(theme => ({
 }))(Slider);
 
 function AudioPlayer(props) {
-  const { audioSrc, audioRef, textRefs, title, img, series, producer } = props;
+  const { audioRef, textRefs, title, img, series, producer } = props;
   const [isPlaying, setPlayerState] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const classes = useStyles();
   const xsBreakpoint = useMediaQuery(theme => theme.breakpoints.only('xs'));
+
+  useEffect(() => {
+    // Set states
+    setPlayerState(audioRef.current.paused ? false : true);
+    setCurrentTime(audioRef.current.currentTime);
+    if (audioRef.current.duration) {
+      setDuration(audioRef.current.duration);
+    }
+    // Set event listeners
+    audioRef.current.addEventListener('loadedmetadata', (event) => {
+      setDuration(Math.floor(event.target.duration));
+    });
+    audioRef.current.addEventListener('timeupdate', (event) => {
+      setCurrentTime(Math.floor(event.target.currentTime));
+    });
+    audioRef.current.addEventListener('ended', () => {
+      audioRef.current.currentTime = 0;
+      setPlayerState(false);
+    });
+  }, [audioRef]);
 
   const formatTime = timeSeconds => {
     return new Date(timeSeconds * 1000).toISOString().substr(11, 8)
@@ -95,21 +115,6 @@ function AudioPlayer(props) {
       });
     }
   };
-
-  const handleEnd = () => {
-    audioRef.current.currentTime = 0;
-    setPlayerState(false);
-  };
-
-  useEffect(() => {
-    // Empty array at the end indicates to only add listener once
-    audioRef.current.addEventListener('loadedmetadata', (event) => {
-      setDuration(Math.floor(event.target.duration))
-    }, []);
-    audioRef.current.addEventListener("timeupdate", (event) => {
-      setCurrentTime(Math.floor(event.target.currentTime))
-    }, []);
-  });
 
   return (
     <Paper className={classes.root} square elevation={2}>
@@ -187,11 +192,6 @@ function AudioPlayer(props) {
           </Grid>
 
           <Grid item xs={12} container>
-            <audio
-              ref={audioRef}
-              onEnded={handleEnd}>
-              <source src={audioSrc} type='audio/mpeg' />
-            </audio>
             <CustomSlider
               className={classes.slider}
               value={currentTime}

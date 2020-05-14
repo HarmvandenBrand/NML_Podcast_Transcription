@@ -43,12 +43,11 @@ function TranscriptDownloadButton(props) {
 }
 
 function AudioTranscript(props) {
-  const { episode } = props;
+  const { audioRef, episode } = props;
   const { title, img, series, producer } = episode.metadata;
   const transcriptJSON = episode.sentence_transcript;
   const [transcript, setTranscript] = useState(null);
   const theme = useTheme();
-  const audioRef = useRef(null);
   const textRefs = useRef([]);
 
   useEffect(() => {
@@ -78,7 +77,7 @@ function AudioTranscript(props) {
       );
     }
     setTranscript(processTranscript(transcriptJSON, handleClick));
-  }, [transcriptJSON]);
+  }, [transcriptJSON, audioRef]);
 
   useEffect(() => {
     // const speakerColors = [theme.palette.primary.main, 'dodgerblue']; // temporary colors
@@ -101,12 +100,12 @@ function AudioTranscript(props) {
         });
       }
     });
-  }, [theme]);
+  }, [theme, audioRef]);
 
   return (
     <>
       <Header allowBack>
-        <SearchField/>
+        <SearchField />
         <TranscriptDownloadButton
           transcriptJSON={transcriptJSON}
           title={title}
@@ -117,7 +116,6 @@ function AudioTranscript(props) {
         title={title}
       />
       <AudioPlayer
-        audioSrc={episode.audio}
         audioRef={audioRef}
         textRefs={textRefs}
         title={title}

@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Shows(props) {
-  const { podcasts, setShow } = props;
+  const { podcasts } = props;
   const classes = useStyles();
 
   return (
@@ -27,7 +27,6 @@ function Shows(props) {
         {Object.keys(podcasts).map(key => (
           <div className={classes.card} key={key}>
             <ShowCard
-              setShow={setShow}
               showKey={key}
               show={podcasts[key]}
             />
@@ -40,13 +39,11 @@ function Shows(props) {
 
 function Home(props) {
   const { podcasts, setEpisode } = props;
-  const defaultShow = podcasts['IRL']; // temporary
-  const [show, setShow] = React.useState(defaultShow);
 
   return (
     <Router>
-      <Shows path='/' podcasts={podcasts} setShow={setShow} />
-      <Episodes path='episodes/:showKey' show={show} setEpisode={setEpisode}  />
+      <Shows path='/' podcasts={podcasts} />
+      <Episodes path='episodes/:showKey' podcasts={podcasts} setEpisode={setEpisode}  />
     </Router>
   );
 }
