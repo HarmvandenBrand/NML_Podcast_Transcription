@@ -1,11 +1,11 @@
 import React from 'react';
+import { useParams } from '@reach/router';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container, Typography } from '@material-ui/core';
 import Header from './Header';
 import ShowDetails from './ShowDetails';
 import EpisodeCard from './EpisodeCard';
 import SearchField from './SearchField';
-
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -17,9 +17,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Episodes(props) {
-  const { show, setEpisode } = props;
-  const { metadata, ...episodes } = show;
+  const { podcasts, setEpisode } = props;
   const classes = useStyles();
+  const params = useParams();
+  const { metadata, ...episodes } = podcasts[params.showKey];
 
   return (
     <>
