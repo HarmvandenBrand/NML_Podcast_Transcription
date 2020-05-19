@@ -1,12 +1,5 @@
 const podcasts = {
   
-        '99PercentInvisible': {
-          'metadata': require('./99PercentInvisible/metadata.json'),
-          'WipeOut': {
-          'audio': require("./99PercentInvisible/WipeOut/audio.mp3"), 'metadata': require("./99PercentInvisible/WipeOut/metadata.json"), 'sentence_transcript': require("./99PercentInvisible/WipeOut/sentence_transcript.json"), 'transcript': require("./99PercentInvisible/WipeOut/transcript.json")
-        } 
-        },
-
         'GeologySociety': {
           'metadata': require('./GeologySociety/metadata.json'),
           'salt_tectonics': {

@@ -9,7 +9,7 @@ import theme from './theme';
 import podcasts from './podcasts/podcasts.js';
 
 function App() {
-  const defaultEpisode = podcasts['99PercentInvisible']['WipeOut'] // temporary
+  const defaultEpisode = podcasts['IRL']['internet_carbon_footprint'] // temporary
   const [episode, setEpisode] = React.useState(defaultEpisode);
   const audioRef = useRef();
 
