@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Container, Typography, IconButton, Fab } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useTheme } from '@material-ui/core/styles';
@@ -129,10 +129,11 @@ function AudioTranscript(props) {
     }
   }, [currentText, isFocusMode]);
 
+  const scrollHandler = useCallback(() => {
+    setIsFocusMode(false);
+  }, []);
+
   useEffect(() => {
-    const scrollHandler = () => {
-      setIsFocusMode(false);
-    };
     // Cannot use scroll event because we scroll text into view.
     // There are more scroll options for example with scroll bar and arrow keys etc.
     // that are not captured right now.
@@ -143,14 +144,7 @@ function AudioTranscript(props) {
       window.removeEventListener('touchmove', scrollHandler);
       window.removeEventListener('wheel', scrollHandler);
     }
-  }, [isFocusMode]);
-
-  const handleFocus = () => {
-    setIsFocusMode(!isFocusMode);
-    if (isFocusMode && currentText) {
-      scrollTo(currentText);
-    }
-  };
+  }, [isFocusMode, scrollHandler]);
 
   return (
     <>
@@ -170,7 +164,7 @@ function AudioTranscript(props) {
         className={classes.fab}
         color={isFocusMode ? 'primary' : ''}
         size='medium'
-        onClick={handleFocus}
+        onClick={() => setIsFocusMode(!isFocusMode)}
       >
         {isFocusMode ? <CenterFocusStrongRounded /> : <CenterFocusWeakRounded />}
       </Fab>
