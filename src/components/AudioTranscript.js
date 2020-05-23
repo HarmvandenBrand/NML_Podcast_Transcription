@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Container, Typography, IconButton } from '@material-ui/core';
+import { Container, Typography, IconButton, Fab } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { useTheme } from '@material-ui/core/styles';
+import { GetApp, CenterFocusStrongRounded, CenterFocusWeakRounded } from '@material-ui/icons';
 import Header from './Header';
-import GetAppIcon from '@material-ui/icons/GetApp';
 import AudioPlayer from './AudioPlayer';
 import SearchField from './SearchField'
 
 function TranscriptView(props) {
-  const { transcript, title } = props;
+  const { transcript, title, classes } = props;
 
   return (
-    <Container id='transcript-container' maxWidth='md' style={{ paddingTop: '32px', paddingBottom: '32px' }}>
+    <Container className={classes.transcriptContainer} id='transcript-container' maxWidth='md'>
       <Typography variant='h6'>{title}</Typography>
       <Typography component='div'>
         {transcript}
@@ -37,28 +38,47 @@ function TranscriptDownloadButton(props) {
       href={'data:text/plain;charset=utf-8,' + joinTranscriptJSON()}
       download={title + '.txt'}
     >
-      <GetAppIcon />
+      <GetApp />
     </IconButton>
   );
 }
+
+const useStyles = makeStyles(theme => ({
+  transcriptContainer: {
+    paddingTop: '32px',
+    paddingBottom: '32px'
+  },
+  fab: {
+    position: 'fixed',
+    right: theme.spacing(2),
+    bottom: 56 + 128 + theme.spacing(2),
+  }
+}));
 
 function AudioTranscript(props) {
   const { audioRef, episode } = props;
   const { title, img, series, producer } = episode.metadata;
   const transcriptJSON = episode.sentence_transcript;
   const [transcript, setTranscript] = useState(null);
+  const [currentText, setCurrentText] = useState(null);
+  const [isFocusMode, setIsFocusMode] = useState(false);
   const theme = useTheme();
   const textRefs = useRef([]);
+  const classes = useStyles();
+
+  function scrollTo(text) {
+    text.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
+  }
 
   useEffect(() => {
     const handleClick = (event, idx) => {
       let text = event.target;
       let start = text.dataset.start;
       audioRef.current.currentTime = start;
-      textRefs.current[idx].scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-      });
+      scrollTo(textRefs.current[idx])
     }
     const processTranscript = (transcript, handleClick) => {
       let timestampPrecision = 1000; // milliseconds
@@ -92,6 +112,7 @@ function AudioTranscript(props) {
             // text.style.backgroundColor = speakerColors[speaker - 1];
             text.style.backgroundColor = theme.palette.primary.main;
             text.style.color = '#000';
+            setCurrentText(text);
           }
           else {
             text.style.backgroundColor = 'transparent';
@@ -100,7 +121,36 @@ function AudioTranscript(props) {
         });
       }
     });
-  }, [theme, audioRef]);
+  }, [audioRef, theme]);
+
+  useEffect(() => {
+    if (isFocusMode && currentText) {
+      scrollTo(currentText);
+    }
+  }, [currentText, isFocusMode]);
+
+  useEffect(() => {
+    const scrollHandler = () => {
+      setIsFocusMode(false);
+    };
+    // Cannot use scroll event because we scroll text into view.
+    // There are more scroll options for example with scroll bar and arrow keys etc.
+    // that are not captured right now.
+    if (isFocusMode) {
+      window.addEventListener('touchmove', scrollHandler);
+      window.addEventListener('wheel', scrollHandler);
+    } else {
+      window.removeEventListener('touchmove', scrollHandler);
+      window.removeEventListener('wheel', scrollHandler);
+    }
+  }, [isFocusMode]);
+
+  const handleFocus = () => {
+    setIsFocusMode(!isFocusMode);
+    if (isFocusMode && currentText) {
+      scrollTo(currentText);
+    }
+  };
 
   return (
     <>
@@ -114,7 +164,16 @@ function AudioTranscript(props) {
       <TranscriptView
         transcript={transcript}
         title={title}
+        classes={classes}
       />
+      <Fab
+        className={classes.fab}
+        color={isFocusMode ? 'primary' : ''}
+        size='medium'
+        onClick={handleFocus}
+      >
+        {isFocusMode ? <CenterFocusStrongRounded /> : <CenterFocusWeakRounded />}
+      </Fab>
       <AudioPlayer
         audioRef={audioRef}
         textRefs={textRefs}
