@@ -61,7 +61,7 @@ function AudioTranscript(props) {
   const transcriptJSON = episode.sentence_transcript;
   const [transcript, setTranscript] = useState(null);
   const [currentText, setCurrentText] = useState(null);
-  const [isFocusMode, setIsFocusMode] = useState(false);
+  const [isFocusMode, setIsFocusMode] = useState(true);
   const theme = useTheme();
   const textRefs = useRef([]);
   const classes = useStyles();
