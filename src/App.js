@@ -24,12 +24,14 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+
       {!started &&
         <StartOverlay setStarted={setStarted} setId={setId} />
       }
       {!tutorialFinished &&
-        <Tutorial setTutorialFinished={setTutorialFinished} started={started}/>
+        <Tutorial setTutorialFinished={setTutorialFinished} started={started} />
       }
+
       <Router style={{ marginBottom: '56px' }}>
         <Redirect from='/' to='/home' noThrow />
         <Home path='/home/*' podcasts={podcasts} setEpisode={setEpisode} />

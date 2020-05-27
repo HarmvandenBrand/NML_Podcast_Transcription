@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Typography, Slide } from '@material-ui/core';
+import { Grid, Typography, Grow } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import InfoStepper from './InfoStepper';
 
@@ -31,16 +31,14 @@ export default function Tutorial(props) {
 
   return (
     <div className={classes.root}>
-      <Slide direction='up' in={started} mountOnEnter unmountOnExit timeout={500}>
+      <Grow in={started} mountOnEnter unmountOnExit timeout={500}>
         <Grid
           className={classes.tutorial}
           container
           alignItems='center'
         >
           <Grid item xs={12}>
-            <Typography variant='h2' align='center'>
-              Tutorial
-          </Typography>
+            <Typography variant='overline' color='primary'> Tutorial </Typography>
             <InfoStepper handleEnd={setLastReached} />
             <Button
               className={classes.finBtn}
@@ -53,7 +51,7 @@ export default function Tutorial(props) {
             </Button>
           </Grid>
         </Grid>
-      </Slide>
+      </Grow>
     </div >
   );
 }
