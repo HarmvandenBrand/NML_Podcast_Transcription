@@ -146,6 +146,14 @@ function AudioTranscript(props) {
     }
   }, [isFocusMode, scrollHandler]);
 
+  // clean up on unmount
+  useEffect(() => {
+    return () => {
+      window.removeEventListener('touchmove', scrollHandler);
+      window.removeEventListener('wheel', scrollHandler);
+    }
+  }, [scrollHandler]);
+
   return (
     <>
       <Header allowBack>
