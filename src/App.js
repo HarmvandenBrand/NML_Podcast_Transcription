@@ -6,6 +6,7 @@ import Home from './components/Home';
 import AudioTranscript from './components/AudioTranscript';
 import Navigation from './components/Navigation';
 import StartOverlay from './components/StartOverlay';
+import Tutorial from './components/Tutorial';
 import theme from './theme';
 import podcasts from './podcasts/podcasts.js';
 
@@ -16,14 +17,18 @@ function App() {
 
   // Once true, always true for a session
   const [started, setStarted] = useState(false);
+  const [tutorialFinished, setTutorialFinished] = useState(false);
   // ID is set only once per session
-  const [id,  setId] = useState(null);
+  const [id, setId] = useState(null);
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       {!started &&
-        <StartOverlay setStarted={setStarted} setId={setId}/>
+        <StartOverlay setStarted={setStarted} setId={setId} />
+      }
+      {!tutorialFinished &&
+        <Tutorial setTutorialFinished={setTutorialFinished} started={started}/>
       }
       <Router style={{ marginBottom: '56px' }}>
         <Redirect from='/' to='/home' noThrow />

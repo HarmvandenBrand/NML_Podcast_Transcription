@@ -131,7 +131,7 @@ function AudioTranscript(props) {
 
   const scrollHandler = useCallback(() => {
     setIsFocusMode(false);
-  }, []);
+  }, [setIsFocusMode]);
 
   useEffect(() => {
     // Cannot use scroll event because we scroll text into view.
@@ -162,7 +162,7 @@ function AudioTranscript(props) {
       />
       <Fab
         className={classes.fab}
-        color={isFocusMode ? 'primary' : ''}
+        color={isFocusMode ? 'primary' : 'default'}
         size='medium'
         onClick={() => setIsFocusMode(!isFocusMode)}
       >

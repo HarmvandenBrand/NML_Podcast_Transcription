@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Grid, Button, TextField, Typography } from '@material-ui/core';
+import {
+  Container,
+  Grid,
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Slide
+} from '@material-ui/core';
+import ArrowForwardRoundedIcon from '@material-ui/icons/ArrowForwardRounded';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -11,8 +20,13 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.default,
   },
   form: {
-    marginTop: '20vh',
+    paddingTop: '20vh',
   },
+  logo: {
+    [theme.breakpoints.only('xs')]: {
+      fontSize: '4.0em',
+    },
+  }
 }));
 
 /**
@@ -32,42 +46,52 @@ export default function StartOverlay(props) {
 
   return (
     <div className={classes.root}>
-      <Container maxWidth='sm'>
-        <Grid
-          className={classes.form}
-          container
-          alignItems='center'
-          direction='column'
-          spacing={4}
-        >
-          <Grid item xs={12}>
-            <Typography variant='h1'>EleCast</Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant='body1'>
-              Welcome, and thank you for participating in our experiment!<br />
-              Please fill in your participant ID below to start the experiment.
+      <Slide direction='up' in={true} unmountOnExit timeout={500}>
+        <Container maxWidth='sm'>
+          <Grid
+            className={classes.form}
+            container
+            alignItems='center'
+            direction='column'
+            spacing={4}
+          >
+
+            <Grid item xs={12}>
+              <Typography className={classes.logo} variant='h1'
+              >
+                EleCast
             </Typography>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Typography variant='body1'>
+                Welcome, and thank you for participating in our experiment!<br />
+              Please fill in your participant ID below to continue.
+            </Typography>
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                label='Participant ID'
+                required
+                onChange={e => setTextValue(e.target.value)}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <Button
+                variant='contained'
+                color='primary'
+                disabled={textValue === ''}
+                onClick={handleStart}
+              >
+                <Box pr={1}>Continue</Box><ArrowForwardRoundedIcon />
+              </Button>
+            </Grid>
+
           </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label='Participant ID'
-              required
-              onChange={e => setTextValue(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Button
-              variant='contained'
-              color='primary'
-              disabled={textValue === ''}
-              onClick={handleStart}
-            >
-              Start
-          </Button>
-          </Grid>
-        </Grid>
-      </Container>
+        </Container>
+      </Slide>
     </div>
   );
 }
