@@ -5,11 +5,11 @@ import { useTheme } from '@material-ui/core/styles';
 import { GetApp, CenterFocusStrongRounded, CenterFocusWeakRounded } from '@material-ui/icons';
 import Header from './Header';
 import AudioPlayer from './AudioPlayer';
-import SearchField from './SearchField'
+import SearchField from './SearchField';
+
 
 function TranscriptView(props) {
-  const { transcript, title, classes } = props;
-
+  const { transcript, title, classes, logInfo, setLogInfo } = props;
   return (
     <Container className={classes.transcriptContainer} id='transcript-container' maxWidth='md'>
       <Typography variant='h6'>{title}</Typography>
@@ -24,7 +24,7 @@ function TranscriptView(props) {
  * User can click this button to download the audio transcript.
  */
 function TranscriptDownloadButton(props) {
-  const { transcriptJSON, title } = props;
+  const { transcriptJSON, title, logInfo } = props;
 
   // Joins the transcript on sentences with double newlines.
   const joinTranscriptJSON = () => {
@@ -35,7 +35,7 @@ function TranscriptDownloadButton(props) {
   return (
     <IconButton
       edge='end'
-      href={'data:text/plain;charset=utf-8,' + joinTranscriptJSON()}
+      href={'data:text/plain;charset=utf-8,' + JSON.stringify(logInfo) + joinTranscriptJSON() }
       download={title + '.txt'}
     >
       <GetApp />
@@ -66,6 +66,18 @@ function AudioTranscript(props) {
   const textRefs = useRef([]);
   const classes = useStyles();
 
+  // Maintain a dictionary with all relevant logging info (clicks)
+  const [logInfo, setLogInfo] = useState( 
+    { forwardButton: 0,
+      backwardButton: 0,
+      playButton: 0,
+      pauseButton: 0,
+      audioBar: 0,
+      transcriptSentence: 0,
+      search: 0,
+      searchNavigation: 0
+    });
+
   function scrollTo(text) {
     text.scrollIntoView({
       behavior: 'smooth',
@@ -78,8 +90,9 @@ function AudioTranscript(props) {
       let text = event.target;
       let start = text.dataset.start;
       audioRef.current.currentTime = start;
-      scrollTo(textRefs.current[idx])
+      scrollTo(textRefs.current[idx]);
     }
+
     const processTranscript = (transcript, handleClick) => {
       let timestampPrecision = 1000; // milliseconds
       return transcript.map(([sentence, start, duration, speakerId], idx) =>
@@ -88,7 +101,11 @@ function AudioTranscript(props) {
             data-start={start / timestampPrecision}
             data-end={(start + duration) / timestampPrecision}
             data-speaker={speakerId}
-            onClick={e => handleClick(e, idx)}
+            onClick={e => {
+              handleClick(e, idx);
+              // TODO, this goes wrong because it's called after each render and resets the state!
+              //setLogInfo({...logInfo, transcriptSentence: logInfo['transcriptSentence']+1 });
+            }}
             ref={ref => textRefs.current[idx] = ref}
           >
             {sentence}
@@ -149,16 +166,22 @@ function AudioTranscript(props) {
   return (
     <>
       <Header allowBack>
-        <SearchField />
+        <SearchField 
+          logInfo={logInfo}
+          setLogInfo={setLogInfo}
+        />
         <TranscriptDownloadButton
           transcriptJSON={transcriptJSON}
           title={title}
+          logInfo={logInfo}
         />
       </Header>
       <TranscriptView
         transcript={transcript}
         title={title}
         classes={classes}
+        logInfo={logInfo}
+        setLogInfo={setLogInfo}
       />
       <Fab
         className={classes.fab}
@@ -175,6 +198,8 @@ function AudioTranscript(props) {
         img={img}
         series={series}
         producer={producer}
+        logInfo={logInfo}
+        setLogInfo={setLogInfo}
       />
     </>
   );

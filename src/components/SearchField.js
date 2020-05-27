@@ -4,6 +4,7 @@ import { TextField } from '@material-ui/core'
 import { useTheme } from '@material-ui/core/styles';
 
 function SearchField(props) {
+  const { logInfo, setLogInfo } = props;
   const theme = useTheme();
 
   var finder = null;
@@ -48,13 +49,12 @@ function SearchField(props) {
 
       //Only scroll and focusHighlight when enter is pressed and search results exist
       if (event.keyCode === 13 && searchResults.length > 0) {
+        // TODO Log search action (wat ik ook probeer, het introduceert bugs)
+        //setLogInfo({...logInfo, searchNavigation: logInfo['searchNavigation']+1 });
+
         //Forward search
         if (!event.shiftKey) {
           searchIndex = (searchIndex + 1) % searchResults.length;
-
-          //Scroll to focus and highlight it
-          searchResults[searchIndex].scrollIntoView({ block: "center", behavior: "smooth" });
-          searchResults[searchIndex].setAttribute("style", `background-color :${theme.highlighting.searchResultFocus}`);
         }
         //Backward search
         else {
@@ -66,11 +66,10 @@ function SearchField(props) {
           if (searchIndex < 0)
             searchIndex += searchResults.length;
 
-          //Scroll to focus and highlight it
-          searchResults[searchIndex].scrollIntoView({ block: "center", behavior: "smooth" });
-          searchResults[searchIndex].setAttribute("style", `background-color :${theme.highlighting.searchResultFocus}`);
         }
-
+        //Scroll to focus and highlight it
+        searchResults[searchIndex].scrollIntoView({ block: "center", behavior: "smooth" });
+        searchResults[searchIndex].setAttribute("style", `background-color :${theme.highlighting.searchResultFocus}`);
       }
     }
   }
@@ -82,7 +81,10 @@ function SearchField(props) {
       type='search'
       variant='outlined'
       margin='dense'
-      onKeyUp={(event) => { search(event) }}
+      onKeyUp={(event) => { 
+        search(event)
+        // TODO also trying to log here introduces severe bugs
+      }}
     />
   );
 }
