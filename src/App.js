@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Router, Redirect } from '@reach/router';
 import { ThemeProvider } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,13 +13,26 @@ function App() {
   const [episode, setEpisode] = React.useState(defaultEpisode);
   const audioRef = useRef();
 
+  // Maintain a dictionary with all relevant logging info (clicks)
+  const [logInfo, setLogInfo] = useState( 
+    { forwardButton: 0,
+      backwardButton: 0,
+      playButton: 0,
+      pauseButton: 0,
+      audioBar: 0,
+      transcriptSentence: 0,
+      search: 0,
+      searchNavigation: 0
+    });
+
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router style={{ marginBottom: '56px' }}>
         <Redirect from='/' to='/home' noThrow />
         <Home path='/home/*' podcasts={podcasts} setEpisode={setEpisode} />
-        <AudioTranscript path='player' audioRef={audioRef} episode={episode} />
+        <AudioTranscript path='player' audioRef={audioRef} episode={episode} logInfo={logInfo} setLogInfo={setLogInfo} />
       </Router>
       <audio ref={audioRef} src={episode.audio}/>
       <Navigation />

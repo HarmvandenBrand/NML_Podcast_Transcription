@@ -9,7 +9,7 @@ import SearchField from './SearchField';
 
 
 function TranscriptView(props) {
-  const { transcript, title, classes, logInfo, setLogInfo } = props;
+  const { transcript, title, classes} = props;
   return (
     <Container className={classes.transcriptContainer} id='transcript-container' maxWidth='md'>
       <Typography variant='h6'>{title}</Typography>
@@ -56,7 +56,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function AudioTranscript(props) {
-  const { audioRef, episode } = props;
+  const { audioRef, episode, logInfo, setLogInfo } = props;
   const { title, img, series, producer } = episode.metadata;
   const transcriptJSON = episode.sentence_transcript;
   const [transcript, setTranscript] = useState(null);
@@ -66,23 +66,27 @@ function AudioTranscript(props) {
   const textRefs = useRef([]);
   const classes = useStyles();
 
-  // Maintain a dictionary with all relevant logging info (clicks)
-  const [logInfo, setLogInfo] = useState( 
-    { forwardButton: 0,
-      backwardButton: 0,
-      playButton: 0,
-      pauseButton: 0,
-      audioBar: 0,
-      transcriptSentence: 0,
-      search: 0,
-      searchNavigation: 0
-    });
-
   function scrollTo(text) {
     text.scrollIntoView({
       behavior: 'smooth',
       block: 'center'
     });
+  }
+
+  const processTranscript = (transcript, handleClick) => {
+    let timestampPrecision = 1000; // milliseconds
+    return transcript.map(([sentence, start, duration, speakerId], idx) =>
+      <p key={idx}>
+        <span
+          data-start={start / timestampPrecision}
+          data-end={(start + duration) / timestampPrecision}
+          data-speaker={speakerId}
+          onClick={e => { handleClick(e, idx) }}
+          ref={ref => textRefs.current[idx] = ref} >
+            {sentence}
+        </span>
+      </p>
+    );
   }
 
   useEffect(() => {
@@ -91,30 +95,10 @@ function AudioTranscript(props) {
       let start = text.dataset.start;
       audioRef.current.currentTime = start;
       scrollTo(textRefs.current[idx]);
-    }
-
-    const processTranscript = (transcript, handleClick) => {
-      let timestampPrecision = 1000; // milliseconds
-      return transcript.map(([sentence, start, duration, speakerId], idx) =>
-        <p key={idx}>
-          <span
-            data-start={start / timestampPrecision}
-            data-end={(start + duration) / timestampPrecision}
-            data-speaker={speakerId}
-            onClick={e => {
-              handleClick(e, idx);
-              // TODO, this goes wrong because it's called after each render and resets the state!
-              //setLogInfo({...logInfo, transcriptSentence: logInfo['transcriptSentence']+1 });
-            }}
-            ref={ref => textRefs.current[idx] = ref}
-          >
-            {sentence}
-          </span>
-        </p>
-      );
-    }
+      setLogInfo({...logInfo, transcriptSentence: logInfo['transcriptSentence']+1 }); 
+    };
     setTranscript(processTranscript(transcriptJSON, handleClick));
-  }, [transcriptJSON, audioRef]);
+  }, [transcriptJSON, audioRef, logInfo, setLogInfo]);
 
   useEffect(() => {
     // const speakerColors = [theme.palette.primary.main, 'dodgerblue']; // temporary colors
@@ -180,8 +164,6 @@ function AudioTranscript(props) {
         transcript={transcript}
         title={title}
         classes={classes}
-        logInfo={logInfo}
-        setLogInfo={setLogInfo}
       />
       <Fab
         className={classes.fab}
