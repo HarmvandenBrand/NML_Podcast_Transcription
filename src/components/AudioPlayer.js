@@ -10,8 +10,6 @@ import Forward10RoundedIcon from '@material-ui/icons/Forward10Rounded';
 import Slider from '@material-ui/core/Slider';
 import '../styles/lineclamp.css';
 
-import * as log from 'loglevel';
-
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'sticky',

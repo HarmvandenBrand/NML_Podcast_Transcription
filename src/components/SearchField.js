@@ -11,7 +11,7 @@ function SearchField(props) {
   var searchIndex = 0;
   var searchVal = null;
 
-  function search(event) {
+  function search(event, logInfo, setLogInfo) {
 
     var resultNodeId = "search_result";
 
@@ -49,7 +49,7 @@ function SearchField(props) {
 
       //Only scroll and focusHighlight when enter is pressed and search results exist
       if (event.keyCode === 13 && searchResults.length > 0) {
-        // TODO Log search action (wat ik ook probeer, het introduceert bugs)
+        // TODO
         //setLogInfo({...logInfo, searchNavigation: logInfo['searchNavigation']+1 });
 
         //Forward search
@@ -82,9 +82,8 @@ function SearchField(props) {
       variant='outlined'
       margin='dense'
       onKeyUp={(event) => { 
-        search(event)
-        // TODO also trying to log here introduces severe bugs
-      }}
+        search(event, logInfo, setLogInfo); }}
+      onClick={ () => setLogInfo({...logInfo, search: logInfo['search']+1 })}
     />
   );
 }
