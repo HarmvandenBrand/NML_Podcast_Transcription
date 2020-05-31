@@ -1,7 +1,10 @@
 import bottomNavImg from './bottomnav.png';
+import focusmodeStatesImg from './focusmode_states.png'
 import focusmodeVideo from './focusmode.mp4';
 import audioToTextVideo from './audio-to-text.mp4';
 import textToAudioVideo from './text-to-audio.mp4';
+
+// The heading and body can be written in a plain HTML string if desired.
 
 // Template:
 // const tutorial = {
@@ -13,15 +16,15 @@ import textToAudioVideo from './text-to-audio.mp4';
 
 const tutorial1 = {
   heading: "Introduction",
-  body: `A quick tutorial will follow to show you how to use the app.
-        The 'Listen Now' page with the audioplayer and transcript will 
+  body: `<p> A quick tutorial will follow to show you how to use the app.
+        The <b>Listen Now</b> page with the audioplayer and transcript will 
         be the main focus to showcase the different ways that you can
-        navigate through the podcast. Click NEXT when you are ready
-        to move on. When you have reached the end of the tutorial,
-        you can click on FINISH to go to the app.`,
+        navigate through the podcast. </p>
+        <p> Click <b>NEXT</b> when you are ready to move on. When you have reached 
+        the end of the tutorial, you can click on <b>FINISH</b> to go to the app. </p>`,
   img: bottomNavImg,
   vidSrc: null,
-}
+};
 
 const tutorial2 = {
   heading: "Focus Mode",
@@ -32,9 +35,9 @@ const tutorial2 = {
         grey when disabled. Clicking on the floating button when disabled will enable 
         focus mode again and scroll you to the position at which the transcript 
         is currently highlighted.`,
-  img: null,
+  img: focusmodeStatesImg,
   vidSrc: focusmodeVideo,
-}
+};
 
 const tutorial3 = {
   heading: "Audio Navigation",
@@ -43,7 +46,7 @@ const tutorial3 = {
         position at which the audio is currently playing.`,
   img: null,
   vidSrc: audioToTextVideo,
-}
+};
 
 const tutorial4 = {
   heading: "Transcript Navigation",
@@ -51,8 +54,16 @@ const tutorial4 = {
         a sentence in the transcript will bring the audio to that point.`,
   img: null,
   vidSrc: textToAudioVideo,
-}
+};
 
-const tutorials = [tutorial1, tutorial2, tutorial3, tutorial4];
+const tutorial5 = {
+  heading: "The End",
+  body: `<p> You have completed the tutorial!🎉 </p>
+        <p> Click on <b>FINISH</b> to go to the app. </p>`,
+  img: null,
+  vidSrc: null,
+};
+
+const tutorials = [tutorial1, tutorial2, tutorial3, tutorial4, tutorial5];
 
 export default tutorials;

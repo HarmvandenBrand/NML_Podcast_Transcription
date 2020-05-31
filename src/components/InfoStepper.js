@@ -31,11 +31,18 @@ function ContentSkeleton(props) {
   const { heading, body, img, vidSrc } = props
   const classes = useStyles();
 
+  useEffect(() => {
+    let headingEl = document.getElementById('tutorial-heading');
+    let bodyEl = document.getElementById('tutorial-body');
+    headingEl.innerHTML = heading;
+    bodyEl.innerHTML = body;
+  }, [heading, body]);
+
   return (
     <Grid container spacing={2} justify='center'>
       <Grid item xs={12}>
-        <Typography variant='h6' paragraph>{heading}</Typography>
-        <Typography variant='body1' paragraph>{body}</Typography>
+        <Typography id='tutorial-heading' component='div' variant='h6' paragraph />
+        <Typography id='tutorial-body' component='div' variant='body1' paragraph />
       </Grid>
       {img &&
         <Grid item xs={12} sm={6}>
@@ -76,7 +83,7 @@ export default function InfoStepper(props) {
       <ContentSkeleton
         heading={tutorial.heading}
         body={tutorial.body}
-        img ={tutorial.img}
+        img={tutorial.img}
         vidSrc={tutorial.vidSrc}
       />
     );
