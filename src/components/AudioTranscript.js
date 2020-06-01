@@ -62,7 +62,6 @@ function AudioTranscript(props) {
   const [transcript, setTranscript] = useState(null);
   const [currentText, setCurrentText] = useState(null);
   const [isFocusMode, setIsFocusMode] = useState(true);
-  const [finder, setFinder] = useState(null); // for search
   const theme = useTheme();
   const textRefs = useRef([]);
   const classes = useStyles();
@@ -76,9 +75,6 @@ function AudioTranscript(props) {
 
   useEffect(() => {
     const handleClick = (event, idx) => {
-      if (finder !== null) {
-        finder.revert();
-      }
       let text = event.target;
       if (text.nodeName === 'MARK') {
         text = text.parentElement;
@@ -156,7 +152,7 @@ function AudioTranscript(props) {
   return (
     <>
       <Header allowBack>
-        <SearchField finder={finder} setFinder={setFinder} />
+        <SearchField />
         <TranscriptDownloadButton
           transcriptJSON={transcriptJSON}
           title={title}

@@ -7,40 +7,52 @@ import { useTheme } from '@material-ui/core/styles';
 import SearchResults from './SearchResults';
 
 function SearchField(props) {
-  const { finder, setFinder } = props;
   const theme = useTheme();
   const [searchResultsLength, setSearchResultsLength] = useState(null);
   var length = 0;
 
-  var searchIndex = 0;
+  const [finder, setFinder] = useState(null);
   const [searchVal, setSearchVal] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [searchIndex, setSearchIndex] = useState(-1);
   const resultNodeId = "search_result";
 
   useEffect(() => {
-    if (searchVal) {
-      //Revert highlighting of previous search
-      if (finder !== null)
-        finder.revert();
-
-      if (searchVal.length > 0) {
-        //Prepare the highlight-wrapping for found search terms
-        let wrapNode = document.createElement("mark");
-        wrapNode.setAttribute("class", resultNodeId);
-        wrapNode.setAttribute("style", `background-color:${theme.highlighting.searchResult}`);
-
-        //Escape special regex characters
-        let searchValEscaped = searchVal.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&');
-        //Wrap all search results
-        setFinder(findandreplacedomtext(document.querySelector('[id$="-container"]'), { find: new RegExp(searchValEscaped, "gi"), wrap: wrapNode }));
-      }
-    } else {
-      if (finder) {
-        finder.revert();
-      }
+    //Revert highlighting of previous search
+    if (finder) {
+      finder.revert();
     }
+
+    if (searchVal) {
+      //Reset index
+      setSearchIndex(-1);
+
+      //Prepare the highlight-wrapping for found search terms
+      let wrapNode = document.createElement("mark");
+      wrapNode.setAttribute("class", resultNodeId);
+      wrapNode.setAttribute("style", `background-color: ${theme.highlighting.searchResult}`);
+
+      //Escape special regex characters
+      let searchValEscaped = searchVal.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&');
+      //Wrap all search results
+      setFinder(findandreplacedomtext(document.querySelector('[id$="-container"]'), { find: new RegExp(searchValEscaped, "gi"), wrap: wrapNode }));
+    }
+
     setSearchResults(document.getElementsByClassName(resultNodeId));
-  }, [searchVal]);
+  }, [searchVal, theme]); // do NOT add finder as a dependency because this will break the code
+
+  useEffect(() => {
+    if (searchIndex > -1) {
+      Array.from(searchResults).forEach((res, idx) => {
+        if (idx === searchIndex) {
+          res.setAttribute("style", `background-color: ${theme.highlighting.searchResultFocus}`);
+          res.scrollIntoView({ block: "center", behavior: "smooth" });
+        } else {
+          res.setAttribute("style", `background-color: ${theme.highlighting.searchResult}`);
+        }
+      });
+    }
+  }, [searchIndex, searchResults, theme]);
 
   const handleEnter = (event) => {
     if (event.keyCode === 13 && searchResults.length > 0) {
@@ -54,34 +66,24 @@ function SearchField(props) {
   };
 
   function searchNext() {
-    if (searchVal !== null && searchResults.length > 0) {
-      searchResults[searchIndex].setAttribute("style", `background-color: ${theme.highlighting.searchResult}`);
-      if (searchIndex === -1)
-        searchIndex = getClosestElement(searchResults);
-      else
-        searchIndex = (searchIndex + 1) % searchResults.length;
-
-      //Scroll to focus and highlight it
-      searchResults[searchIndex].scrollIntoView({ block: "center", behavior: "smooth" });
-      searchResults[searchIndex].setAttribute("style", `background-color :${theme.highlighting.searchResultFocus}`);
+    if (searchVal && searchResults.length > 0) {
+      if (searchIndex === -1) {
+        setSearchIndex(getClosestElement(searchResults));
+      } else {
+        setSearchIndex((searchIndex + 1) % searchResults.length);
+      }
     }
   }
 
   function searchPrevious() {
-    if (searchVal !== null && searchResults.length > 0) {
-      searchResults[searchIndex].setAttribute("style", `background-color: ${theme.highlighting.searchResult}`);
-      if (!(searchIndex === -1))
-        searchIndex = searchIndex - 1;
-      else
-        searchIndex = getClosestElement(searchResults);
-
-      //Loop around the searchResults
-      if (searchIndex < 0)
-        searchIndex += searchResults.length;
-
-      //Scroll to focus and highlight it
-      searchResults[searchIndex].scrollIntoView({ block: "center", behavior: "smooth" });
-      searchResults[searchIndex].setAttribute("style", `background-color :${theme.highlighting.searchResultFocus}`);
+    if (searchVal && searchResults.length > 0) {
+      if (searchIndex === -1) {
+        setSearchIndex(getClosestElement(searchResults));
+      } else {
+        let newSearchIndex = searchIndex - 1
+        newSearchIndex = newSearchIndex < 0 ? newSearchIndex + searchResults.length : newSearchIndex;
+        setSearchIndex(newSearchIndex);
+      }
     }
   }
 
