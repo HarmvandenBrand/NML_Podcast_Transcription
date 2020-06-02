@@ -21,7 +21,7 @@ function App() {
       pauseButton: 0,
       audioBar: 0,
       transcriptSentence: 0,
-      search: 0,
+      searchClick: 0,
       searchNavigation: 0
     });
 

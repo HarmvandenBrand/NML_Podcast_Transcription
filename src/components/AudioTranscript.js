@@ -92,6 +92,9 @@ function AudioTranscript(props) {
   useEffect(() => {
     const handleClick = (event, idx) => {
       let text = event.target;
+      if (text.nodeName === 'MARK') {
+        text = text.parentElement;
+      }
       let start = text.dataset.start;
       audioRef.current.currentTime = start;
       scrollTo(textRefs.current[idx]);
