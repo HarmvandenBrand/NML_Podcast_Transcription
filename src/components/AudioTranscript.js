@@ -35,7 +35,9 @@ function TranscriptDownloadButton(props) {
   return (
     <IconButton
       edge='end'
-      href={'data:text/plain;charset=utf-8,' + JSON.stringify(logInfo) + joinTranscriptJSON() }
+      // for experiment, make download button only download the log
+      //href={'data:text/plain;charset=utf-8,' + JSON.stringify(logInfo) + joinTranscriptJSON() }
+      href={'data:text/plain;charset=utf-8,' + JSON.stringify(logInfo) }
       download={title + '.txt'}
     >
       <GetApp />

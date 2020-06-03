@@ -41,12 +41,13 @@ const useStyles = makeStyles(theme => ({
  * @param {*} props 
  */
 export default function StartOverlay(props) {
-  const { setStarted, setId } = props;
+  const { setStarted, setId, logInfo, setLogInfo  } = props;
   const classes = useStyles();
   const [textValue, setTextValue] = useState('');
 
   const handleStart = () => {
     setId(textValue);
+    setLogInfo({...logInfo, id: textValue });
     setStarted(true);
   };
 

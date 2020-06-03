@@ -17,7 +17,8 @@ function App() {
 
   // Maintain a dictionary with all relevant logging info (clicks)
   const [logInfo, setLogInfo] = useState( 
-    { forwardButton: 0,
+    { id: '',
+      forwardButton: 0,
       backwardButton: 0,
       playButton: 0,
       pauseButton: 0,
@@ -38,7 +39,7 @@ function App() {
       <CssBaseline />
 
       {!started &&
-        <StartOverlay setStarted={setStarted} setId={setId} />
+        <StartOverlay setStarted={setStarted} setId={setId} logInfo={logInfo} setLogInfo={setLogInfo}/>
       }
       {!tutorialFinished &&
         <Tutorial setTutorialFinished={setTutorialFinished} started={started} />
