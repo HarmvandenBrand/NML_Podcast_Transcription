@@ -48,7 +48,7 @@ function App() {
       <Router style={{ marginBottom: '56px' }}>
         <Redirect from='/' to='/home' noThrow />
         <Home path='/home/*' podcasts={podcasts} setEpisode={setEpisode} />
-        <AudioTranscript path='player' audioRef={audioRef} episode={episode} logInfo={logInfo} setLogInfo={setLogInfo} />
+        <AudioTranscript path='player' audioRef={audioRef} episode={episode} logInfo={logInfo} setLogInfo={setLogInfo} id={id} />
       </Router>
       <audio ref={audioRef} src={episode.audio} />
       <Navigation />

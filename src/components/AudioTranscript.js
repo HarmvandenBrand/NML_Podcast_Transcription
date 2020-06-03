@@ -24,7 +24,7 @@ function TranscriptView(props) {
  * User can click this button to download the audio transcript.
  */
 function TranscriptDownloadButton(props) {
-  const { transcriptJSON, title, logInfo } = props;
+  const { transcriptJSON, title, id, logInfo } = props;
 
   // Joins the transcript on sentences with double newlines.
   const joinTranscriptJSON = () => {
@@ -38,7 +38,7 @@ function TranscriptDownloadButton(props) {
       // for experiment, make download button only download the log
       //href={'data:text/plain;charset=utf-8,' + JSON.stringify(logInfo) + joinTranscriptJSON() }
       href={'data:text/plain;charset=utf-8,' + JSON.stringify(logInfo) }
-      download={title + '.txt'}
+      download={id + '-' + title + '.txt'}
     >
       <GetApp />
     </IconButton>
@@ -58,7 +58,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function AudioTranscript(props) {
-  const { audioRef, episode, logInfo, setLogInfo } = props;
+  const { audioRef, episode, id, logInfo, setLogInfo } = props;
   const { title, img, series, producer } = episode.metadata;
   const transcriptJSON = episode.sentence_transcript;
   const [transcript, setTranscript] = useState(null);
@@ -171,6 +171,7 @@ function AudioTranscript(props) {
           transcriptJSON={transcriptJSON}
           title={title}
           logInfo={logInfo}
+          id={id}
         />
       </Header>
       <TranscriptView
