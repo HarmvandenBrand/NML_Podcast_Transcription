@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Router, Redirect } from '@reach/router';
 import { ThemeProvider } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,7 +10,7 @@ import podcasts from './podcasts/podcasts.js';
 
 function App() {
   const defaultEpisode = podcasts['IRL']['internet_carbon_footprint'] // temporary
-  const [episode, setEpisode] = React.useState(defaultEpisode);
+  const [episode, setEpisode] = useState(defaultEpisode);
   const audioRef = useRef();
 
   return (
@@ -21,7 +21,7 @@ function App() {
         <Home path='/home/*' podcasts={podcasts} setEpisode={setEpisode} />
         <AudioTranscript path='player' audioRef={audioRef} episode={episode} />
       </Router>
-      <audio ref={audioRef} src={episode.audio}/>
+      <audio ref={audioRef} src={episode.audio} />
       <Navigation />
     </ThemeProvider>
   );
