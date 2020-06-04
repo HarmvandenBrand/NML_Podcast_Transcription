@@ -74,23 +74,34 @@ function AudioPlayer(props) {
   const xsBreakpoint = useMediaQuery(theme => theme.breakpoints.only('xs'));
 
   useEffect(() => {
+    let audio = audioRef.current
     // Set states
-    setPlayerState(audioRef.current.paused ? false : true);
-    setCurrentTime(audioRef.current.currentTime);
-    if (audioRef.current.duration) {
-      setDuration(audioRef.current.duration);
+    setPlayerState(audio.paused ? false : true);
+    setCurrentTime(audio.currentTime);
+    if (audio.duration) {
+      setDuration(audio.duration);
     }
-    // Set event listeners
-    audioRef.current.addEventListener('loadedmetadata', (event) => {
+    // Event handler
+    const handleLoadedMetadata = (event) => {
       setDuration(Math.floor(event.target.duration));
-    });
-    audioRef.current.addEventListener('timeupdate', (event) => {
+    };
+    const handleTimeUpdate = (event) => {
       setCurrentTime(Math.floor(event.target.currentTime));
-    });
-    audioRef.current.addEventListener('ended', () => {
-      audioRef.current.currentTime = 0;
+    };
+    const handleEnded = (event) => {
+      audio.currentTime = 0;
       setPlayerState(false);
-    });
+    };
+    // Add event listeners
+    audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+    audio.addEventListener('timeupdate', handleTimeUpdate);
+    audio.addEventListener('ended', handleEnded);
+    // Clean up on unmount
+    return () => {
+      audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      audio.removeEventListener('timeupdate', handleTimeUpdate);
+      audio.removeEventListener('ended', handleEnded);
+    }
   }, [audioRef]);
 
   const formatTime = timeSeconds => {
