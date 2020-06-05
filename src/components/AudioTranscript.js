@@ -32,6 +32,21 @@ function TranscriptDownloadButton(props) {
     return encodeURIComponent(transcriptList.join('\r\n\r\n'));
   };
 
+  // Send log info per mail
+  const sendMail = (id, logInfo) => {
+    const templateId = 'template_jZEggNDQ'
+    const templateParams = {
+      message_html: logInfo,
+      from_name: id, 
+      reply_to: 'test'
+
+    }
+    window.emailjs.send(
+      'gmail',
+      templateId,
+      templateParams)
+  }
+
   return (
     <IconButton
       edge='end'
@@ -39,6 +54,7 @@ function TranscriptDownloadButton(props) {
       //href={'data:text/plain;charset=utf-8,' + JSON.stringify(logInfo) + joinTranscriptJSON() }
       href={'data:text/plain;charset=utf-8,' + JSON.stringify(logInfo) }
       download={id + '-' + title + '.txt'}
+      onClick={ () => sendMail(id, JSON.stringify(logInfo)) }
     >
       <GetApp />
     </IconButton>
