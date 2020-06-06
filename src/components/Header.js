@@ -53,7 +53,7 @@ function HideOnScroll(props) {
 export default function Header(props) {
   const { allowBack } = props;
   const classes = useStyles();
-  const matches = useMediaQuery('(min-width:420px)');
+  const matches = useMediaQuery('(min-width:480px)');
 
   return (
 

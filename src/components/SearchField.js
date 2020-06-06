@@ -4,12 +4,9 @@ import { TextField, Toolbar, Button, IconButton, Icon } from '@material-ui/core'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { useTheme } from '@material-ui/core/styles';
-import SearchResults from './SearchResults';
 
 function SearchField(props) {
   const theme = useTheme();
-  const [searchResultsLength, setSearchResultsLength] = useState(null);
-  var length = 0;
 
   const [finder, setFinder] = useState(null);
   const [searchVal, setSearchVal] = useState('');
@@ -42,6 +39,7 @@ function SearchField(props) {
   }, [searchVal, theme]); // do NOT add finder as a dependency because this will break the code
 
   useEffect(() => {
+    //Highlight search results
     if (searchIndex > -1) {
       Array.from(searchResults).forEach((res, idx) => {
         if (idx === searchIndex) {
@@ -53,6 +51,18 @@ function SearchField(props) {
       });
     }
   }, [searchIndex, searchResults, theme]);
+
+  useEffect(() => {
+    //Update and display amount of found results
+    var target = document.getElementById("search-results-display");
+    var padding = 7 - String(searchIndex + 1).length - String(searchResults.length).length;
+
+    if (searchVal.length < 1)
+      target.setAttribute("style", `visibility: hidden; margin-right: ${padding}ch; margin-left: 1ch;`);
+    else
+      target.setAttribute("style", `margin-right: ${padding}ch; margin-left: 1ch;`);
+    target.innerHTML = (searchIndex + 1 + "/" + searchResults.length);
+  });
 
   const handleEnter = (event) => {
     if (event.keyCode === 13 && searchResults.length > 0) {
@@ -116,25 +126,6 @@ function SearchField(props) {
         onKeyUp={handleEnter}
       />
 
-      {/* {searchResults2 !== null && searchResults2.length > 0 &&
-        <div>{searchResults2.length}</div>
-      } */}
-
-      {searchResultsLength > 0 ? (
-        <div>{searchResultsLength}</div>
-      ) : (
-          <div>leeg</div>
-        )}
-
-      {/* <div>{length}</div> */}
-
-
-      {/* {searchResults2 !== null ? (
-        <SearchResults props={searchResults2.length}/>
-      ) : (
-        <div></div>
-      )} */}
-
       <IconButton
         onClick={() => {
           searchPrevious();
@@ -149,6 +140,8 @@ function SearchField(props) {
       >
         <ExpandMoreIcon />
       </IconButton>
+
+      <div id="search-results-display" />
 
     </Toolbar>
   );
