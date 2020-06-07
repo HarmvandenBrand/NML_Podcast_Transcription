@@ -76,6 +76,10 @@ function AudioTranscript(props) {
   useEffect(() => {
     const handleClick = (event, idx) => {
       let text = event.target;
+      //If a clicked node is a 'mark' node, this indicates a search-highlighted node that is a child of the sentence node. Get that parent sentence node.
+      if (text.nodeName === 'MARK') {
+        text = text.parentElement;
+      }
       let start = text.dataset.start;
       audioRef.current.currentTime = start;
       scrollTo(textRefs.current[idx])
