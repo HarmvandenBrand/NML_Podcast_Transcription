@@ -15,6 +15,19 @@ function App() {
   const [episode, setEpisode] = useState(defaultEpisode);
   const audioRef = useRef();
 
+  // Maintain a dictionary with all relevant logging info (clicks)
+  const [logInfo, setLogInfo] = useState( 
+    { id: '',
+      forwardButton: 0,
+      backwardButton: 0,
+      playButton: 0,
+      pauseButton: 0,
+      audioBar: 0,
+      transcriptSentence: 0,
+      searchClick: 0,
+      searchNavigation: 0
+    });
+
   // Once true, always true for a session
   const [started, setStarted] = useState(false);
   const [tutorialFinished, setTutorialFinished] = useState(false);
@@ -26,7 +39,7 @@ function App() {
       <CssBaseline />
 
       {!started &&
-        <StartOverlay setStarted={setStarted} setId={setId} />
+        <StartOverlay setStarted={setStarted} setId={setId} logInfo={logInfo} setLogInfo={setLogInfo}/>
       }
       {!tutorialFinished &&
         <Tutorial setTutorialFinished={setTutorialFinished} started={started} />
@@ -35,7 +48,7 @@ function App() {
       <Router style={{ marginBottom: '56px' }}>
         <Redirect from='/' to='/home' noThrow />
         <Home path='/home/*' podcasts={podcasts} setEpisode={setEpisode} />
-        <AudioTranscript path='player' audioRef={audioRef} episode={episode} />
+        <AudioTranscript path='player' audioRef={audioRef} episode={episode} logInfo={logInfo} setLogInfo={setLogInfo} id={id} />
       </Router>
       <audio ref={audioRef} src={episode.audio} />
       <Navigation />

@@ -6,6 +6,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { useTheme } from '@material-ui/core/styles';
 
 function SearchField(props) {
+  const { logInfo, setLogInfo } = props;
   const theme = useTheme();
 
   const [finder, setFinder] = useState(null);
@@ -77,6 +78,7 @@ function SearchField(props) {
 
   function searchNext() {
     if (searchVal && searchResults.length > 0) {
+      setLogInfo({...logInfo, searchNavigation: logInfo["searchNavigation"]+1 });
       if (searchIndex === -1) {
         setSearchIndex(getClosestElement(searchResults));
       } else {
@@ -87,6 +89,7 @@ function SearchField(props) {
 
   function searchPrevious() {
     if (searchVal && searchResults.length > 0) {
+      setLogInfo({...logInfo, searchNavigation: logInfo["searchNavigation"]+1 });
       if (searchIndex === -1) {
         setSearchIndex(getClosestElement(searchResults));
       } else {
@@ -124,6 +127,7 @@ function SearchField(props) {
         margin='dense'
         onChange={event => setSearchVal(event.target.value)} //newSearch(event) }}
         onKeyUp={handleEnter}
+        onClick={() => setLogInfo({...logInfo, searchClick: logInfo["searchClick"]+1 })}
       />
 
       <IconButton

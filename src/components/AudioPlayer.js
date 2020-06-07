@@ -66,7 +66,7 @@ const CustomSlider = withStyles(theme => ({
 }))(Slider);
 
 function AudioPlayer(props) {
-  const { audioRef, textRefs, title, img, series, producer } = props;
+  const { audioRef, textRefs, title, img, series, producer, logInfo, setLogInfo } = props;
   const [isPlaying, setPlayerState] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -153,7 +153,10 @@ function AudioPlayer(props) {
             <Grid item>
               <IconButton
                 size='small'
-                onClick={() => { audioRef.current.currentTime -= 10 }}
+                onClick={() => { 
+                  audioRef.current.currentTime -= 10;
+                  setLogInfo({...logInfo, backwardButton: logInfo['backwardButton']+1 });
+                }}
               >
                 <Replay10RoundedIcon className={classes.secondaryIcon} />
               </IconButton>
@@ -166,6 +169,7 @@ function AudioPlayer(props) {
                   onClick={() => {
                     audioRef.current.pause();
                     setPlayerState(false);
+                    setLogInfo({...logInfo, pauseButton: logInfo['pauseButton']+1 })
                   }}
                 >
                   <PauseCircleFilledRoundedIcon className={classes.mainIcon} />
@@ -179,6 +183,7 @@ function AudioPlayer(props) {
                   onClick={() => {
                     audioRef.current.play();
                     setPlayerState(true);
+                    setLogInfo({...logInfo, playButton: logInfo['playButton']+1 })
                   }}
                 >
                   <PlayCircleFilledRoundedIcon className={classes.mainIcon} />
@@ -188,7 +193,10 @@ function AudioPlayer(props) {
             <Grid item>
               <IconButton
                 size='small'
-                onClick={() => { audioRef.current.currentTime += 10 }}
+                onClick={() => {
+                  audioRef.current.currentTime += 10;
+                  setLogInfo({...logInfo, forwardButton: logInfo['forwardButton']+1 });
+                }}
               >
                 <Forward10RoundedIcon className={classes.secondaryIcon} />
               </IconButton>
@@ -210,6 +218,7 @@ function AudioPlayer(props) {
               min={0}
               step={0.1}
               max={duration}
+              onClick={ () => setLogInfo({...logInfo, audioBar: logInfo['audioBar']+1 }) }
             />
           </Grid>
         </Grid>

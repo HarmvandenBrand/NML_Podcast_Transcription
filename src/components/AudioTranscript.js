@@ -5,11 +5,11 @@ import { useTheme } from '@material-ui/core/styles';
 import { GetApp, CenterFocusStrongRounded, CenterFocusWeakRounded } from '@material-ui/icons';
 import Header from './Header';
 import AudioPlayer from './AudioPlayer';
-import SearchField from './SearchField'
+import SearchField from './SearchField';
+
 
 function TranscriptView(props) {
-  const { transcript, title, classes } = props;
-
+  const { transcript, title, classes} = props;
   return (
     <Container className={classes.transcriptContainer} id='transcript-container' maxWidth='md'>
       <Typography variant='h6'>{title}</Typography>
@@ -24,7 +24,7 @@ function TranscriptView(props) {
  * User can click this button to download the audio transcript.
  */
 function TranscriptDownloadButton(props) {
-  const { transcriptJSON, title } = props;
+  const { transcriptJSON, title, id, logInfo } = props;
 
   // Joins the transcript on sentences with double newlines.
   const joinTranscriptJSON = () => {
@@ -32,11 +32,29 @@ function TranscriptDownloadButton(props) {
     return encodeURIComponent(transcriptList.join('\r\n\r\n'));
   };
 
+  // Send log info per mail
+  const sendMail = (id, logInfo) => {
+    const templateId = 'template_jZEggNDQ';
+    const templateParams = {
+      message_html: logInfo,
+      from_name: id, 
+      reply_to: 'elecast.info@gmail.com'
+    };
+    window.emailjs.send(
+      'gmail',
+      templateId,
+      templateParams);
+    window.alert("Thank you for participating in our experiment!");
+  }
+
   return (
     <IconButton
       edge='end'
-      href={'data:text/plain;charset=utf-8,' + joinTranscriptJSON()}
-      download={title + '.txt'}
+      // for experiment, make download button only download the log
+      //href={'data:text/plain;charset=utf-8,' + JSON.stringify(logInfo) + joinTranscriptJSON() }
+      //href={'data:text/plain;charset=utf-8,' + JSON.stringify(logInfo) }
+      //download={id + '-' + title + '.txt'}
+      onClick={ () => sendMail(id, JSON.stringify(logInfo)) }
     >
       <GetApp />
     </IconButton>
@@ -56,7 +74,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function AudioTranscript(props) {
-  const { audioRef, episode } = props;
+  const { audioRef, episode, id, logInfo, setLogInfo } = props;
   const { title, img, series, producer } = episode.metadata;
   const transcriptJSON = episode.sentence_transcript;
   const [transcript, setTranscript] = useState(null);
@@ -73,6 +91,22 @@ function AudioTranscript(props) {
     });
   }
 
+  const processTranscript = (transcript, handleClick) => {
+    let timestampPrecision = 1000; // milliseconds
+    return transcript.map(([sentence, start, duration, speakerId], idx) =>
+      <p key={idx}>
+        <span
+          data-start={start / timestampPrecision}
+          data-end={(start + duration) / timestampPrecision}
+          data-speaker={speakerId}
+          onClick={e => { handleClick(e, idx) }}
+          ref={ref => textRefs.current[idx] = ref} >
+            {sentence}
+        </span>
+      </p>
+    );
+  }
+
   useEffect(() => {
     const handleClick = (event, idx) => {
       let text = event.target;
@@ -82,26 +116,11 @@ function AudioTranscript(props) {
       }
       let start = text.dataset.start;
       audioRef.current.currentTime = start;
-      scrollTo(textRefs.current[idx])
-    }
-    const processTranscript = (transcript, handleClick) => {
-      let timestampPrecision = 1000; // milliseconds
-      return transcript.map(([sentence, start, duration, speakerId], idx) =>
-        <p key={idx}>
-          <span
-            data-start={start / timestampPrecision}
-            data-end={(start + duration) / timestampPrecision}
-            data-speaker={speakerId}
-            onClick={e => handleClick(e, idx)}
-            ref={ref => textRefs.current[idx] = ref}
-          >
-            {sentence}
-          </span>
-        </p>
-      );
-    }
+      scrollTo(textRefs.current[idx]);
+      setLogInfo({...logInfo, transcriptSentence: logInfo['transcriptSentence']+1 }); 
+    };
     setTranscript(processTranscript(transcriptJSON, handleClick));
-  }, [transcriptJSON, audioRef]);
+  }, [transcriptJSON, audioRef, logInfo, setLogInfo]);
 
   useEffect(() => {
     // const speakerColors = [theme.palette.primary.main, 'dodgerblue']; // temporary colors
@@ -161,10 +180,15 @@ function AudioTranscript(props) {
   return (
     <>
       <Header allowBack>
-        <SearchField />
+        <SearchField 
+          logInfo={logInfo}
+          setLogInfo={setLogInfo}
+        />
         <TranscriptDownloadButton
           transcriptJSON={transcriptJSON}
           title={title}
+          logInfo={logInfo}
+          id={id}
         />
       </Header>
       <TranscriptView
@@ -187,6 +211,8 @@ function AudioTranscript(props) {
         img={img}
         series={series}
         producer={producer}
+        logInfo={logInfo}
+        setLogInfo={setLogInfo}
       />
     </>
   );
