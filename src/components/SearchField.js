@@ -57,7 +57,6 @@ function SearchField(props) {
 
   const handleEnter = (event) => {
     if (event.keyCode === 13 && searchResults.length > 0) {
-      setLogInfo({...logInfo, searchNavigation: logInfo["searchNavigation"]+1 });
       if (!event.shiftKey) {
         searchNext();
       }
@@ -69,6 +68,7 @@ function SearchField(props) {
 
   function searchNext() {
     if (searchVal && searchResults.length > 0) {
+      setLogInfo({...logInfo, searchNavigation: logInfo["searchNavigation"]+1 });
       if (searchIndex === -1) {
         setSearchIndex(getClosestElement(searchResults));
       } else {
@@ -79,6 +79,7 @@ function SearchField(props) {
 
   function searchPrevious() {
     if (searchVal && searchResults.length > 0) {
+      setLogInfo({...logInfo, searchNavigation: logInfo["searchNavigation"]+1 });
       if (searchIndex === -1) {
         setSearchIndex(getClosestElement(searchResults));
       } else {
