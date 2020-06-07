@@ -5,7 +5,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Home from './components/Home';
 import AudioTranscript from './components/AudioTranscript';
 import Navigation from './components/Navigation';
-import StartOverlay from './components/StartOverlay';
 import Tutorial from './components/Tutorial';
 import theme from './theme';
 import podcasts from './podcasts/podcasts.js';
@@ -29,20 +28,16 @@ function App() {
     });
 
   // Once true, always true for a session
-  const [started, setStarted] = useState(false);
   const [tutorialFinished, setTutorialFinished] = useState(false);
   // ID is set only once per session
-  const [id, setId] = useState(null);
+  const [id, setId] = useState('');
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
 
-      {!started &&
-        <StartOverlay setStarted={setStarted} setId={setId} logInfo={logInfo} setLogInfo={setLogInfo}/>
-      }
       {!tutorialFinished &&
-        <Tutorial setTutorialFinished={setTutorialFinished} started={started} />
+        <Tutorial setTutorialFinished={setTutorialFinished} started={true} />
       }
 
       <Router style={{ marginBottom: '56px' }}>

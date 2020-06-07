@@ -54,9 +54,9 @@ function TranscriptDownloadButton(props) {
       edge='end'
       // for experiment, make download button only download the log
       //href={'data:text/plain;charset=utf-8,' + JSON.stringify(logInfo) + joinTranscriptJSON() }
-      //href={'data:text/plain;charset=utf-8,' + JSON.stringify(logInfo) }
-      //download={id + '-' + title + '.txt'}
-      onClick={ () => sendMail(id, JSON.stringify(logInfo)) }
+      href={'data:text/plain;charset=utf-8,' + JSON.stringify(logInfo) }
+      download={id + '-' + title + '.txt'}
+      // onClick={ () => sendMail(id, JSON.stringify(logInfo)) }
     >
       <GetApp />
     </IconButton>
