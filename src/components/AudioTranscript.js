@@ -195,7 +195,7 @@ function AudioTranscript(props) {
         classes={classes}
       />
       <div>
-        <img src={img} style={{display: 'block', margin: 'auto', marginTop: '6em', height: '40%', width:'40%'}} alt="Podcast logo"/>
+        <img src={img} style={{display: 'block', margin: 'auto', marginTop: '6em', height: '50vh', width:'50vh'}} alt="Podcast logo"/>
       </div>
       <AudioPlayer
         audioRef={audioRef}
