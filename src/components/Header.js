@@ -33,10 +33,18 @@ function HideOnScroll(props) {
 
   useEffect(() => {
     // If header has no search bar, then searchFocused always remains false, i.e., not relevant
-    if (document.getElementById("transcript-search")) {
-      let focused = document.getElementById("transcript-search") === document.activeElement;
-      setSearchFocused(focused);
+    var searchElements = Array.from(document.getElementsByClassName("search-buttons"));
+    searchElements.push(document.getElementById("transcript-search"));
+    var focused = false;
+
+    if (searchElements) {
+      searchElements.forEach(element => {
+        if (element === document.activeElement)
+          focused = true;
+      })
     }
+
+    setSearchFocused(focused);
   }, [trigger]);
 
   return (

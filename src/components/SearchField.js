@@ -127,13 +127,16 @@ function SearchField(props) {
       />
 
       <IconButton
+        className="search-buttons"
         onClick={() => {
           searchPrevious();
         }}
       >
         <ExpandLessIcon />
       </IconButton>
+      
       <IconButton
+        className="search-buttons"
         onClick={() => {
           searchNext();
         }}
