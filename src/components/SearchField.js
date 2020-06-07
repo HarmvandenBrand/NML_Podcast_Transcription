@@ -62,7 +62,7 @@ function SearchField(props) {
     else
       target.setAttribute("style", `margin-right: ${padding}ch; margin-left: 1ch;`);
     target.innerHTML = (searchIndex + 1 + "/" + searchResults.length);
-  });
+  }, [searchIndex, searchVal, searchResults]);
 
   const handleEnter = (event) => {
     if (event.keyCode === 13 && searchResults.length > 0) {
