@@ -11,12 +11,14 @@ import SearchField from './SearchField';
 function TranscriptView(props) {
   const { transcript, title, classes} = props;
   return (
+    <>{ false &&
     <Container className={classes.transcriptContainer} id='transcript-container' maxWidth='md'>
       <Typography variant='h6'>{title}</Typography>
       <Typography component='div'>
         {transcript}
       </Typography>
-    </Container>
+    </Container>}
+    </>
   );
 }
 

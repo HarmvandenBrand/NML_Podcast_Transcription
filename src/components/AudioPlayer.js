@@ -12,7 +12,7 @@ import '../styles/lineclamp.css';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    position: 'sticky',
+    position: 'fixed',
     bottom: '56px',
     width: '100%',
     maxHeight: '128px',
