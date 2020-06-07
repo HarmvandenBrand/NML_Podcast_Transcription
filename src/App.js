@@ -5,7 +5,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Home from './components/Home';
 import AudioTranscript from './components/AudioTranscript';
 import Navigation from './components/Navigation';
-import Tutorial from './components/Tutorial';
 import theme from './theme';
 import podcasts from './podcasts/podcasts.js';
 
@@ -27,18 +26,12 @@ function App() {
       searchNavigation: 0
     });
 
-  // Once true, always true for a session
-  const [tutorialFinished, setTutorialFinished] = useState(false);
   // ID is set only once per session
   const [id, setId] = useState('');
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-
-      {!tutorialFinished &&
-        <Tutorial setTutorialFinished={setTutorialFinished} started={true} />
-      }
 
       <Router style={{ marginBottom: '56px' }}>
         <Redirect from='/' to='/home' noThrow />
