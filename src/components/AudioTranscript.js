@@ -182,10 +182,6 @@ function AudioTranscript(props) {
   return (
     <>
       <Header allowBack>
-        <SearchField 
-          logInfo={logInfo}
-          setLogInfo={setLogInfo}
-        />
         <TranscriptDownloadButton
           transcriptJSON={transcriptJSON}
           title={title}
