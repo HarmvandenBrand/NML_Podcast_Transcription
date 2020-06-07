@@ -37,14 +37,13 @@ function HideOnScroll(props) {
     searchElements.push(document.getElementById("transcript-search"));
     var focused = false;
 
-    if (searchElements) {
-      searchElements.forEach(element => {
-        if (element === document.activeElement)
-          focused = true;
-      })
-    }
+    searchElements.forEach(element => {
+      if (element === document.activeElement)
+        focused = true;
+    })
 
     setSearchFocused(focused);
+    
   }, [trigger]);
 
   return (
