@@ -194,14 +194,6 @@ function AudioTranscript(props) {
         title={title}
         classes={classes}
       />
-      <Fab
-        className={classes.fab}
-        color={isFocusMode ? 'primary' : 'default'}
-        size='medium'
-        onClick={() => setIsFocusMode(!isFocusMode)}
-      >
-        {isFocusMode ? <CenterFocusStrongRounded /> : <CenterFocusWeakRounded />}
-      </Fab>
       <AudioPlayer
         audioRef={audioRef}
         textRefs={textRefs}
