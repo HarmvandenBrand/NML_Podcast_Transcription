@@ -34,17 +34,17 @@ function TranscriptDownloadButton(props) {
 
   // Send log info per mail
   const sendMail = (id, logInfo) => {
-    const templateId = 'template_jZEggNDQ'
+    const templateId = 'template_jZEggNDQ';
     const templateParams = {
       message_html: logInfo,
       from_name: id, 
-      reply_to: 'test'
-
-    }
+      reply_to: 'elecast.info@gmail.com'
+    };
     window.emailjs.send(
       'gmail',
       templateId,
-      templateParams)
+      templateParams);
+    window.alert("Thank you for participating in our experiment!");
   }
 
   return (
@@ -52,8 +52,8 @@ function TranscriptDownloadButton(props) {
       edge='end'
       // for experiment, make download button only download the log
       //href={'data:text/plain;charset=utf-8,' + JSON.stringify(logInfo) + joinTranscriptJSON() }
-      href={'data:text/plain;charset=utf-8,' + JSON.stringify(logInfo) }
-      download={id + '-' + title + '.txt'}
+      //href={'data:text/plain;charset=utf-8,' + JSON.stringify(logInfo) }
+      //download={id + '-' + title + '.txt'}
       onClick={ () => sendMail(id, JSON.stringify(logInfo)) }
     >
       <GetApp />
