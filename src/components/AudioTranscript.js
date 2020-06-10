@@ -44,7 +44,7 @@ function TranscriptDownloadButton(props) {
       'gmail',
       templateId,
       templateParams);
-    window.alert("Thank you for participating in our experiment!");
+    window.alert("You successfully submitted the experiment log!\nPlease return to the questionnaire.");
   }
 
   return (
