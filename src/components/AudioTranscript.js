@@ -160,8 +160,8 @@ function AudioTranscript(props) {
 
   return (
     <>
-      <Header allowBack>
-        <SearchField />
+      <Header>
+        <SearchField searchActivityHandler={() => setIsFocusMode(false)} />
         <TranscriptDownloadButton
           transcriptJSON={transcriptJSON}
           title={title}

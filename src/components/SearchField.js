@@ -6,6 +6,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { useTheme } from '@material-ui/core/styles';
 
 function SearchField(props) {
+  const { searchActivityHandler } = props;
   const theme = useTheme();
 
   const [finder, setFinder] = useState(null);
@@ -122,7 +123,12 @@ function SearchField(props) {
         type='search'
         variant='outlined'
         margin='dense'
-        onChange={event => setSearchVal(event.target.value)} //newSearch(event) }}
+        onChange={event => {
+          setSearchVal(event.target.value);
+          if (searchActivityHandler) {
+            searchActivityHandler();
+          }
+        }}
         onKeyUp={handleEnter}
       />
 
@@ -130,15 +136,21 @@ function SearchField(props) {
         className="search-buttons"
         onClick={() => {
           searchPrevious();
+          if (searchActivityHandler) {
+            searchActivityHandler();
+          }
         }}
       >
         <ExpandLessIcon />
       </IconButton>
-      
+
       <IconButton
         className="search-buttons"
         onClick={() => {
           searchNext();
+          if (searchActivityHandler) {
+            searchActivityHandler();
+          }
         }}
       >
         <ExpandMoreIcon />
