@@ -67,6 +67,9 @@ function SearchField(props) {
 
   const handleEnter = (event) => {
     if (event.keyCode === 13 && searchResults.length > 0) {
+      if (searchActivityHandler) {
+        searchActivityHandler();
+      }
       if (!event.shiftKey) {
         searchNext();
       }
@@ -123,12 +126,7 @@ function SearchField(props) {
         type='search'
         variant='outlined'
         margin='dense'
-        onChange={event => {
-          setSearchVal(event.target.value);
-          if (searchActivityHandler) {
-            searchActivityHandler();
-          }
-        }}
+        onChange={event => setSearchVal(event.target.value)}
         onKeyUp={handleEnter}
       />
 
