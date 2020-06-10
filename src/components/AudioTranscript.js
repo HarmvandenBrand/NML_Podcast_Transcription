@@ -9,7 +9,7 @@ import SearchField from './SearchField';
 
 
 function TranscriptView(props) {
-  const { transcript, title, classes} = props;
+  const { transcript, title, classes } = props;
   return (
     <Container className={classes.transcriptContainer} id='transcript-container' maxWidth='md'>
       <Typography variant='h6'>{title}</Typography>
@@ -37,7 +37,7 @@ function TranscriptDownloadButton(props) {
     const templateId = 'template_jZEggNDQ';
     const templateParams = {
       message_html: logInfo,
-      from_name: id, 
+      from_name: id,
       reply_to: 'elecast.info@gmail.com'
     };
     window.emailjs.send(
@@ -52,9 +52,9 @@ function TranscriptDownloadButton(props) {
       edge='end'
       // for experiment, make download button only download the log
       //href={'data:text/plain;charset=utf-8,' + JSON.stringify(logInfo) + joinTranscriptJSON() }
-      href={'data:text/plain;charset=utf-8,' + JSON.stringify(logInfo) }
+      href={'data:text/plain;charset=utf-8,' + JSON.stringify(logInfo)}
       download={id + '-' + title + '.txt'}
-      // onClick={ () => sendMail(id, JSON.stringify(logInfo)) }
+    // onClick={ () => sendMail(id, JSON.stringify(logInfo)) }
     >
       <GetApp />
     </IconButton>
@@ -101,7 +101,7 @@ function AudioTranscript(props) {
           data-speaker={speakerId}
           onClick={e => { handleClick(e, idx) }}
           ref={ref => textRefs.current[idx] = ref} >
-            {sentence}
+          {sentence}
         </span>
       </p>
     );
@@ -117,7 +117,7 @@ function AudioTranscript(props) {
       let start = text.dataset.start;
       audioRef.current.currentTime = start;
       scrollTo(textRefs.current[idx]);
-      setLogInfo({...logInfo, transcriptSentence: logInfo['transcriptSentence']+1 }); 
+      setLogInfo({ ...logInfo, transcriptSentence: logInfo['transcriptSentence'] + 1 });
     };
     setTranscript(processTranscript(transcriptJSON, handleClick));
   }, [transcriptJSON, audioRef, logInfo, setLogInfo]);
@@ -179,8 +179,9 @@ function AudioTranscript(props) {
 
   return (
     <>
-      <Header allowBack>
-        <SearchField 
+      <Header>
+        <SearchField
+          searchActivityHandler={() => setIsFocusMode(false)}
           logInfo={logInfo}
           setLogInfo={setLogInfo}
         />
