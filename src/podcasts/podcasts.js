@@ -1,5 +1,12 @@
 const podcasts = {
   
+        '99Invisible': {
+          'metadata': require('./99Invisible/metadata.json'),
+          'WipeOut': {
+          'audio': require("./99Invisible/WipeOut/audio.mp3"), 'metadata': require("./99Invisible/WipeOut/metadata.json"), 'sentence_transcript': require("./99Invisible/WipeOut/sentence_transcript.json"), 'transcript': require("./99Invisible/WipeOut/transcript.json")
+        } 
+        },
+
         'GeologySociety': {
           'metadata': require('./GeologySociety/metadata.json'),
           'salt_tectonics': {
