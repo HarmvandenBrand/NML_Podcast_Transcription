@@ -2,6 +2,9 @@
 
 Group Repository of the Podcast Transcription App for the New Media Lab Course.
 
+The backend code for retrieving the transcripts contains private API keys and is therefore private.
+If you have any interest in this code, feel free to contact the owner of this repository.
+
 Also see [info on React]( ./React_README.md ).
 
 ## React development instructions
